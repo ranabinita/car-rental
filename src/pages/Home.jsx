@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 
 import {
   ArrowRight,
-  ArrowLeft,
-  ChevronRight,
   Car,
   UserCheck,
   Shield,
@@ -12,6 +10,9 @@ import {
   CalendarDays,
   Search,
 } from 'lucide-react';
+
+import hero1 from '../assets/hero/car-rental-1.png';
+import hero2 from '../assets/hero/car-rental-2.png';
 
 import './Home.css';
 
@@ -24,35 +25,24 @@ const slides = [
     description:
       'Reliable vehicles for city drives, weekend escapes and journeys across Nepal.',
     primary: 'Find a Car',
+    primaryLink: '#booking',
     secondary: 'Explore Services',
     secondaryLink: '#services',
-    type: 'rental',
+    image: hero1,
   },
+
   {
     id: 2,
-    kicker: 'PROFESSIONAL DRIVER SERVICE',
-    title: 'Sit back. We handle',
-    highlight: 'the road.',
+    kicker: 'TRAVEL ACROSS NEPAL',
+    title: 'From city streets to',
+    highlight: 'mountain roads.',
     description:
-      'Travel comfortably with experienced local drivers for city transfers and long-distance journeys.',
-    primary: 'Hire a Driver',
-    primaryLink: '/hire-driver',
-    secondary: 'Learn More',
+      'Choose the right vehicle for Kathmandu, Pokhara, Chitwan and journeys beyond.',
+    primary: 'Find a Car',
+    primaryLink: '#booking',
+    secondary: 'Hire a Driver',
     secondaryLink: '/hire-driver',
-    type: 'driver',
-  },
-  {
-    id: 3,
-    kicker: 'CORPORATE MOBILITY',
-    title: 'Transport built for',
-    highlight: 'your business.',
-    description:
-      'Flexible long-term vehicle solutions designed for companies, teams and organizations.',
-    primary: 'Corporate Rental',
-    primaryLink: '/corporate-rent',
-    secondary: 'Learn More',
-    secondaryLink: '/corporate-rent',
-    type: 'corporate',
+    image: hero2,
   },
 ];
 
@@ -62,20 +52,10 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((current) => (current + 1) % slides.length);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(timer);
   }, []);
-
-  const nextSlide = () => {
-    setCurrentSlide((current) => (current + 1) % slides.length);
-  };
-
-  const previousSlide = () => {
-    setCurrentSlide(
-      (current) => (current - 1 + slides.length) % slides.length
-    );
-  };
 
   const slide = slides[currentSlide];
 
@@ -84,10 +64,25 @@ export default function Home() {
 
       {/* ================= HERO ================= */}
 
-      <section className={`home-hero hero-${slide.type}`}>
+      <section className="home-hero">
 
-        <div className="hero-decoration hero-circle-one"></div>
-        <div className="hero-decoration hero-circle-two"></div>
+        {/* Sliding images */}
+        <div className="hero-images">
+          {slides.map((item, index) => (
+            <div
+              key={item.id}
+              className={`hero-image ${
+                index === currentSlide ? 'active' : ''
+              }`}
+              style={{
+                backgroundImage: `url(${item.image})`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Dark overlay */}
+        <div className="hero-overlay"></div>
 
         <div className="wrap home-hero-content">
 
@@ -110,18 +105,18 @@ export default function Home() {
 
             <div className="hero-actions">
 
-              {slide.primaryLink ? (
+              {slide.primaryLink.startsWith('/') ? (
                 <Link
                   to={slide.primaryLink}
-                  className="btn-primary hero-primary"
+                  className="btn-primary"
                 >
                   {slide.primary}
                   <ArrowRight size={17} />
                 </Link>
               ) : (
                 <a
-                  href="#booking"
-                  className="btn-primary hero-primary"
+                  href={slide.primaryLink}
+                  className="btn-primary"
                 >
                   {slide.primary}
                   <ArrowRight size={17} />
@@ -147,39 +142,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Slide number */}
-
-          <div className="hero-slide-number">
-            <strong>0{currentSlide + 1}</strong>
-            <span>/ 0{slides.length}</span>
-          </div>
-
         </div>
 
 
-        {/* Slider arrows */}
-
-        <div className="hero-slider-controls">
-
-          <button
-            onClick={previousSlide}
-            aria-label="Previous slide"
-          >
-            <ArrowLeft size={18} />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            aria-label="Next slide"
-          >
-            <ChevronRight size={20} />
-          </button>
-
-        </div>
-
-
-        {/* Slider indicators */}
-
+        {/* Slider progress */}
         <div className="hero-dots">
 
           {slides.map((item, index) => (
@@ -187,7 +153,7 @@ export default function Home() {
               key={item.id}
               className={index === currentSlide ? 'active' : ''}
               onClick={() => setCurrentSlide(index)}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={`Show slide ${index + 1}`}
             >
               <span></span>
             </button>
@@ -224,7 +190,6 @@ export default function Home() {
               </div>
             </div>
 
-
             <div className="booking-field">
               <label>Pick-up date</label>
 
@@ -233,7 +198,6 @@ export default function Home() {
                 <input type="date" />
               </div>
             </div>
-
 
             <div className="booking-field">
               <label>Return date</label>
@@ -244,9 +208,8 @@ export default function Home() {
               </div>
             </div>
 
-
             <button className="booking-search-btn">
-              <Search size={19} />
+              <Search size={18} />
               Search
             </button>
 
@@ -259,19 +222,14 @@ export default function Home() {
 
       {/* ================= SERVICES ================= */}
 
-      <section
-        className="home-services"
-        id="services"
-      >
+      <section className="home-services" id="services">
 
         <div className="wrap">
 
           <div className="section-heading">
 
             <div>
-              <span className="kicker">
-                OUR SERVICES
-              </span>
+              <span className="kicker">OUR SERVICES</span>
 
               <h2>
                 One journey.
