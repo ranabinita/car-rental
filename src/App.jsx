@@ -25,7 +25,7 @@ export default function App() {
         zIndex: 100
       }}>
         <Link to="/" style={{ fontSize: '20px', fontWeight: 'bold', textDecoration: 'none', color: '#111' }}>
-          Spark Car
+          Car Rental
         </Link>
         
         <nav style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
@@ -70,7 +70,7 @@ export default function App() {
         color: '#666',
         fontSize: '14px'
       }}>
-        © {new Date().getFullYear()} Spark Car Rental Nepal. All rights reserved.
+        © {new Date().getFullYear()} Car Rental Nepal. All rights reserved.
       </footer>
     </div>
   );
