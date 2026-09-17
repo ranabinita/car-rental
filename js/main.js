@@ -1,31 +1,84 @@
+/* SHARED COMPONENTS */
+
+async function loadComponent(id, path) {
+  const container = document.getElementById(id);
+  if (!container) return;
+
+  try {
+    const response = await fetch(path);
+
+    if (!response.ok) {
+      throw new Error(`Failed to load ${path}`);
+    }
+
+    container.innerHTML = await response.text();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function loadLayout() {
+  await Promise.all([
+    loadComponent('navbar', 'components/navbar.html'),
+    loadComponent('footer', 'components/footer.html')
+  ]);
+
+  setActiveNav();
+  setCurrentYear();
+}
+
+function setActiveNav() {
+  const currentPage = document.body.dataset.page;
+  const activeLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+
+  if (activeLink) {
+    activeLink.classList.add('active');
+  }
+}
+
+function setCurrentYear() {
+  const year = document.getElementById('currentYear');
+
+  if (year) {
+    year.textContent = new Date().getFullYear();
+  }
+}
+document.addEventListener('DOMContentLoaded', loadLayout);
 /* BOOKING SERVICE SWITCHER */
 
 const serviceOptions = document.querySelectorAll('.service-option');
 const serviceForms = document.querySelectorAll('.service-form');
 
+function selectService(service) {
+  serviceOptions.forEach((item) => {
+    item.classList.toggle('active', item.dataset.service === service);
+  });
+
+  serviceForms.forEach((form) => {
+    form.classList.remove('active');
+  });
+
+  if (service === 'driver') {
+    document.getElementById('driverForm')?.classList.add('active');
+  } else if (service === 'self') {
+    document.getElementById('selfForm')?.classList.add('active');
+  } else {
+    document.getElementById('rentForm')?.classList.add('active');
+  }
+}
+
 serviceOptions.forEach((option) => {
   option.addEventListener('click', () => {
-    const selectedService = option.dataset.service;
-
-    serviceOptions.forEach((item) => {
-      item.classList.remove('active');
-    });
-
-    serviceForms.forEach((form) => {
-      form.classList.remove('active');
-    });
-
-    option.classList.add('active');
-
-    if (selectedService === 'rent') {
-      document.getElementById('rentForm').classList.add('active');
-    } else if (selectedService === 'driver') {
-      document.getElementById('driverForm').classList.add('active');
-    } else if (selectedService === 'self') {
-      document.getElementById('selfForm').classList.add('active');
-    }
+    selectService(option.dataset.service);
   });
 });
+
+const params = new URLSearchParams(window.location.search);
+const selectedService = params.get('service');
+
+if (selectedService === 'driver' || selectedService === 'self' || selectedService === 'rent') {
+  selectService(selectedService);
+}
 const whySection = document.querySelector('.why-section');
 if (whySection) {
   const whyObserver = new IntersectionObserver(
@@ -85,9 +138,4 @@ if (statsSection) {
       }
     );
   statsObserver.observe(statsSection);
-}
-const currentYear = document.getElementById('currentYear');
-
-if (currentYear) {
-  currentYear.textContent = new Date().getFullYear();
 }

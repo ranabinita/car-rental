@@ -1,0 +1,252 @@
+/* ================= HIRE DRIVER PAGE ================= */
+
+/* HERO */
+.driver-hero {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  background: url("../images/hero-1.png") center/cover no-repeat;
+  overflow: hidden;
+}
+
+.driver-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(7, 15, 32, 0.92), rgba(7, 15, 32, 0.45));
+}
+
+.driver-hero-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+
+.driver-hero-content > span {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.driver-hero-content h1 {
+  max-width: 650px;
+  margin-bottom: 18px;
+  color: #fff;
+  font-size: clamp(44px, 6vw, 68px);
+  font-weight: 700;
+}
+
+.driver-hero-content p {
+  max-width: 580px;
+  margin-bottom: 28px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.driver-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 25px;
+  color: #fff;
+  background: var(--red);
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.driver-cta-btn:hover {
+  color: #fff;
+  background: var(--red-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(166, 61, 47, 0.25);
+}
+
+/* INTRO */
+.driver-intro {
+  padding: 90px 0 55px;
+  background: #fff;
+}
+
+.driver-intro-box {
+  max-width: 1000px;
+  margin: 38px auto 0;
+  padding: 28px 32px;
+  background: var(--cream);
+  border-left: 3px solid var(--red);
+}
+
+.driver-intro-box p {
+  display: flex;
+  gap: 11px;
+  margin: 0 0 14px;
+  color: #626a75;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.driver-intro-box p:last-child {
+  margin-bottom: 0;
+}
+
+.driver-intro-box i {
+  margin-top: 3px;
+  color: var(--red);
+}
+
+/* THREE STEPS */
+.driver-steps {
+  padding: 60px 0 95px;
+  background: #fff;
+}
+
+.driver-step-card {
+  height: 100%;
+  padding: 32px 28px;
+  background: var(--cream);
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.driver-step-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(20, 33, 61, 0.08);
+}
+
+.driver-step-number {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: var(--red);
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.driver-step-card h4 {
+  margin-bottom: 10px;
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.driver-step-card p {
+  margin: 0;
+  color: #707883;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* BENEFITS */
+.driver-benefits {
+  padding: 90px 0 100px;
+  background: var(--cream);
+}
+
+.driver-benefit {
+  height: 100%;
+  padding: 27px 28px;
+  display: flex;
+  gap: 18px;
+  background: #fff;
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  border-radius: 9px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.driver-benefit:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(20, 33, 61, 0.08);
+}
+
+.driver-benefit > i {
+  flex: 0 0 36px;
+  color: var(--red);
+  font-size: 28px;
+}
+
+.driver-benefit h4 {
+  margin-bottom: 7px;
+  color: var(--navy);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.driver-benefit p {
+  margin: 0;
+  color: #707883;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* BOTTOM CTA */
+.driver-booking-cta {
+  margin-top: 55px;
+  padding: 30px 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  color: #fff;
+  background: var(--navy);
+  border-radius: 10px;
+}
+
+.driver-booking-cta span {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.driver-booking-cta h3 {
+  margin: 5px 0 0;
+  color: #fff;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.driver-cta-btn i {
+  margin-left: 8px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 767px) {
+  .driver-hero {
+    min-height: 440px;
+  }
+
+  .driver-hero-content h1 {
+    font-size: 40px;
+  }
+
+  .driver-intro,
+  .driver-benefits {
+    padding: 65px 0;
+  }
+
+  .driver-steps {
+    padding: 45px 0 70px;
+  }
+
+  .driver-intro-box {
+    padding: 23px 20px;
+  }
+
+  .driver-booking-cta {
+    padding: 25px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
