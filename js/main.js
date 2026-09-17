@@ -1,17 +1,30 @@
+/* BOOKING SERVICE SWITCHER */
+
 const serviceOptions = document.querySelectorAll('.service-option');
+const serviceForms = document.querySelectorAll('.service-form');
 
 serviceOptions.forEach((option) => {
-
   option.addEventListener('click', () => {
+    const selectedService = option.dataset.service;
 
     serviceOptions.forEach((item) => {
       item.classList.remove('active');
     });
 
+    serviceForms.forEach((form) => {
+      form.classList.remove('active');
+    });
+
     option.classList.add('active');
 
+    if (selectedService === 'rent') {
+      document.getElementById('rentForm').classList.add('active');
+    } else if (selectedService === 'driver') {
+      document.getElementById('driverForm').classList.add('active');
+    } else if (selectedService === 'self') {
+      document.getElementById('selfForm').classList.add('active');
+    }
   });
-
 });
 const whySection = document.querySelector('.why-section');
 if (whySection) {

@@ -1315,6 +1315,40 @@ body {
 .footer-contact a:hover {
   color: #ffffff;
 }
+/* SERVICE FORM SWITCHING */
+
+.service-form {
+  display: none;
+}
+
+.service-form.active {
+  display: block;
+  animation: serviceFormIn 0.3s ease;
+}
+
+@keyframes serviceFormIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.driver-search-btn {
+  min-width: 135px;
+}
+
+@media (max-width: 767px) {
+  .driver-search-btn {
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
 
 
 /* ==========================================

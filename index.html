@@ -138,137 +138,154 @@
 </section>
 <!-- ================= BOOKING PANEL ================= -->
 <section class="booking-wrapper" id="booking">
-        <div class="container">
+  <div class="container">
+    <div class="booking-panel">
+      <div class="row g-4">
 
-            <div class="booking-panel">
+        <!-- SERVICE OPTIONS -->
+        <div class="col-lg-4">
+          <p class="booking-label">Choose a service</p>
 
-                <div class="row g-4 align-items-center">
+          <div class="service-selector">
+            <button type="button" class="service-option active" data-service="rent">
+              <div class="service-option-icon">
+                <i class="bi bi-car-front"></i>
+              </div>
+              <span>Rent a Car</span>
+              <div class="selected-check">
+                <i class="bi bi-check"></i>
+              </div>
+            </button>
 
-                    <!-- SERVICE SELECTION -->
-                    <div class="col-lg-4">
+            <button type="button" class="service-option" data-service="driver">
+              <div class="service-option-icon">
+                <i class="bi bi-person-badge"></i>
+              </div>
+              <span>Hire Driver</span>
+              <div class="selected-check">
+                <i class="bi bi-check"></i>
+              </div>
+            </button>
 
-                        <p class="booking-label">Choose a service</p>
+            <button type="button" class="service-option" data-service="self">
+              <div class="service-option-icon">
+                <i class="bi bi-car-front-fill"></i>
+              </div>
+              <span>Self Drive</span>
+              <div class="selected-check">
+                <i class="bi bi-check"></i>
+              </div>
+            </button>
+          </div>
+        </div>
 
-                        <div class="service-selector">
+        <!-- FORMS -->
+        <div class="col-lg-8">
 
-                            <!-- Rent a Car -->
-                            <button type="button" class="service-option active" data-service="rent">
-                                <div class="service-option-icon">
-                                    <i class="bi bi-car-front"></i>
-                                </div>
-                                <span>Rent a Car</span>
+          <!-- RENT A CAR -->
+          <div class="service-form active" id="rentForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Pick Up Location</label>
+                <input type="text" class="form-control booking-control" placeholder="Please enter from location">
+              </div>
 
-                                <div class="selected-check">
-                                    <i class="bi bi-check"></i>
-                                </div>
-                            </button>
+              <div class="col-md-6">
+                <label class="form-label">Drop Off Location</label>
+                <input type="text" class="form-control booking-control" placeholder="Please enter to location">
+              </div>
 
+              <div class="col-md-6">
+                <label class="form-label">Pick Up Date</label>
+                <input type="datetime-local" class="form-control booking-control">
+              </div>
 
-                            <!-- Hire Driver -->
-                            <button type="button" class="service-option" data-service="driver">
-                                <div class="service-option-icon">
-                                    <i class="bi bi-person-badge"></i>
-                                </div>
+              <div class="col-md-6">
+                <label class="form-label">Drop Date</label>
+                <input type="datetime-local" class="form-control booking-control">
+              </div>
 
-                                <span>Hire Driver</span>
-
-                                <div class="selected-check">
-                                    <i class="bi bi-check"></i>
-                                </div>
-                            </button>
-
-
-                            <!-- Self Drive -->
-                            <button type="button" class="service-option" data-service="self">
-                                <div class="service-option-icon">
-                                    <i class="bi bi-car-front-fill"></i>
-                                </div>
-
-                                <span>Self Drive</span>
-
-                                <div class="selected-check">
-                                    <i class="bi bi-check"></i>
-                                </div>
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- FORM -->
-                    <div class="col-lg-8">
-
-                        <div class="row g-3">
-
-                            <!-- PICKUP -->
-                            <div class="col-md-6">
-
-                                <label class="form-label">
-                                    Pick Up Location
-                                </label>
-
-                                <input type="text" class="form-control booking-control"
-                                    placeholder="Enter pick up location">
-
-                            </div>
-
-
-                            <!-- DROP OFF -->
-                            <div class="col-md-6">
-
-                                <label class="form-label">
-                                    Drop Off Location
-                                </label>
-
-                                <input type="text" class="form-control booking-control"
-                                    placeholder="Enter drop off location">
-
-                            </div>
-
-
-                            <!-- PICKUP DATE -->
-                            <div class="col-md-6">
-
-                                <label class="form-label">
-                                    Pick Up Date
-                                </label>
-
-                                <input type="datetime-local" class="form-control booking-control">
-
-                            </div>
-
-
-                            <!-- DROP DATE -->
-                            <div class="col-md-6">
-
-                                <label class="form-label">
-                                    Drop Date
-                                </label>
-
-                                <input type="datetime-local" class="form-control booking-control">
-
-                            </div>
-
-
-                            <!-- BUTTON -->
-                            <div class="col-12 text-end mt-4">
-
-                                <button type="button" class="find-vehicle-btn">
-                                    Find Vehicle
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
+              <div class="col-12 text-end mt-4">
+                <button type="button" class="find-vehicle-btn">Find Vehicle</button>
+              </div>
             </div>
+          </div>
+
+          <!-- HIRE DRIVER -->
+          <div class="service-form" id="driverForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Pick Up Location</label>
+                <input type="text" class="form-control booking-control" placeholder="Please enter from location">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Drop Off Location</label>
+                <input type="text" class="form-control booking-control" placeholder="Please enter to location">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Pick Up Date</label>
+                <input type="datetime-local" class="form-control booking-control">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Drop Date</label>
+                <input type="datetime-local" class="form-control booking-control">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Vehicle Type To Drive</label>
+                <select class="form-select booking-control">
+                  <option selected disabled>Select a vehicle type</option>
+                  <option>Hatchback</option>
+                  <option>Sedan</option>
+                  <option>SUV</option>
+                  <option>Electric</option>
+                  <option>Premium</option>
+                  <option>Pickup</option>
+                </select>
+              </div>
+
+              <div class="col-md-6 d-flex align-items-end justify-content-md-end">
+                <button type="button" class="find-vehicle-btn driver-search-btn">Find Driver</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SELF DRIVE -->
+          <div class="service-form" id="selfForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">From</label>
+                <input type="text" class="form-control booking-control" placeholder="Enter starting location">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">To</label>
+                <input type="text" class="form-control booking-control" placeholder="Please enter to location">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">From Date</label>
+                <input type="datetime-local" class="form-control booking-control">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">To Date</label>
+                <input type="datetime-local" class="form-control booking-control">
+              </div>
+
+              <div class="col-12 text-end mt-4">
+                <button type="button" class="find-vehicle-btn">Find Vehicle</button>
+              </div>
+            </div>
+          </div>
 
         </div>
+      </div>
+    </div>
+  </div>
 </section>
 <!-- ================= HOW IT WORKS ================= -->
 <section class="how-it-works">
