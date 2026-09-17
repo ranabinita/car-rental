@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Car Rental</title>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                Car <span>Rental</span>
+            </a>
+            <button class="navbar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Hire Driver</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Corporate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sign In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- HERO SECTION  -->
+    <section class="hero-section">
+
+        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000"
+            data-bs-pause="false">
+
+            <!-- Slides -->
+            <div class="carousel-inner">
+
+                <!-- Slide 1 -->
+                <div class="carousel-item active">
+
+                    <img src="images/hero-1.png" class="hero-image" alt="Car rental in Nepal">
+
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+
+                    <img src="images/hero-2.png" class="hero-image" alt="Road trip across Nepal">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Dark Overlay -->
+        <div class="hero-overlay"></div>
+
+
+        <!-- Hero Content -->
+        <div class="container hero-content">
+
+            <div class="row">
+
+                <div class="col-lg-7 col-md-9">
+
+                    <span class="hero-kicker">
+                        CAR RENTAL IN NEPAL
+                    </span>
+
+                    <h1>
+                        Drive Nepal's roads
+                        <span>your way.</span>
+                    </h1>
+
+                    <p>
+                        Reliable vehicles for city drives, weekend escapes
+                        and unforgettable journeys across Nepal.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <a href="#booking" class="hero-primary-btn">
+                            Find a Car
+                        </a>
+
+                        <a href="#" class="hero-secondary-btn">
+                            Hire a Driver
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Bottom Indicators -->
+        <div class="hero-indicators">
+
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"
+                aria-label="Slide 1"></button>
+
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+
+        </div>
+
+    </section>
+    <!-- ================= BOOKING PANEL ================= -->
+
+    <section class="booking-wrapper" id="booking">
+        <div class="container">
+
+            <div class="booking-panel">
+
+                <div class="row g-4 align-items-center">
+
+                    <!-- SERVICE SELECTION -->
+                    <div class="col-lg-4">
+
+                        <p class="booking-label">Choose a service</p>
+
+                        <div class="service-selector">
+
+                            <!-- Rent a Car -->
+                            <button type="button" class="service-option active" data-service="rent">
+                                <div class="service-option-icon">
+                                    <i class="bi bi-car-front"></i>
+                                </div>
+                                <span>Rent a Car</span>
+
+                                <div class="selected-check">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                            </button>
+
+
+                            <!-- Hire Driver -->
+                            <button type="button" class="service-option" data-service="driver">
+                                <div class="service-option-icon">
+                                    <i class="bi bi-person-badge"></i>
+                                </div>
+
+                                <span>Hire Driver</span>
+
+                                <div class="selected-check">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                            </button>
+
+
+                            <!-- Self Drive -->
+                            <button type="button" class="service-option" data-service="self">
+                                <div class="service-option-icon">
+                                    <i class="bi bi-car-front-fill"></i>
+                                </div>
+
+                                <span>Self Drive</span>
+
+                                <div class="selected-check">
+                                    <i class="bi bi-check"></i>
+                                </div>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FORM -->
+                    <div class="col-lg-8">
+
+                        <div class="row g-3">
+
+                            <!-- PICKUP -->
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Pick Up Location
+                                </label>
+
+                                <input type="text" class="form-control booking-control"
+                                    placeholder="Enter pick up location">
+
+                            </div>
+
+
+                            <!-- DROP OFF -->
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Drop Off Location
+                                </label>
+
+                                <input type="text" class="form-control booking-control"
+                                    placeholder="Enter drop off location">
+
+                            </div>
+
+
+                            <!-- PICKUP DATE -->
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Pick Up Date
+                                </label>
+
+                                <input type="datetime-local" class="form-control booking-control">
+
+                            </div>
+
+
+                            <!-- DROP DATE -->
+                            <div class="col-md-6">
+
+                                <label class="form-label">
+                                    Drop Date
+                                </label>
+
+                                <input type="datetime-local" class="form-control booking-control">
+
+                            </div>
+
+
+                            <!-- BUTTON -->
+                            <div class="col-12 text-end mt-4">
+
+                                <button type="button" class="find-vehicle-btn">
+                                    Find Vehicle
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>
