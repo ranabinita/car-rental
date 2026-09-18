@@ -139,3 +139,19 @@ if (statsSection) {
     );
   statsObserver.observe(statsSection);
 }
+/* CORPORATE PARTNER FORM */
+const partnerForm = document.getElementById('partnerForm');
+
+if (partnerForm) {
+  partnerForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const modalElement = document.getElementById('partnerModal');
+    const modal = bootstrap.Modal.getInstance(modalElement);
+
+    modal.hide();
+    partnerForm.reset();
+
+    alert('Your corporate rental request has been submitted.');
+  });
+}

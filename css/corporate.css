@@ -1,0 +1,340 @@
+/* ================= CORPORATE PAGE ================= */
+
+/* HERO */
+.corporate-hero {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  background: url("../images/corporate.jpg") center/cover no-repeat;
+  overflow: hidden;
+}
+
+.corporate-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(7, 15, 32, .92), rgba(7, 15, 32, .42));
+}
+
+.corporate-hero-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+
+.corporate-hero-content > span {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+}
+
+.corporate-hero-content h1 {
+  max-width: 700px;
+  margin-bottom: 18px;
+  color: #fff;
+  font-size: clamp(44px, 6vw, 68px);
+  font-weight: 700;
+}
+
+.corporate-hero-content p {
+  max-width: 610px;
+  margin-bottom: 28px;
+  color: rgba(255, 255, 255, .82);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* MAIN BUTTON */
+.corporate-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 25px;
+  color: #fff;
+  background: var(--red);
+  border: 0;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+
+.corporate-cta-btn:hover {
+  color: #fff;
+  background: var(--red-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(166, 61, 47, .25);
+}
+
+/* BENEFITS */
+.corporate-benefits {
+  padding: 90px 0 100px;
+  background: #fff;
+}
+
+.corporate-benefit-card {
+  height: 100%;
+  padding: 35px 28px;
+  text-align: center;
+  background: var(--cream);
+  border: 1px solid rgba(20, 33, 61, .08);
+  border-radius: 10px;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.corporate-benefit-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(20, 33, 61, .09);
+}
+
+.corporate-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red);
+  background: rgba(166, 61, 47, .08);
+  border-radius: 50%;
+  font-size: 30px;
+  transition: .3s ease;
+}
+
+.corporate-benefit-card:hover .corporate-icon {
+  color: #fff;
+  background: var(--red);
+  transform: scale(1.06);
+}
+
+.corporate-benefit-card h4 {
+  margin-bottom: 12px;
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.corporate-benefit-card p {
+  max-width: 330px;
+  margin: 0 auto;
+  color: #707883;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* PROCESS */
+.corporate-process {
+  padding: 90px 0 100px;
+  background: var(--cream);
+}
+
+.corporate-process-list {
+  max-width: 1000px;
+  margin: 65px auto 0;
+}
+
+.corporate-process-item {
+  position: relative;
+  min-height: 190px;
+  margin-bottom: 30px;
+  padding: 35px 40px 35px 115px;
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  align-items: center;
+  gap: 40px;
+  background: #fff;
+  border: 1px solid rgba(20, 33, 61, .08);
+  border-radius: 10px;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.corporate-process-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(20, 33, 61, .08);
+}
+
+.process-number {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: var(--red);
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 700;
+  transform: translateY(-50%);
+}
+
+.corporate-process-item h4 {
+  margin-bottom: 10px;
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.corporate-process-item p {
+  max-width: 570px;
+  margin: 0;
+  color: #707883;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.process-icon {
+  width: 105px;
+  height: 105px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  color: var(--red);
+  background: rgba(166, 61, 47, .07);
+  border-radius: 50%;
+  font-size: 45px;
+  transition: .3s ease;
+}
+
+.corporate-process-item:hover .process-icon {
+  transform: scale(1.06);
+}
+
+/* MODAL */
+.partner-modal {
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(20, 33, 61, .25);
+}
+
+.partner-modal .modal-header {
+  padding: 25px 28px 20px;
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(20, 33, 61, .08);
+}
+
+.modal-kicker {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.partner-modal .modal-title {
+  color: var(--navy);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.partner-modal .modal-body {
+  padding: 25px 28px 15px;
+}
+
+.partner-modal .form-label {
+  margin-bottom: 7px;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.partner-modal .form-label span {
+  color: var(--red);
+}
+
+.corporate-control {
+  min-height: 48px;
+  padding: 10px 13px;
+  color: var(--navy);
+  border: 1px solid rgba(20, 33, 61, .18);
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.corporate-control:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(166, 61, 47, .08);
+}
+
+.corporate-textarea {
+  min-height: 95px;
+  resize: vertical;
+}
+
+.partner-modal .modal-footer {
+  padding: 15px 28px 25px;
+  border: 0;
+}
+
+.modal-cancel-btn {
+  padding: 12px 20px;
+  color: #69717d;
+  background: transparent;
+  border: 1px solid rgba(20, 33, 61, .15);
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.modal-cancel-btn:hover {
+  color: var(--navy);
+  background: var(--cream);
+}
+
+/* RESPONSIVE */
+@media (max-width: 767px) {
+  .corporate-hero {
+    min-height: 440px;
+  }
+
+  .corporate-hero-content h1 {
+    font-size: 40px;
+  }
+
+  .corporate-benefits,
+  .corporate-process {
+    padding: 65px 0;
+  }
+
+  .corporate-process-list {
+    margin-top: 45px;
+  }
+
+  .corporate-process-item {
+    min-height: auto;
+    padding: 28px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .process-number {
+    position: static;
+    transform: none;
+  }
+
+  .process-icon {
+    width: 80px;
+    height: 80px;
+    justify-self: auto;
+    font-size: 34px;
+  }
+
+  .partner-modal .modal-header,
+  .partner-modal .modal-body,
+  .partner-modal .modal-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

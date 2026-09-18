@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corporate Rental | CarRental</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/corporate.css">
+</head>
+
+<body data-page="corporate">
+
+<div id="navbar"></div>
+
+<main>
+
+  <!-- CORPORATE HERO -->
+  <section class="corporate-hero">
+    <div class="corporate-hero-overlay"></div>
+
+    <div class="container corporate-hero-content">
+      <span>CORPORATE VEHICLE RENTAL</span>
+      <h1>Reliable Mobility for Your Business</h1>
+      <p>Flexible vehicle rental solutions designed for companies, teams and business travel across Nepal.</p>
+
+      <button class="corporate-cta-btn" data-bs-toggle="modal" data-bs-target="#partnerModal">
+        Be a Partner
+      </button>
+    </div>
+  </section>
+
+  <!-- WHY CORPORATE -->
+  <section class="corporate-benefits">
+    <div class="container">
+
+      <div class="section-heading text-center">
+        <span>CORPORATE RENTAL</span>
+        <h2>Why Choose Corporate Car Rental?</h2>
+        <p>Flexible transportation solutions designed around your company's travel requirements.</p>
+      </div>
+
+      <div class="row g-4 mt-4">
+
+        <div class="col-lg-4">
+          <div class="corporate-benefit-card">
+            <div class="corporate-icon">
+              <i class="bi bi-car-front"></i>
+            </div>
+
+            <h4>Well-Maintained Vehicles</h4>
+            <p>Choose vehicles suitable for daily operations, meetings, events and business travel.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="corporate-benefit-card">
+            <div class="corporate-icon">
+              <i class="bi bi-calendar3"></i>
+            </div>
+
+            <h4>Flexible Rental Duration</h4>
+            <p>Arrange vehicles according to short-term or longer business transportation needs.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="corporate-benefit-card">
+            <div class="corporate-icon">
+              <i class="bi bi-buildings"></i>
+            </div>
+
+            <h4>Business-Focused Service</h4>
+            <p>Transportation solutions suitable for companies, employees and corporate guests.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="corporate-process">
+    <div class="container">
+
+      <div class="section-heading text-center">
+        <span>HOW IT WORKS</span>
+        <h2>Become a Corporate Partner in Four Steps</h2>
+      </div>
+
+      <div class="corporate-process-list">
+
+        <div class="corporate-process-item">
+          <div class="process-number">01</div>
+
+          <div>
+            <h4>Submit Your Request</h4>
+            <p>Provide your company and contact information through our partnership form.</p>
+          </div>
+
+          <div class="process-icon">
+            <i class="bi bi-file-earmark-text"></i>
+          </div>
+        </div>
+
+        <div class="corporate-process-item">
+          <div class="process-number">02</div>
+
+          <div>
+            <h4>Requirement Review</h4>
+            <p>We review your transportation requirements and corporate rental preferences.</p>
+          </div>
+
+          <div class="process-icon">
+            <i class="bi bi-clipboard-check"></i>
+          </div>
+        </div>
+
+        <div class="corporate-process-item">
+          <div class="process-number">03</div>
+
+          <div>
+            <h4>Rental Agreement</h4>
+            <p>Confirm the rental arrangement and service details for your organization.</p>
+          </div>
+
+          <div class="process-icon">
+            <i class="bi bi-file-earmark-check"></i>
+          </div>
+        </div>
+
+        <div class="corporate-process-item">
+          <div class="process-number">04</div>
+
+          <div>
+            <h4>Service Begins</h4>
+            <p>Your corporate transportation service is ready according to the agreed requirements.</p>
+          </div>
+
+          <div class="process-icon">
+            <i class="bi bi-car-front-fill"></i>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- PARTNER FORM MODAL -->
+<div class="modal fade" id="partnerModal" tabindex="-1" aria-labelledby="partnerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content partner-modal">
+
+      <div class="modal-header">
+        <div>
+          <span class="modal-kicker">CORPORATE PARTNERSHIP</span>
+          <h4 class="modal-title" id="partnerModalLabel">Request Corporate Rental</h4>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form id="partnerForm">
+        <div class="modal-body">
+
+          <div class="mb-3">
+            <label class="form-label">Company Name <span>*</span></label>
+            <input type="text" class="form-control corporate-control" placeholder="Enter company name" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Contact Person Name <span>*</span></label>
+            <input type="text" class="form-control corporate-control" placeholder="Enter contact person name" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Phone Number <span>*</span></label>
+            <input type="tel" class="form-control corporate-control" placeholder="Enter phone number" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email Address <span>*</span></label>
+            <input type="email" class="form-control corporate-control" placeholder="Enter email address" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Rental Requirement</label>
+            <textarea class="form-control corporate-control corporate-textarea" rows="3" placeholder="Tell us briefly about your vehicle requirements"></textarea>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="modal-cancel-btn" data-bs-dismiss="modal">
+            Cancel
+          </button>
+
+          <button type="submit" class="corporate-cta-btn">
+            Submit Request
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<div id="footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
