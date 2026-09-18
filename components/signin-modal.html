@@ -1,0 +1,81 @@
+<div class="auth-overlay" id="signinModal">
+  <div class="auth-modal">
+
+    <button type="button" class="auth-close" id="closeSignin">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <div class="auth-header">
+      <a href="index.html" class="auth-brand">
+        Car<span>Rental</span>
+      </a>
+
+      <h2>Welcome Back</h2>
+      <p>Sign in to continue to your account.</p>
+    </div>
+
+    <form id="signinForm">
+
+      <div class="auth-field">
+        <label for="signinEmail">Email Address</label>
+
+        <div class="auth-input">
+          <i class="bi bi-envelope"></i>
+
+          <input
+            type="email"
+            id="signinEmail"
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="auth-field">
+        <label for="signinPassword">Password</label>
+
+        <div class="auth-input">
+          <i class="bi bi-lock"></i>
+
+          <input
+            type="password"
+            id="signinPassword"
+            placeholder="Enter your password"
+            required
+          >
+
+          <button
+            type="button"
+            class="password-toggle"
+            id="passwordToggle"
+            aria-label="Show password"
+          >
+            <i class="bi bi-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="auth-options">
+        <label class="remember-me">
+          <input type="checkbox">
+          <span>Remember me</span>
+        </label>
+
+        <a href="#" class="forgot-password">
+          Forgot password?
+        </a>
+      </div>
+
+      <button type="submit" class="auth-submit">
+        Sign In
+      </button>
+
+    </form>
+
+    <div class="auth-register">
+      <span>Don't have an account?</span>
+      <a href="#">Create Account</a>
+    </div>
+
+  </div>
+</div>

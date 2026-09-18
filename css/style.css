@@ -1337,6 +1337,15 @@ body {
     transform: translateY(0);
   }
 }
+@keyframes heroImageMove {
+  0% {
+    transform: scale(1.03) translateX(0);
+  }
+
+  100% {
+    transform: scale(1.1) translateX(-1.5%);
+  }
+}
 
 .driver-search-btn {
   min-width: 135px;
