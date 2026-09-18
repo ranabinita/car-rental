@@ -61,10 +61,9 @@
             <input type="checkbox">
             <span>Remember me</span>
           </label>
-
-          <a href="#" class="forgot-password">
-            Forgot password?
-          </a>
+<button type="button" class="forgot-password" id="showForgot">
+  Forgot password?
+</button>
         </div>
 
         <button type="submit" class="auth-submit">
@@ -223,6 +222,156 @@
       </div>
 
     </div>
+    <!-- FORGOT PASSWORD VIEW -->
+<div class="auth-view" id="forgotView">
+  <div class="auth-header">
+    <a href="index.html" class="auth-brand">
+      Car<span>Rental</span>
+    </a>
+
+    <h2>Forgot Password?</h2>
+    <p>Enter your registered email address to reset your password.</p>
+  </div>
+
+  <form id="forgotForm">
+    <div class="auth-field">
+      <label for="forgotEmail">Email Address</label>
+
+      <div class="auth-input">
+        <i class="bi bi-envelope"></i>
+        <input
+          type="email"
+          id="forgotEmail"
+          name="email"
+          placeholder="Enter your registered email"
+          required
+        >
+      </div>
+    </div>
+
+    <button type="submit" class="auth-submit">
+      Send OTP
+    </button>
+  </form>
+
+  <div class="auth-register">
+    <button type="button" class="auth-switch" id="forgotBackSignin">
+      <i class="bi bi-arrow-left"></i> Back to Sign In
+    </button>
+  </div>
+</div>
+
+<!-- OTP VIEW -->
+<div class="auth-view" id="otpView">
+  <div class="auth-header">
+    <a href="index.html" class="auth-brand">
+      Car<span>Rental</span>
+    </a>
+
+    <h2>Verify OTP</h2>
+    <p>Enter the verification code sent to your registered email.</p>
+  </div>
+
+  <form id="otpForm">
+    <div class="otp-inputs">
+      <input type="text" maxlength="1" inputmode="numeric" required>
+      <input type="text" maxlength="1" inputmode="numeric" required>
+      <input type="text" maxlength="1" inputmode="numeric" required>
+      <input type="text" maxlength="1" inputmode="numeric" required>
+      <input type="text" maxlength="1" inputmode="numeric" required>
+      <input type="text" maxlength="1" inputmode="numeric" required>
+    </div>
+
+    <button type="submit" class="auth-submit">
+      Verify OTP
+    </button>
+  </form>
+
+  <div class="otp-resend">
+    <span>Didn't receive the code?</span>
+    <button type="button">Resend OTP</button>
+  </div>
+
+  <div class="auth-register">
+    <button type="button" class="auth-switch" id="otpBack">
+      <i class="bi bi-arrow-left"></i> Back
+    </button>
+  </div>
+</div>
+
+<!-- RESET PASSWORD VIEW -->
+<div class="auth-view" id="resetView">
+  <div class="auth-header">
+    <a href="index.html" class="auth-brand">
+      Car<span>Rental</span>
+    </a>
+
+    <h2>Create New Password</h2>
+    <p>Choose a new password for your account.</p>
+  </div>
+
+  <form id="resetForm">
+    <div class="auth-field">
+      <label for="newPassword">New Password</label>
+
+      <div class="auth-input">
+        <i class="bi bi-lock"></i>
+        <input
+          type="password"
+          id="newPassword"
+          placeholder="Enter new password"
+          required
+        >
+
+        <button
+          type="button"
+          class="password-toggle"
+          data-password="newPassword"
+          aria-label="Show password"
+        >
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="auth-field">
+      <label for="confirmNewPassword">Confirm Password</label>
+
+      <div class="auth-input">
+        <i class="bi bi-lock"></i>
+        <input
+          type="password"
+          id="confirmNewPassword"
+          placeholder="Confirm new password"
+          required
+        >
+
+        <button
+          type="button"
+          class="password-toggle"
+          data-password="confirmNewPassword"
+          aria-label="Show password"
+        >
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
+    </div>
+
+    <p class="auth-error" id="resetError"></p>
+
+    <button type="submit" class="auth-submit">
+      Reset Password
+    </button>
+  </form>
+
+  <div class="auth-register">
+    <button type="button" class="auth-switch" id="resetBackSignin">
+      <i class="bi bi-arrow-left"></i> Back to Sign In
+    </button>
+  </div>
+</div>
+    
+
 
   </div>
 </div>

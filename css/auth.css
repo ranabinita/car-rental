@@ -41,6 +41,8 @@
   transform: translateY(0) scale(1);
 }
 
+/* ================= CLOSE BUTTON ================= */
+
 .auth-close {
   position: absolute;
   top: 17px;
@@ -51,6 +53,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
   color: #68707b;
   background: transparent;
   border: 0;
@@ -65,7 +68,7 @@
   background: rgba(166, 61, 47, .07);
 }
 
-/* AUTH VIEWS */
+/* ================= AUTH VIEWS ================= */
 
 .auth-view {
   display: none;
@@ -88,7 +91,7 @@
   }
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 
 .auth-header {
   margin-bottom: 28px;
@@ -127,7 +130,7 @@
   line-height: 1.6;
 }
 
-/* FORM */
+/* ================= FORM ================= */
 
 .auth-field {
   margin-bottom: 18px;
@@ -179,13 +182,14 @@
   box-shadow: 0 0 0 3px rgba(166, 61, 47, .08);
 }
 
-/* PASSWORD */
+/* ================= PASSWORD ================= */
 
 .password-toggle {
   position: absolute;
   right: 8px;
   width: 36px;
   height: 36px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,7 +205,7 @@
   color: var(--red);
 }
 
-/* SIGN IN OPTIONS */
+/* ================= SIGN IN OPTIONS ================= */
 
 .auth-options {
   margin: 2px 0 22px;
@@ -222,21 +226,34 @@
 }
 
 .remember-me input {
+  margin: 0;
   accent-color: var(--red);
 }
 
-.forgot-password {
+/* Forgot password - plain red text */
+
+.auth-options .forgot-password {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  margin: 0;
   color: var(--red);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  font-family: inherit;
   font-size: 11px;
   font-weight: 600;
-  text-decoration: none;
+  line-height: 1.4;
+  cursor: pointer;
 }
 
-.forgot-password:hover {
+.auth-options .forgot-password:hover {
   color: var(--red-dark);
 }
 
-/* BUTTON */
+/* ================= MAIN BUTTON ================= */
 
 .auth-submit {
   width: 100%;
@@ -257,7 +274,7 @@
   box-shadow: 0 8px 18px rgba(166, 61, 47, .2);
 }
 
-/* SWITCH LOGIN / REGISTER */
+/* ================= LOGIN / REGISTER SWITCH ================= */
 
 .auth-register {
   margin-top: 23px;
@@ -277,6 +294,9 @@
   color: var(--red);
   background: transparent;
   border: 0;
+  outline: 0;
+  box-shadow: none;
+  font-family: inherit;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
@@ -284,10 +304,9 @@
 
 .auth-switch:hover {
   color: var(--red-dark);
-  text-decoration: underline;
 }
 
-/* REGISTER */
+/* ================= REGISTER ================= */
 
 #registerView .auth-header {
   margin-bottom: 22px;
@@ -308,13 +327,70 @@
   font-size: 11px;
 }
 
-/* PAGE SCROLL LOCK */
+/* ================= OTP ================= */
+
+.otp-inputs {
+  margin: 5px 0 24px;
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+}
+
+.otp-inputs input {
+  width: 48px;
+  height: 54px;
+  padding: 0;
+  color: var(--navy);
+  background: var(--cream);
+  border: 1px solid rgba(20, 33, 61, .14);
+  border-radius: 7px;
+  outline: none;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 700;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.otp-inputs input:focus {
+  background: #fff;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(166, 61, 47, .08);
+}
+
+.otp-resend {
+  margin-top: 18px;
+  color: #7b828c;
+  text-align: center;
+  font-size: 11px;
+}
+
+.otp-resend button {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  color: var(--red);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.otp-resend button:hover {
+  color: var(--red-dark);
+  text-decoration: underline;
+}
+
+/* ================= SCROLL LOCK ================= */
 
 body.modal-open {
   overflow: hidden;
 }
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 
 @media (max-width: 576px) {
   .auth-overlay {
@@ -331,7 +407,7 @@ body.modal-open {
   }
 
   .auth-options {
-    align-items: flex-start;
+    align-items: center;
   }
 
   #registerView .row {
@@ -340,5 +416,14 @@ body.modal-open {
 
   #registerView .row .auth-field {
     margin-bottom: 14px;
+  }
+
+  .otp-inputs {
+    gap: 6px;
+  }
+
+  .otp-inputs input {
+    width: 40px;
+    height: 48px;
   }
 }

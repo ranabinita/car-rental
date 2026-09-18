@@ -230,63 +230,62 @@ if (qualityTabs.length && qualityTitle && qualityText) {
     });
   });
 }
-/* ================= AUTH MODAL ================= */
-
-async function loadSigninModal() {
-  const container = document.getElementById('signin-modal-container');
-
-  if (!container) return;
-
-  try {
-    const response = await fetch('components/signin-modal.html');
-
-    if (!response.ok) {
-      throw new Error('Could not load auth modal.');
-    }
-
-    const html = await response.text();
-
-    container.innerHTML = html;
-
-    initSigninModal();
-  } catch (error) {
-    console.error('Could not load auth modal:', error);
-  }
-}
-
 function initSigninModal() {
   const modal = document.getElementById('signinModal');
   const closeButton = document.getElementById('closeSignin');
 
   const signinView = document.getElementById('signinView');
   const registerView = document.getElementById('registerView');
+  const forgotView = document.getElementById('forgotView');
+  const otpView = document.getElementById('otpView');
+  const resetView = document.getElementById('resetView');
 
   const showRegister = document.getElementById('showRegister');
   const showSignin = document.getElementById('showSignin');
+  const showForgot = document.getElementById('showForgot');
+  const forgotBackSignin = document.getElementById('forgotBackSignin');
+  const otpBack = document.getElementById('otpBack');
+  const resetBackSignin = document.getElementById('resetBackSignin');
 
   const signinForm = document.getElementById('signinForm');
   const registerForm = document.getElementById('registerForm');
+  const forgotForm = document.getElementById('forgotForm');
+  const otpForm = document.getElementById('otpForm');
+  const resetForm = document.getElementById('resetForm');
 
   const registerPassword = document.getElementById('registerPassword');
   const confirmPassword = document.getElementById('confirmPassword');
   const registerError = document.getElementById('registerError');
+  const resetError = document.getElementById('resetError');
 
-  if (!modal || !signinView || !registerView) return;
+  if (!modal || !signinView) return;
 
-  function showView(view) {
-    signinView.classList.remove('active');
-    registerView.classList.remove('active');
+  const authViews = [
+    signinView,
+    registerView,
+    forgotView,
+    otpView,
+    resetView
+  ];
 
-    view.classList.add('active');
+  function showAuthView(view) {
+    authViews.forEach((item) => {
+      item?.classList.remove('active');
+    });
+
+    view?.classList.add('active');
 
     if (registerError) {
       registerError.textContent = '';
     }
+
+    if (resetError) {
+      resetError.textContent = '';
+    }
   }
 
   function openModal() {
-    showView(signinView);
-
+    showAuthView(signinView);
     modal.classList.add('active');
     document.body.classList.add('modal-open');
   }
@@ -302,7 +301,6 @@ function initSigninModal() {
     if (!signinButton) return;
 
     event.preventDefault();
-
     openModal();
   });
 
@@ -315,26 +313,38 @@ function initSigninModal() {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (
-      event.key === 'Escape' &&
-      modal.classList.contains('active')
-    ) {
+    if (event.key === 'Escape' && modal.classList.contains('active')) {
       closeModal();
     }
   });
 
   showRegister?.addEventListener('click', () => {
-    showView(registerView);
+    showAuthView(registerView);
   });
 
   showSignin?.addEventListener('click', () => {
-    showView(signinView);
+    showAuthView(signinView);
+  });
+
+  showForgot?.addEventListener('click', () => {
+    showAuthView(forgotView);
+  });
+
+  forgotBackSignin?.addEventListener('click', () => {
+    showAuthView(signinView);
+  });
+
+  otpBack?.addEventListener('click', () => {
+    showAuthView(forgotView);
+  });
+
+  resetBackSignin?.addEventListener('click', () => {
+    showAuthView(signinView);
   });
 
   document.querySelectorAll('.password-toggle').forEach((button) => {
     button.addEventListener('click', () => {
-      const inputId = button.dataset.password;
-      const input = document.getElementById(inputId);
+      const input = document.getElementById(button.dataset.password);
 
       if (!input) return;
 
@@ -350,6 +360,24 @@ function initSigninModal() {
         'aria-label',
         passwordVisible ? 'Show password' : 'Hide password'
       );
+    });
+  });
+
+  const otpInputs = document.querySelectorAll('.otp-inputs input');
+
+  otpInputs.forEach((input, index) => {
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/\D/g, '');
+
+      if (input.value && index < otpInputs.length - 1) {
+        otpInputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Backspace' && !input.value && index > 0) {
+        otpInputs[index - 1].focus();
+      }
     });
   });
 
@@ -371,17 +399,68 @@ function initSigninModal() {
       confirmPassword &&
       registerPassword.value !== confirmPassword.value
     ) {
-      if (registerError) {
-        registerError.textContent = 'Passwords do not match.';
-      }
-
+      registerError.textContent = 'Passwords do not match.';
       confirmPassword.focus();
-
       return;
     }
 
     console.log('Registration ready for Django backend.');
   });
+
+  forgotForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Django will send OTP later.
+    showAuthView(otpView);
+  });
+
+  otpForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Django will verify OTP later.
+    showAuthView(resetView);
+  });
+
+  resetForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const newPassword = document.getElementById('newPassword');
+    const confirmNewPassword = document.getElementById('confirmNewPassword');
+
+    if (!newPassword || !confirmNewPassword) return;
+
+    if (newPassword.value !== confirmNewPassword.value) {
+      resetError.textContent = 'Passwords do not match.';
+      confirmNewPassword.focus();
+      return;
+    }
+
+    resetError.textContent = '';
+
+    console.log('Password reset ready for Django backend.');
+
+    resetForm.reset();
+    showAuthView(signinView);
+  });
+}
+/* ================= LOAD AUTH MODAL ================= */
+
+async function loadSigninModal() {
+  const container = document.getElementById('signin-modal-container');
+  if (!container) return;
+
+  try {
+    const response = await fetch('components/signin-modal.html');
+
+    if (!response.ok) {
+      throw new Error('Could not load auth modal.');
+    }
+
+    container.innerHTML = await response.text();
+    initSigninModal();
+  } catch (error) {
+    console.error('Could not load auth modal:', error);
+  }
 }
 
-loadSigninModal();
+document.addEventListener('DOMContentLoaded', loadSigninModal);
