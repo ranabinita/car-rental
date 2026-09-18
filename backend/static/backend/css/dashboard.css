@@ -1,0 +1,274 @@
+:root {
+    --navy: #14213d;
+    --navy-light: #233258;
+    --red: #a63d2f;
+    --red-dark: #832f24;
+    --gold: #e8a33d;
+    --cream: #fbf9f4;
+    --border: #e8e9ed;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    color: #313744;
+    background: #f6f7f9;
+    font-family: Arial, sans-serif;
+}
+
+.backend-layout {
+    min-height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 1000;
+    width: 250px;
+    padding: 28px 18px;
+    background: var(--navy);
+}
+
+.sidebar-brand {
+    display: block;
+    margin: 0 14px 35px;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.sidebar-brand span {
+    color: var(--gold);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 12px 14px;
+    color: #bfc6d5;
+    border-radius: 7px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: .2s ease;
+}
+
+.sidebar-nav a i {
+    width: 20px;
+    font-size: 17px;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+    color: #fff;
+    background: var(--navy-light);
+}
+
+.sidebar-nav a.active {
+    border-left: 3px solid var(--gold);
+}
+
+.backend-main {
+    width: calc(100% - 250px);
+    min-height: 100vh;
+    margin-left: 250px;
+}
+
+.backend-header {
+    height: 72px;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-toggle {
+    display: none;
+    padding: 0;
+    color: var(--navy);
+    background: transparent;
+    border: 0;
+    font-size: 25px;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-avatar {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: var(--red);
+    border-radius: 50%;
+}
+
+.admin-profile strong,
+.admin-profile span {
+    display: block;
+}
+
+.admin-profile strong {
+    color: var(--navy);
+    font-size: 12px;
+}
+
+.admin-profile span {
+    margin-top: 2px;
+    color: #9096a0;
+    font-size: 10px;
+}
+
+.backend-content {
+    padding: 30px;
+}
+
+.page-heading {
+    margin-bottom: 25px;
+}
+
+.page-heading h1 {
+    margin: 0 0 5px;
+    color: var(--navy);
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.page-heading p {
+    margin: 0;
+    color: #8a9099;
+    font-size: 12px;
+}
+
+.stat-card {
+    height: 100%;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    color: var(--red);
+    background: rgba(166, 61, 47, .08);
+    border-radius: 9px;
+    font-size: 20px;
+}
+
+.stat-card span {
+    color: #8a9099;
+    font-size: 11px;
+}
+
+.stat-card h3 {
+    margin: 3px 0 0;
+    color: var(--navy);
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.dashboard-panel {
+    margin-top: 28px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.panel-header {
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-header h4 {
+    margin: 0 0 4px;
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.panel-header p {
+    margin: 0;
+    color: #9499a2;
+    font-size: 11px;
+}
+
+.panel-header a {
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.empty-state {
+    padding: 55px 20px;
+    text-align: center;
+}
+
+.empty-state i {
+    color: #c6cad1;
+    font-size: 36px;
+}
+
+.empty-state h5 {
+    margin: 12px 0 5px;
+    color: var(--navy);
+    font-size: 14px;
+}
+
+.empty-state p {
+    margin: 0;
+    color: #9a9fa7;
+    font-size: 11px;
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .backend-main {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .backend-content {
+        padding: 22px;
+    }
+}
