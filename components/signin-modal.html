@@ -5,76 +5,223 @@
       <i class="bi bi-x-lg"></i>
     </button>
 
-    <div class="auth-header">
-      <a href="index.html" class="auth-brand">
-        Car<span>Rental</span>
-      </a>
+    <!-- SIGN IN VIEW -->
+    <div class="auth-view active" id="signinView">
 
-      <h2>Welcome Back</h2>
-      <p>Sign in to continue to your account.</p>
+      <div class="auth-header">
+        <a href="index.html" class="auth-brand">
+          Car<span>Rental</span>
+        </a>
+
+        <h2>Welcome Back</h2>
+        <p>Sign in to continue to your account.</p>
+      </div>
+
+      <form id="signinForm">
+
+        <div class="auth-field">
+          <label for="signinEmail">Email Address</label>
+
+          <div class="auth-input">
+            <i class="bi bi-envelope"></i>
+            <input
+              type="email"
+              id="signinEmail"
+              placeholder="Enter your email"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="signinPassword">Password</label>
+
+          <div class="auth-input">
+            <i class="bi bi-lock"></i>
+            <input
+              type="password"
+              id="signinPassword"
+              placeholder="Enter your password"
+              required
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              data-password="signinPassword"
+              aria-label="Show password"
+            >
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-options">
+          <label class="remember-me">
+            <input type="checkbox">
+            <span>Remember me</span>
+          </label>
+
+          <a href="#" class="forgot-password">
+            Forgot password?
+          </a>
+        </div>
+
+        <button type="submit" class="auth-submit">
+          Sign In
+        </button>
+
+      </form>
+
+      <div class="auth-register">
+        <span>Don't have an account?</span>
+        <button type="button" class="auth-switch" id="showRegister">
+          Create Account
+        </button>
+      </div>
+
     </div>
 
-    <form id="signinForm">
+    <!-- REGISTER VIEW -->
+    <div class="auth-view" id="registerView">
 
-      <div class="auth-field">
-        <label for="signinEmail">Email Address</label>
-
-        <div class="auth-input">
-          <i class="bi bi-envelope"></i>
-
-          <input
-            type="email"
-            id="signinEmail"
-            placeholder="Enter your email"
-            required
-          >
-        </div>
-      </div>
-
-      <div class="auth-field">
-        <label for="signinPassword">Password</label>
-
-        <div class="auth-input">
-          <i class="bi bi-lock"></i>
-
-          <input
-            type="password"
-            id="signinPassword"
-            placeholder="Enter your password"
-            required
-          >
-
-          <button
-            type="button"
-            class="password-toggle"
-            id="passwordToggle"
-            aria-label="Show password"
-          >
-            <i class="bi bi-eye"></i>
-          </button>
-        </div>
-      </div>
-
-      <div class="auth-options">
-        <label class="remember-me">
-          <input type="checkbox">
-          <span>Remember me</span>
-        </label>
-
-        <a href="#" class="forgot-password">
-          Forgot password?
+      <div class="auth-header">
+        <a href="index.html" class="auth-brand">
+          Car<span>Rental</span>
         </a>
+
+        <h2>Create Account</h2>
+        <p>Create your account to manage your bookings.</p>
       </div>
 
-      <button type="submit" class="auth-submit">
-        Sign In
-      </button>
+      <form id="registerForm">
 
-    </form>
+        <div class="row g-3">
 
-    <div class="auth-register">
-      <span>Don't have an account?</span>
-      <a href="#">Create Account</a>
+          <div class="col-md-6">
+            <div class="auth-field">
+              <label for="firstName">First Name</label>
+
+              <div class="auth-input">
+                <i class="bi bi-person"></i>
+                <input
+                  type="text"
+                  id="firstName"
+                  placeholder="First name"
+                  required
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="auth-field">
+              <label for="lastName">Last Name</label>
+
+              <div class="auth-input">
+                <i class="bi bi-person"></i>
+                <input
+                  type="text"
+                  id="lastName"
+                  placeholder="Last name"
+                  required
+                >
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="auth-field">
+          <label for="registerPhone">Phone Number</label>
+
+          <div class="auth-input">
+            <i class="bi bi-telephone"></i>
+            <input
+              type="tel"
+              id="registerPhone"
+              placeholder="Enter your phone number"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="registerEmail">Email Address</label>
+
+          <div class="auth-input">
+            <i class="bi bi-envelope"></i>
+            <input
+              type="email"
+              id="registerEmail"
+              placeholder="Enter your email"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="registerPassword">Password</label>
+
+          <div class="auth-input">
+            <i class="bi bi-lock"></i>
+            <input
+              type="password"
+              id="registerPassword"
+              placeholder="Create a password"
+              required
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              data-password="registerPassword"
+              aria-label="Show password"
+            >
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <label for="confirmPassword">Confirm Password</label>
+
+          <div class="auth-input">
+            <i class="bi bi-lock"></i>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm your password"
+              required
+            >
+
+            <button
+              type="button"
+              class="password-toggle"
+              data-password="confirmPassword"
+              aria-label="Show password"
+            >
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <p class="auth-error" id="registerError"></p>
+
+        <button type="submit" class="auth-submit">
+          Create Account
+        </button>
+
+      </form>
+
+      <div class="auth-register">
+        <span>Already have an account?</span>
+
+        <button type="button" class="auth-switch" id="showSignin">
+          Sign In
+        </button>
+      </div>
+
     </div>
 
   </div>

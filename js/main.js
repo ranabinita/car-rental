@@ -230,7 +230,7 @@ if (qualityTabs.length && qualityTitle && qualityText) {
     });
   });
 }
-/* ================= SIGN IN MODAL ================= */
+/* ================= AUTH MODAL ================= */
 
 async function loadSigninModal() {
   const container = document.getElementById('signin-modal-container');
@@ -239,26 +239,54 @@ async function loadSigninModal() {
 
   try {
     const response = await fetch('components/signin-modal.html');
+
+    if (!response.ok) {
+      throw new Error('Could not load auth modal.');
+    }
+
     const html = await response.text();
 
     container.innerHTML = html;
 
     initSigninModal();
   } catch (error) {
-    console.error('Could not load sign in modal:', error);
+    console.error('Could not load auth modal:', error);
   }
 }
 
 function initSigninModal() {
   const modal = document.getElementById('signinModal');
   const closeButton = document.getElementById('closeSignin');
-  const passwordToggle = document.getElementById('passwordToggle');
-  const passwordInput = document.getElementById('signinPassword');
-  const signinForm = document.getElementById('signinForm');
 
-  if (!modal) return;
+  const signinView = document.getElementById('signinView');
+  const registerView = document.getElementById('registerView');
+
+  const showRegister = document.getElementById('showRegister');
+  const showSignin = document.getElementById('showSignin');
+
+  const signinForm = document.getElementById('signinForm');
+  const registerForm = document.getElementById('registerForm');
+
+  const registerPassword = document.getElementById('registerPassword');
+  const confirmPassword = document.getElementById('confirmPassword');
+  const registerError = document.getElementById('registerError');
+
+  if (!modal || !signinView || !registerView) return;
+
+  function showView(view) {
+    signinView.classList.remove('active');
+    registerView.classList.remove('active');
+
+    view.classList.add('active');
+
+    if (registerError) {
+      registerError.textContent = '';
+    }
+  }
 
   function openModal() {
+    showView(signinView);
+
     modal.classList.add('active');
     document.body.classList.add('modal-open');
   }
@@ -271,10 +299,11 @@ function initSigninModal() {
   document.addEventListener('click', (event) => {
     const signinButton = event.target.closest('.signin-btn');
 
-    if (signinButton) {
-      event.preventDefault();
-      openModal();
-    }
+    if (!signinButton) return;
+
+    event.preventDefault();
+
+    openModal();
   });
 
   closeButton?.addEventListener('click', closeModal);
@@ -286,25 +315,72 @@ function initSigninModal() {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && modal.classList.contains('active')) {
+    if (
+      event.key === 'Escape' &&
+      modal.classList.contains('active')
+    ) {
       closeModal();
     }
   });
 
-  passwordToggle?.addEventListener('click', () => {
-    const showingPassword = passwordInput.type === 'text';
+  showRegister?.addEventListener('click', () => {
+    showView(registerView);
+  });
 
-    passwordInput.type = showingPassword ? 'password' : 'text';
+  showSignin?.addEventListener('click', () => {
+    showView(signinView);
+  });
 
-    passwordToggle.innerHTML = showingPassword
-      ? '<i class="bi bi-eye"></i>'
-      : '<i class="bi bi-eye-slash"></i>';
+  document.querySelectorAll('.password-toggle').forEach((button) => {
+    button.addEventListener('click', () => {
+      const inputId = button.dataset.password;
+      const input = document.getElementById(inputId);
+
+      if (!input) return;
+
+      const passwordVisible = input.type === 'text';
+
+      input.type = passwordVisible ? 'password' : 'text';
+
+      button.innerHTML = passwordVisible
+        ? '<i class="bi bi-eye"></i>'
+        : '<i class="bi bi-eye-slash"></i>';
+
+      button.setAttribute(
+        'aria-label',
+        passwordVisible ? 'Show password' : 'Hide password'
+      );
+    });
   });
 
   signinForm?.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    console.log('Sign in form ready for Django backend.');
+    console.log('Sign in ready for Django backend.');
+  });
+
+  registerForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    if (registerError) {
+      registerError.textContent = '';
+    }
+
+    if (
+      registerPassword &&
+      confirmPassword &&
+      registerPassword.value !== confirmPassword.value
+    ) {
+      if (registerError) {
+        registerError.textContent = 'Passwords do not match.';
+      }
+
+      confirmPassword.focus();
+
+      return;
+    }
+
+    console.log('Registration ready for Django backend.');
   });
 }
 
