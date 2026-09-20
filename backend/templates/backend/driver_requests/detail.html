@@ -1,0 +1,239 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Driver Request #{{ driver_request.id }} | CarRental{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <div>
+        <h1>Driver Request #{{ driver_request.id }}</h1>
+        <p>Review customer, trip and driver request information.</p>
+    </div>
+
+    <a href="{% url 'driver_requests:list' %}"
+       class="btn btn-outline-dark">
+        <i class="bi bi-arrow-left"></i>
+        Back to Requests
+    </a>
+</div>
+
+<div class="booking-detail-grid">
+
+    <!-- CUSTOMER -->
+    <div class="dashboard-panel booking-detail-card">
+
+        <div class="panel-header">
+            <div>
+                <h4>Customer Details</h4>
+                <p>Contact information for this request.</p>
+            </div>
+
+            <span class="booking-status status-{{ driver_request.status }}">
+                {{ driver_request.get_status_display }}
+            </span>
+        </div>
+
+        <div class="booking-detail-body">
+
+            <div class="booking-detail-item">
+                <span>Full Name</span>
+                <strong>{{ driver_request.full_name }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Email</span>
+                <strong>{{ driver_request.email }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Phone</span>
+                <strong>{{ driver_request.phone }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Requested On</span>
+                <strong>
+                    {{ driver_request.created_at|date:"M d, Y - g:i A" }}
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- REQUEST -->
+    <div class="dashboard-panel booking-detail-card">
+
+        <div class="panel-header">
+            <div>
+                <h4>Driver Requirement</h4>
+                <p>Requested vehicle type and current status.</p>
+            </div>
+        </div>
+
+        <div class="booking-detail-body">
+
+            <div class="booking-detail-item">
+                <span>Vehicle Type</span>
+                <strong>{{ driver_request.get_vehicle_type_display }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Status</span>
+                <strong>{{ driver_request.get_status_display }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Request ID</span>
+                <strong>#{{ driver_request.id }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TRIP -->
+<div class="dashboard-panel booking-trip-panel">
+
+    <div class="panel-header">
+        <div>
+            <h4>Trip Details</h4>
+            <p>Pickup, destination and travel period.</p>
+        </div>
+    </div>
+
+    <div class="booking-trip-grid">
+
+        <div class="booking-detail-item">
+            <span>Pickup Location</span>
+            <strong>{{ driver_request.pickup_location }}</strong>
+        </div>
+
+        <div class="booking-detail-item">
+            <span>Drop-off Location</span>
+            <strong>{{ driver_request.dropoff_location }}</strong>
+        </div>
+
+        <div class="booking-detail-item">
+            <span>Pickup Date & Time</span>
+            <strong>
+                {{ driver_request.pickup_datetime|date:"M d, Y - g:i A" }}
+            </strong>
+        </div>
+
+        <div class="booking-detail-item">
+            <span>Return Date & Time</span>
+            <strong>
+                {{ driver_request.return_datetime|date:"M d, Y - g:i A" }}
+            </strong>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- NOTES -->
+<div class="dashboard-panel booking-trip-panel">
+
+    <div class="panel-header">
+        <div>
+            <h4>Customer Notes</h4>
+            <p>Additional information provided by the customer.</p>
+        </div>
+    </div>
+
+    <div class="booking-notes">
+
+        {% if driver_request.notes %}
+            <p>{{ driver_request.notes|linebreaksbr }}</p>
+        {% else %}
+            <p class="text-muted mb-0">No additional notes provided.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- ACTIONS -->
+<div class="dashboard-panel booking-trip-panel">
+
+    <div class="panel-header">
+        <div>
+            <h4>Request Actions</h4>
+            <p>Update the status of this driver request.</p>
+        </div>
+    </div>
+
+    <div class="booking-actions">
+
+        {% if driver_request.status == 'pending' %}
+
+        <form method="post"
+              action="{% url 'driver_requests:confirm' driver_request.pk %}">
+            {% csrf_token %}
+
+            <button type="submit"
+                    class="btn btn-dark">
+                <i class="bi bi-check-lg"></i>
+                Confirm Request
+            </button>
+        </form>
+
+        <form method="post"
+              action="{% url 'driver_requests:cancel' driver_request.pk %}">
+            {% csrf_token %}
+
+            <button type="submit"
+                    class="btn btn-outline-danger">
+                <i class="bi bi-x-lg"></i>
+                Cancel Request
+            </button>
+        </form>
+
+        {% elif driver_request.status == 'confirmed' %}
+
+        <form method="post"
+              action="{% url 'driver_requests:complete' driver_request.pk %}">
+            {% csrf_token %}
+
+            <button type="submit"
+                    class="btn btn-dark">
+                <i class="bi bi-check-circle"></i>
+                Mark Completed
+            </button>
+        </form>
+
+        <form method="post"
+              action="{% url 'driver_requests:cancel' driver_request.pk %}">
+            {% csrf_token %}
+
+            <button type="submit"
+                    class="btn btn-outline-danger">
+                <i class="bi bi-x-lg"></i>
+                Cancel Request
+            </button>
+        </form>
+
+        {% elif driver_request.status == 'completed' %}
+
+        <div class="alert alert-success mb-0">
+            <i class="bi bi-check-circle me-1"></i>
+            This driver request has been completed.
+        </div>
+
+        {% elif driver_request.status == 'cancelled' %}
+
+        <div class="alert alert-secondary mb-0">
+            <i class="bi bi-x-circle me-1"></i>
+            This driver request has been cancelled.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

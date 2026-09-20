@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 
 from vehicles.models import Vehicle
 from bookings.models import Booking
+from driver_requests.models import DriverRequest
 
 
 def backend_login(request):
@@ -40,10 +41,14 @@ def backend_login(request):
 def dashboard_home(request):
     context = {
         'total_vehicles': Vehicle.objects.count(),
-
         'available_vehicles': Vehicle.objects.filter(
             status='available'
         ).count(),
+        'total_bookings': Booking.objects.count(),
+        'total_driver_requests': DriverRequest.objects.count(),
+        'recent_bookings': Booking.objects.select_related(
+            'vehicle'
+        ).all()[:5],
     }
 
     return render(
