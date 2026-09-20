@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/corporate.css">
-  <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/auth.css">
 </head>
 
 <body data-page="corporate">
@@ -28,7 +27,7 @@
       <h1>Reliable Mobility for Your Business</h1>
       <p>Flexible vehicle rental solutions designed for companies, teams and business travel across Nepal.</p>
 
-      <button class="corporate-cta-btn" data-bs-toggle="modal" data-bs-target="#partnerModal">
+      <button type="button" class="corporate-cta-btn" data-bs-toggle="modal" data-bs-target="#partnerModal">
         Be a Partner
       </button>
     </div>
@@ -51,7 +50,6 @@
             <div class="corporate-icon">
               <i class="bi bi-car-front"></i>
             </div>
-
             <h4>Well-Maintained Vehicles</h4>
             <p>Choose vehicles suitable for daily operations, meetings, events and business travel.</p>
           </div>
@@ -62,7 +60,6 @@
             <div class="corporate-icon">
               <i class="bi bi-calendar3"></i>
             </div>
-
             <h4>Flexible Rental Duration</h4>
             <p>Arrange vehicles according to short-term or longer business transportation needs.</p>
           </div>
@@ -73,7 +70,6 @@
             <div class="corporate-icon">
               <i class="bi bi-buildings"></i>
             </div>
-
             <h4>Business-Focused Service</h4>
             <p>Transportation solutions suitable for companies, employees and corporate guests.</p>
           </div>
@@ -96,12 +92,10 @@
 
         <div class="corporate-process-item">
           <div class="process-number">01</div>
-
           <div>
             <h4>Submit Your Request</h4>
             <p>Provide your company and contact information through our partnership form.</p>
           </div>
-
           <div class="process-icon">
             <i class="bi bi-file-earmark-text"></i>
           </div>
@@ -109,12 +103,10 @@
 
         <div class="corporate-process-item">
           <div class="process-number">02</div>
-
           <div>
             <h4>Requirement Review</h4>
             <p>We review your transportation requirements and corporate rental preferences.</p>
           </div>
-
           <div class="process-icon">
             <i class="bi bi-clipboard-check"></i>
           </div>
@@ -122,12 +114,10 @@
 
         <div class="corporate-process-item">
           <div class="process-number">03</div>
-
           <div>
             <h4>Rental Agreement</h4>
             <p>Confirm the rental arrangement and service details for your organization.</p>
           </div>
-
           <div class="process-icon">
             <i class="bi bi-file-earmark-check"></i>
           </div>
@@ -135,12 +125,10 @@
 
         <div class="corporate-process-item">
           <div class="process-number">04</div>
-
           <div>
             <h4>Service Begins</h4>
             <p>Your corporate transportation service is ready according to the agreed requirements.</p>
           </div>
-
           <div class="process-icon">
             <i class="bi bi-car-front-fill"></i>
           </div>
@@ -152,7 +140,7 @@
 
 </main>
 
-<!-- PARTNER FORM MODAL -->
+<!-- CORPORATE PARTNER MODAL -->
 <div class="modal fade" id="partnerModal" tabindex="-1" aria-labelledby="partnerModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content partner-modal">
@@ -170,28 +158,36 @@
         <div class="modal-body">
 
           <div class="mb-3">
-            <label class="form-label">Company Name <span>*</span></label>
-            <input type="text" class="form-control corporate-control" placeholder="Enter company name" required>
+            <label class="form-label" for="corporateCompanyName">
+              Company Name <span>*</span>
+            </label>
+            <input type="text" id="corporateCompanyName" class="form-control corporate-control" placeholder="Enter company name" required>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Contact Person Name <span>*</span></label>
-            <input type="text" class="form-control corporate-control" placeholder="Enter contact person name" required>
+            <label class="form-label" for="corporateContactPerson">
+              Contact Person Name <span>*</span>
+            </label>
+            <input type="text" id="corporateContactPerson" class="form-control corporate-control" placeholder="Enter contact person name" required>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Phone Number <span>*</span></label>
-            <input type="tel" class="form-control corporate-control" placeholder="Enter phone number" required>
+            <label class="form-label" for="corporatePhone">
+              Phone Number <span>*</span>
+            </label>
+            <input type="tel" id="corporatePhone" class="form-control corporate-control" placeholder="Enter phone number" autocomplete="tel" required>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Email Address <span>*</span></label>
-            <input type="email" class="form-control corporate-control" placeholder="Enter email address" required>
+            <label class="form-label" for="corporateEmail">
+              Email Address <span>*</span>
+            </label>
+            <input type="email" id="corporateEmail" class="form-control corporate-control" placeholder="Enter email address" autocomplete="email" required>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Rental Requirement</label>
-            <textarea class="form-control corporate-control corporate-textarea" rows="3" placeholder="Tell us briefly about your vehicle requirements"></textarea>
+            <label class="form-label" for="corporateRequirement">Rental Requirement</label>
+            <textarea id="corporateRequirement" class="form-control corporate-control corporate-textarea" rows="3" placeholder="Tell us briefly about your vehicle requirements"></textarea>
           </div>
 
         </div>
@@ -217,5 +213,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/main.js"></script>
+
 </body>
 </html>

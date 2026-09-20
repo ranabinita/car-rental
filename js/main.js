@@ -142,29 +142,132 @@ if (statsSection) {
 
   statsObserver.observe(statsSection);
 }
-
-
 /* =========================
    CORPORATE PARTNER FORM
 ========================= */
 
-const partnerForm = document.getElementById('partnerForm');
+function initCorporateRequest() {
+  const form = document.getElementById('partnerForm');
 
-if (partnerForm) {
-  partnerForm.addEventListener('submit', (event) => {
+  if (!form) return;
+
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const modalElement = document.getElementById('partnerModal');
-    const modal = bootstrap.Modal.getInstance(modalElement);
+    const companyName =
+      document.getElementById('corporateCompanyName').value.trim();
 
-    modal?.hide();
-    partnerForm.reset();
+    const contactPerson =
+      document.getElementById('corporateContactPerson').value.trim();
 
-    alert('Your corporate rental request has been submitted.');
+    const phone =
+      document.getElementById('corporatePhone').value.trim();
+
+    const email =
+      document.getElementById('corporateEmail').value.trim();
+
+    const rentalRequirement =
+      document.getElementById('corporateRequirement').value.trim();
+
+    const submitButton =
+      form.querySelector('button[type="submit"]');
+
+    const emailPattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const phonePattern =
+      /^[0-9+\-\s()]{7,20}$/;
+
+    if (!companyName) {
+      alert('Please enter the company name.');
+      return;
+    }
+
+    if (!contactPerson) {
+      alert('Please enter the contact person name.');
+      return;
+    }
+
+    if (!phonePattern.test(phone)) {
+      alert('Please enter a valid phone number.');
+      return;
+    }
+
+    if (!emailPattern.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.innerHTML =
+      'Submitting...';
+
+    try {
+      const response = await fetch(
+        'http://127.0.0.1:8000/api/corporate-requests/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+          body: JSON.stringify({
+            company_name: companyName,
+            contact_person: contactPerson,
+            phone,
+            email,
+            rental_requirement:
+              rentalRequirement
+          })
+        }
+      );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          'Unable to submit corporate request.'
+        );
+      }
+
+      const modalElement =
+        document.getElementById('partnerModal');
+
+      const modal =
+        bootstrap.Modal.getInstance(
+          modalElement
+        );
+
+      form.reset();
+      modal?.hide();
+
+      alert(
+        `Corporate request submitted successfully. Request #${data.request_id}`
+      );
+
+    } catch (error) {
+      console.error(
+        'Corporate request error:',
+        error
+      );
+
+      alert(error.message);
+
+    } finally {
+      submitButton.disabled = false;
+
+      submitButton.innerHTML =
+        'Submit Request <i class="bi bi-arrow-right"></i>';
+    }
   });
 }
 
-
+document.addEventListener(
+  'DOMContentLoaded',
+  initCorporateRequest
+);
 /* =========================
    ABOUT WING ANIMATION
 ========================= */
