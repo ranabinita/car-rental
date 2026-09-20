@@ -1,0 +1,112 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}{{ blog.title }} | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+  <div>
+    <h1>{{ blog.title }}</h1>
+    <p>View blog post information and content.</p>
+  </div>
+
+  <div class="d-flex gap-2">
+    <a href="{% url 'blogs:list' %}" class="backend-secondary-btn">
+      <i class="bi bi-arrow-left"></i> Back
+    </a>
+
+    <a href="{% url 'blogs:edit' blog.id %}" class="backend-btn">
+      <i class="bi bi-pencil"></i> Edit
+    </a>
+  </div>
+</div>
+
+<div class="booking-detail-grid">
+  <div class="dashboard-panel">
+    <div class="panel-header">
+      <div>
+        <h4>Blog Information</h4>
+        <p>General information about this post.</p>
+      </div>
+    </div>
+
+    <div class="booking-detail-body">
+      <div class="booking-detail-item">
+        <span>Category</span>
+        <strong>{{ blog.category }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Read Time</span>
+        <strong>{{ blog.read_time }} min read</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Published Date</span>
+        <strong>{{ blog.published_at|date:"M d, Y - g:i A" }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Status</span>
+        {% if blog.status == 'published' %}
+          <strong><span class="badge text-bg-success">Published</span></strong>
+        {% else %}
+          <strong><span class="badge text-bg-secondary">Draft</span></strong>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-panel">
+    <div class="panel-header">
+      <div>
+        <h4>Blog Image</h4>
+        <p>Featured image used on the website.</p>
+      </div>
+    </div>
+
+    {% if blog.image %}
+      <img src="{{ blog.image.url }}" alt="{{ blog.title }}" style="width:100%;max-height:300px;object-fit:cover;border-radius:12px;">
+    {% else %}
+      <div class="empty-state">
+        <i class="bi bi-image"></i>
+        <p>No image available.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="dashboard-panel booking-notes-panel">
+  <div class="panel-header">
+    <div>
+      <h4>Excerpt</h4>
+      <p>Short description displayed on the blog card.</p>
+    </div>
+  </div>
+
+  <div class="booking-notes">{{ blog.excerpt }}</div>
+</div>
+
+<div class="dashboard-panel booking-notes-panel">
+  <div class="panel-header">
+    <div>
+      <h4>Blog Content</h4>
+      <p>Full article content.</p>
+    </div>
+  </div>
+
+  <div class="booking-notes">{{ blog.content|linebreaksbr }}</div>
+</div>
+
+<div class="booking-detail-actions">
+  <a href="{% url 'blogs:edit' blog.id %}" class="backend-btn">
+    <i class="bi bi-pencil"></i> Edit Blog
+  </a>
+
+  <form method="post" action="{% url 'blogs:delete' blog.id %}" onsubmit="return confirm('Delete this blog permanently?');">
+    {% csrf_token %}
+    <button type="submit" class="booking-cancel-btn">
+      <i class="bi bi-trash"></i> Delete Blog
+    </button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}{% if blog %}Edit Blog{% else %}Add Blog{% endif %} | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+  <div>
+    <h1>{% if blog %}Edit Blog{% else %}Add Blog{% endif %}</h1>
+    <p>{% if blog %}Update the blog post information.{% else %}Create a new blog post for the website.{% endif %}</p>
+  </div>
+
+  <a href="{% url 'blogs:list' %}" class="backend-secondary-btn">
+    <i class="bi bi-arrow-left"></i> Back to Blogs
+  </a>
+</div>
+
+<div class="dashboard-panel">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <label class="form-label">Title *</label>
+        <input type="text" name="title" class="form-control" value="{{ blog.title|default:'' }}" placeholder="Enter blog title" required>
+      </div>
+
+      <div class="col-lg-4">
+        <label class="form-label">Category *</label>
+        <input type="text" name="category" class="form-control" value="{{ blog.category|default:'' }}" placeholder="e.g. Travel Guide" required>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Excerpt *</label>
+        <textarea name="excerpt" class="form-control" rows="3" placeholder="Short description shown on the blog card" required>{{ blog.excerpt|default:'' }}</textarea>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Content *</label>
+        <textarea name="content" class="form-control" rows="10" placeholder="Write the full blog content" required>{{ blog.content|default:'' }}</textarea>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Blog Image {% if not blog %}*{% endif %}</label>
+        <input type="file" name="image" class="form-control" accept="image/*" {% if not blog %}required{% endif %}>
+
+        {% if blog and blog.image %}
+          <small class="text-muted d-block mt-2">Current image: {{ blog.image.name }}</small>
+        {% endif %}
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Read Time</label>
+        <input type="number" name="read_time" class="form-control" min="1" value="{{ blog.read_time|default:5 }}">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          <option value="draft" {% if not blog or blog.status == 'draft' %}selected{% endif %}>Draft</option>
+          <option value="published" {% if blog.status == 'published' %}selected{% endif %}>Published</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="booking-detail-actions mt-4">
+      <button type="submit" class="backend-btn">
+        <i class="bi bi-check-lg"></i>
+        {% if blog %}Update Blog{% else %}Create Blog{% endif %}
+      </button>
+
+      <a href="{% url 'blogs:list' %}" class="backend-secondary-btn">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

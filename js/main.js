@@ -1251,7 +1251,236 @@ function initDriverRequest() {
   });
 }
 
-document.addEventListener(
-  'DOMContentLoaded',
-  initDriverRequest
-);
+document.addEventListener('DOMContentLoaded',initDriverRequest);
+/*BLOGS*/
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+async function loadBlogs() {
+  const blogGrid = document.getElementById('blogGrid');
+  if (!blogGrid) return;
+
+  const recentPosts = document.getElementById('recentPosts');
+  const categoriesContainer = document.getElementById('blogCategories');
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/blogs/');
+    if (!response.ok) throw new Error('Unable to load blogs.');
+
+    const data = await response.json();
+    const blogs = data.blogs || [];
+
+    if (!blogs.length) {
+      blogGrid.innerHTML = `
+        <div class="text-center py-5 w-100">
+          <i class="bi bi-journal-text fs-1"></i>
+          <h4 class="mt-3">No blog posts yet</h4>
+          <p>New articles will appear here soon.</p>
+        </div>
+      `;
+
+      if (recentPosts) recentPosts.innerHTML = '<p>No recent posts.</p>';
+      if (categoriesContainer) categoriesContainer.innerHTML = '<p>No categories yet.</p>';
+      return;
+    }
+
+    renderBlogCards(blogs);
+    renderRecentPosts(blogs);
+    renderBlogCategories(blogs);
+
+  } catch (error) {
+    console.error('Blog loading error:', error);
+
+    blogGrid.innerHTML = `
+      <div class="text-center py-5 w-100">
+        <i class="bi bi-exclamation-circle fs-1"></i>
+        <h4 class="mt-3">Unable to load blogs</h4>
+        <p>Please try again later.</p>
+      </div>
+    `;
+
+    if (recentPosts) recentPosts.innerHTML = '<p>Unable to load recent posts.</p>';
+    if (categoriesContainer) categoriesContainer.innerHTML = '<p>Unable to load categories.</p>';
+  }
+}
+
+function renderBlogCards(blogs) {
+  const blogGrid = document.getElementById('blogGrid');
+  if (!blogGrid) return;
+
+  blogGrid.innerHTML = blogs.map((blog) => {
+    const date = new Date(blog.published_at);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+
+    return `
+      <article class="blog-card" data-category="${escapeHtml(blog.category)}">
+        <div class="blog-image">
+          ${blog.image ? `<img src="${blog.image}" alt="${escapeHtml(blog.title)}">` : ''}
+          <div class="blog-date">
+            <strong>${day}</strong>
+            <span>${month}</span>
+          </div>
+        </div>
+
+        <div class="blog-card-body">
+          <div class="blog-meta">
+            <span><i class="bi bi-folder"></i> ${escapeHtml(blog.category)}</span>
+            <span><i class="bi bi-clock"></i> ${blog.read_time} min read</span>
+          </div>
+
+          <h3>${escapeHtml(blog.title)}</h3>
+          <p>${escapeHtml(blog.excerpt)}</p>
+
+            <a href="blog-detail.html?id=${blog.id}" class="blog-read-btn">            Read More
+            <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function renderRecentPosts(blogs) {
+  const recentPosts = document.getElementById('recentPosts');
+  if (!recentPosts) return;
+
+  recentPosts.innerHTML = blogs.slice(0, 4).map((blog) => {
+    const date = new Date(blog.published_at);
+    const formattedDate = date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+
+    return `
+      <a href="blog-detail.html?id=${blog.id}" class="recent-post" data-blog-id="${blog.id}">
+        ${blog.image ? `<img src="${blog.image}" alt="${escapeHtml(blog.title)}">` : ''}
+        <div>
+          <h5>${escapeHtml(blog.title)}</h5>
+          <span><i class="bi bi-calendar3"></i> ${formattedDate}</span>
+        </div>
+      </a>
+    `;
+  }).join('');
+}
+
+function renderBlogCategories(blogs) {
+  const categoriesContainer = document.getElementById('blogCategories');
+  if (!categoriesContainer) return;
+
+  const categories = {};
+
+  blogs.forEach((blog) => {
+    categories[blog.category] = (categories[blog.category] || 0) + 1;
+  });
+
+  categoriesContainer.innerHTML = `
+    <a href="#" class="blog-category-filter active" data-category="all">
+      All Posts <span>${String(blogs.length).padStart(2, '0')}</span>
+    </a>
+
+    ${Object.entries(categories).map(([category, count]) => `
+      <a href="#" class="blog-category-filter" data-category="${escapeHtml(category)}">
+        ${escapeHtml(category)}
+        <span>${String(count).padStart(2, '0')}</span>
+      </a>
+    `).join('')}
+  `;
+
+  categoriesContainer.querySelectorAll('.blog-category-filter').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      const category = link.dataset.category;
+
+      categoriesContainer.querySelectorAll('.blog-category-filter').forEach((item) => {
+        item.classList.remove('active');
+      });
+
+      link.classList.add('active');
+
+      document.querySelectorAll('.blog-card').forEach((card) => {
+        const show = category === 'all' || card.dataset.category === category;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadBlogs);
+/*BLOG DETAIL */
+
+async function loadBlogDetail() {
+  const container = document.getElementById('blogDetail');
+  if (!container) return;
+
+  const blogId = new URLSearchParams(window.location.search).get('id');
+  const title = document.getElementById('blogDetailTitle');
+  const excerpt = document.getElementById('blogDetailExcerpt');
+
+  if (!blogId) {
+    container.innerHTML = '<div class="text-center py-5"><h3>Blog not found</h3><a href="blog.html" class="blog-read-btn">Back to Blogs</a></div>';
+    return;
+  }
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/blogs/');
+    if (!response.ok) throw new Error('Unable to load blog.');
+
+    const data = await response.json();
+    const blog = (data.blogs || []).find((item) => String(item.id) === String(blogId));
+
+    if (!blog) {
+      container.innerHTML = '<div class="text-center py-5"><h3>Blog not found</h3><a href="blog.html" class="blog-read-btn">Back to Blogs</a></div>';
+      return;
+    }
+
+    const date = new Date(blog.published_at);
+
+    document.title = `${blog.title} | CarRental`;
+    if (title) title.textContent = blog.title;
+    if (excerpt) excerpt.textContent = blog.excerpt;
+
+    container.innerHTML = `
+      <article>
+        ${blog.image ? `<img src="${blog.image}" alt="${escapeHtml(blog.title)}" style="width:100%;max-height:550px;object-fit:cover;border-radius:18px;">` : ''}
+
+        <div class="blog-meta mt-4 mb-4">
+          <span><i class="bi bi-folder"></i> ${escapeHtml(blog.category)}</span>
+          <span><i class="bi bi-calendar3"></i> ${date.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'})}</span>
+          <span><i class="bi bi-clock"></i> ${blog.read_time} min read</span>
+        </div>
+
+        <div class="blog-article-text">${formatBlogContent(blog.content)}</div>
+
+        <div class="mt-5">
+          <a href="blog.html" class="blog-read-btn">
+            <i class="bi bi-arrow-left"></i> Back to Blogs
+          </a>
+        </div>
+      </article>
+    `;
+
+  } catch (error) {
+    console.error('Blog detail error:', error);
+    container.innerHTML = '<div class="text-center py-5"><h3>Unable to load this article</h3><p>Please try again later.</p></div>';
+  }
+}
+
+function formatBlogContent(content) {
+  return escapeHtml(content)
+    .split(/\n\s*\n/)
+    .filter(Boolean)
+    .map((paragraph) => `<p>${paragraph.replaceAll('\n', '<br>')}</p>`)
+    .join('');
+}
+
+document.addEventListener('DOMContentLoaded', loadBlogDetail);

@@ -1,0 +1,84 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Blogs | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+  <div>
+    <h1>Blogs</h1>
+    <p>Create and manage blog posts displayed on the website.</p>
+  </div>
+
+  <a href="{% url 'blogs:add' %}" class="backend-btn">
+    <i class="bi bi-plus-lg"></i> Add Blog
+  </a>
+</div>
+
+<div class="dashboard-panel">
+  {% if blogs %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Blog</th>
+            <th>Category</th>
+            <th>Read Time</th>
+            <th>Published</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for blog in blogs %}
+            <tr>
+              <td>
+                <strong>{{ blog.title }}</strong><br>
+                <small>{{ blog.excerpt|truncatechars:65 }}</small>
+              </td>
+
+              <td>{{ blog.category }}</td>
+              <td>{{ blog.read_time }} min</td>
+              <td>{{ blog.published_at|date:"M d, Y" }}</td>
+
+              <td>
+                {% if blog.status == 'published' %}
+                  <span class="badge text-bg-success">Published</span>
+                {% else %}
+                  <span class="badge text-bg-secondary">Draft</span>
+                {% endif %}
+              </td>
+
+              <td>
+                <div class="d-flex gap-2 flex-wrap">
+                  <a href="{% url 'blogs:detail' blog.id %}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-eye"></i> View
+                  </a>
+
+                  <a href="{% url 'blogs:edit' blog.id %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i> Edit
+                  </a>
+
+                  <form method="post" action="{% url 'blogs:delete' blog.id %}" onsubmit="return confirm('Delete this blog?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="bi bi-trash"></i> Delete
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  {% else %}
+    <div class="empty-state">
+      <i class="bi bi-journal-text"></i>
+      <h5>No blogs yet</h5>
+      <p>Create your first blog post to get started.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

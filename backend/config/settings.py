@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'bookings',
     'driver_requests',
     'corporate_requests',
+    'blogs',
 ]
 
 MIDDLEWARE = [

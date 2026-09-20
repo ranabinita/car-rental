@@ -49,11 +49,10 @@
         <span>Corporate Requests</span>
       </a>
 
-      <div class="sidebar-disabled">
+      <a href="{% url 'blogs:list' %}" class="{% if request.resolver_match.namespace == 'blogs' %}active{% endif %}">
         <i class="bi bi-journal-text"></i>
         <span>Blogs</span>
-        <small>Soon</small>
-      </div>
+      </a>
 
       <div class="sidebar-disabled">
         <i class="bi bi-envelope"></i>
