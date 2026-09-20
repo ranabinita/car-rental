@@ -15,6 +15,7 @@
 </div>
 
 <div class="booking-detail-grid">
+
   <div class="dashboard-panel">
     <div class="panel-header">
       <div>
@@ -56,7 +57,7 @@
       </div>
 
       <div class="booking-detail-item">
-        <span>Type</span>
+        <span>Vehicle Type</span>
         <strong>{{ booking.vehicle.get_vehicle_type_display }}</strong>
       </div>
 
@@ -66,6 +67,7 @@
       </div>
     </div>
   </div>
+
 </div>
 
 <div class="dashboard-panel booking-trip-panel">
@@ -77,6 +79,20 @@
   </div>
 
   <div class="booking-detail-body booking-trip-grid">
+
+    <div class="booking-detail-item">
+      <span>Rental Type</span>
+      {% if booking.rental_type == 'self_drive' %}
+        <strong>
+          <span class="badge text-bg-dark">Self Drive</span>
+        </strong>
+      {% else %}
+        <strong>
+          <span class="badge text-bg-info">Rent a Car</span>
+        </strong>
+      {% endif %}
+    </div>
+
     <div class="booking-detail-item">
       <span>Pickup Location</span>
       <strong>{{ booking.pickup_location }}</strong>
@@ -121,6 +137,7 @@
         <strong class="booking-status status-cancelled">Cancelled</strong>
       {% endif %}
     </div>
+
   </div>
 </div>
 
@@ -142,6 +159,7 @@
 </div>
 
 <div class="booking-detail-actions">
+
   {% if booking.status == 'pending' %}
     <form method="post" action="{% url 'bookings:confirm' booking.id %}">
       {% csrf_token %}
@@ -172,5 +190,6 @@
       </button>
     </form>
   {% endif %}
+
 </div>
 {% endblock %}

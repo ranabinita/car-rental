@@ -23,6 +23,8 @@ def booking_list(request):
         'backend/bookings/list.html',
         {'bookings': bookings}
     )
+
+
 @login_required(login_url='dashboard:login')
 def booking_detail(request, pk):
     booking = get_object_or_404(
@@ -48,6 +50,7 @@ def booking_confirm(request, pk):
 
     booking.status = 'confirmed'
     booking.save(update_fields=['status', 'updated_at'])
+
     messages.success(request, 'Booking confirmed successfully.')
     return redirect('bookings:list')
 
@@ -63,6 +66,7 @@ def booking_complete(request, pk):
 
     booking.status = 'completed'
     booking.save(update_fields=['status', 'updated_at'])
+
     messages.success(request, 'Booking marked as completed.')
     return redirect('bookings:list')
 
@@ -78,6 +82,7 @@ def booking_cancel(request, pk):
 
     booking.status = 'cancelled'
     booking.save(update_fields=['status', 'updated_at'])
+
     messages.success(request, 'Booking cancelled successfully.')
     return redirect('bookings:list')
 
@@ -93,6 +98,18 @@ def create_booking(request):
     try:
         data = json.loads(request.body)
 
+        # RENT A CAR / SELF DRIVE
+        rental_type = data.get('rental_type', 'rental')
+
+        valid_rental_types = dict(Booking.RENTAL_TYPES)
+
+        if rental_type not in valid_rental_types:
+            return JsonResponse(
+                {'error': 'Invalid rental type.'},
+                status=400
+            )
+
+        # REQUIRED FIELDS
         required_fields = [
             'vehicle_id',
             'full_name',
@@ -111,6 +128,7 @@ def create_booking(request):
                     status=400
                 )
 
+        # VEHICLE
         vehicle = Vehicle.objects.filter(
             id=data['vehicle_id'],
             status='available'
@@ -122,6 +140,7 @@ def create_booking(request):
                 status=404
             )
 
+        # DATES
         pickup = parse_datetime(data['pickup_datetime'])
         return_time = parse_datetime(data['return_datetime'])
 
@@ -149,6 +168,7 @@ def create_booking(request):
                 status=400
             )
 
+        # CHECK VEHICLE BOOKING CONFLICT
         conflict = Booking.objects.filter(
             vehicle=vehicle,
             status__in=['pending', 'confirmed'],
@@ -165,7 +185,9 @@ def create_booking(request):
                 status=409
             )
 
+        # PRICE
         duration = return_time - pickup
+
         rental_days = max(
             1,
             ceil(duration.total_seconds() / 86400)
@@ -173,8 +195,10 @@ def create_booking(request):
 
         total_price = Decimal(rental_days) * vehicle.price_per_day
 
+        # CREATE BOOKING
         booking = Booking.objects.create(
             vehicle=vehicle,
+            rental_type=rental_type,
             full_name=data['full_name'].strip(),
             email=data['email'].strip(),
             phone=data['phone'].strip(),
@@ -190,6 +214,7 @@ def create_booking(request):
             {
                 'message': 'Booking submitted successfully.',
                 'booking_id': booking.id,
+                'rental_type': booking.rental_type,
                 'status': booking.status,
                 'rental_days': rental_days,
                 'total_price': float(total_price),

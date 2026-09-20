@@ -10,15 +10,6 @@
   </div>
 </div>
 
-{% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-  {% endfor %}
-{% endif %}
-
 <div class="dashboard-panel">
   {% if bookings %}
     <div class="table-responsive">
@@ -27,6 +18,7 @@
           <tr>
             <th>Customer</th>
             <th>Vehicle</th>
+            <th>Rental Type</th>
             <th>Phone</th>
             <th>Pickup</th>
             <th>Return</th>
@@ -45,6 +37,17 @@
               </td>
 
               <td>{{ booking.vehicle.name }}</td>
+
+              <td>
+                {% if booking.rental_type == 'self_drive' %}
+                  <span class="badge text-bg-dark"> Self Drive
+                  </span>
+                {% else %}
+                  <span class="badge text-bg-info">Rent a Car
+                  </span>
+                {% endif %}
+              </td>
+
               <td>{{ booking.phone }}</td>
 
               <td>
@@ -79,9 +82,10 @@
 
               <td>
                 <div class="d-flex gap-2 flex-wrap">
-                    <a href="{% url 'bookings:detail' booking.id %}" class="btn btn-sm btn-outline-secondary">
-  <i class="bi bi-eye"></i> View
-</a>
+                  <a href="{% url 'bookings:detail' booking.id %}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-eye"></i> View
+                  </a>
+
                   {% if booking.status == 'pending' %}
                     <form method="post" action="{% url 'bookings:confirm' booking.id %}">
                       {% csrf_token %}
