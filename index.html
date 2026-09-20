@@ -169,35 +169,59 @@
                 </div>
               </div>
             </div>
+<!-- SELF DRIVE -->
+<div class="service-form" id="selfForm">
+  <div class="row g-3">
 
-            <!-- SELF DRIVE -->
-            <div class="service-form" id="selfForm">
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label class="form-label">From</label>
-                  <input type="text" class="form-control booking-control" placeholder="Enter starting location">
-                </div>
+    <div class="col-md-6">
+      <label class="form-label" for="selfPickupLocation">Pick Up Location</label>
+      <input
+        type="text"
+        id="selfPickupLocation"
+        class="form-control booking-control"
+        placeholder="Please enter from location"
+      >
+    </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">To</label>
-                  <input type="text" class="form-control booking-control" placeholder="Please enter to location">
-                </div>
+    <div class="col-md-6">
+      <label class="form-label" for="selfDropoffLocation">Drop Off Location</label>
+      <input
+        type="text"
+        id="selfDropoffLocation"
+        class="form-control booking-control"
+        placeholder="Please enter to location"
+      >
+    </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">From Date</label>
-                  <input type="datetime-local" class="form-control booking-control">
-                </div>
+    <div class="col-md-6">
+      <label class="form-label" for="selfPickupDateTime">Pick Up Date</label>
+      <input
+        type="datetime-local"
+        id="selfPickupDateTime"
+        class="form-control booking-control"
+      >
+    </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">To Date</label>
-                  <input type="datetime-local" class="form-control booking-control">
-                </div>
+    <div class="col-md-6">
+      <label class="form-label" for="selfDropDateTime">Drop Date</label>
+      <input
+        type="datetime-local"
+        id="selfDropDateTime"
+        class="form-control booking-control"
+      >
+    </div>
 
-                <div class="col-12 text-end mt-4">
-                  <button type="button" class="find-vehicle-btn">Find Vehicle</button>
-                </div>
-              </div>
-            </div>
+    <div class="col-12 text-end mt-4">
+      <button
+        type="button"
+        class="find-vehicle-btn self-drive-search-btn"
+      >
+        Find Vehicle
+      </button>
+    </div>
+
+  </div>
+</div>
 
           </div>
         </div>

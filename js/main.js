@@ -38,6 +38,7 @@ function setCurrentYear() {
 
 document.addEventListener('DOMContentLoaded', loadLayout);
 
+
 /* =========================
    BOOKING SERVICE SWITCHER
 ========================= */
@@ -62,7 +63,9 @@ function selectService(service) {
 }
 
 serviceOptions.forEach((option) => {
-  option.addEventListener('click', () => selectService(option.dataset.service));
+  option.addEventListener('click', () => {
+    selectService(option.dataset.service);
+  });
 });
 
 const params = new URLSearchParams(window.location.search);
@@ -71,6 +74,7 @@ const selectedService = params.get('service');
 if (['driver', 'self', 'rent'].includes(selectedService)) {
   selectService(selectedService);
 }
+
 
 /* =========================
    WHY SECTION ANIMATION
@@ -90,6 +94,7 @@ if (whySection) {
 
   whyObserver.observe(whySection);
 }
+
 
 /* =========================
    STATS COUNTER
@@ -138,6 +143,7 @@ if (statsSection) {
   statsObserver.observe(statsSection);
 }
 
+
 /* =========================
    CORPORATE PARTNER FORM
 ========================= */
@@ -158,6 +164,7 @@ if (partnerForm) {
   });
 }
 
+
 /* =========================
    ABOUT WING ANIMATION
 ========================= */
@@ -176,6 +183,7 @@ if (aboutOverview) {
 
   aboutObserver.observe(aboutOverview);
 }
+
 
 /* =========================
    ABOUT QUALITY TABS
@@ -222,6 +230,7 @@ if (qualityTabs.length && qualityTitle && qualityText) {
   });
 }
 
+
 /* =========================
    AUTH MODAL
 ========================= */
@@ -234,17 +243,20 @@ function initSigninModal() {
   const forgotView = document.getElementById('forgotView');
   const otpView = document.getElementById('otpView');
   const resetView = document.getElementById('resetView');
+
   const showRegister = document.getElementById('showRegister');
   const showSignin = document.getElementById('showSignin');
   const showForgot = document.getElementById('showForgot');
   const forgotBackSignin = document.getElementById('forgotBackSignin');
   const otpBack = document.getElementById('otpBack');
   const resetBackSignin = document.getElementById('resetBackSignin');
+
   const signinForm = document.getElementById('signinForm');
   const registerForm = document.getElementById('registerForm');
   const forgotForm = document.getElementById('forgotForm');
   const otpForm = document.getElementById('otpForm');
   const resetForm = document.getElementById('resetForm');
+
   const registerPassword = document.getElementById('registerPassword');
   const confirmPassword = document.getElementById('confirmPassword');
   const registerError = document.getElementById('registerError');
@@ -313,6 +325,7 @@ function initSigninModal() {
 
       const passwordVisible = input.type === 'text';
       input.type = passwordVisible ? 'password' : 'text';
+
       button.innerHTML = passwordVisible
         ? '<i class="bi bi-eye"></i>'
         : '<i class="bi bi-eye-slash"></i>';
@@ -398,6 +411,7 @@ function initSigninModal() {
   });
 }
 
+
 /* =========================
    LOAD AUTH MODAL
 ========================= */
@@ -422,12 +436,16 @@ async function loadSigninModal() {
 
 document.addEventListener('DOMContentLoaded', loadSigninModal);
 
+
 /* =========================
    VEHICLE BOOKING FLOW
+   RENT A CAR + SELF DRIVE
 ========================= */
 
 function initVehicleBooking() {
-  const findButton = document.querySelector('#rentForm .find-vehicle-btn');
+  const rentButton = document.querySelector('#rentForm .find-vehicle-btn');
+  const selfDriveButton = document.querySelector('#selfForm .self-drive-search-btn');
+
   const modal = document.getElementById('bookingModal');
   const overlay = document.getElementById('bookingModalOverlay');
   const closeButton = document.getElementById('bookingModalClose');
@@ -437,14 +455,16 @@ function initVehicleBooking() {
   const bookingForm = document.getElementById('bookingForm');
   const backButton = document.getElementById('bookingBackBtn');
 
-  if (!findButton || !modal || !vehicleView || !bookingView || !results || !bookingForm) {
+  if (!modal || !vehicleView || !bookingView || !results || !bookingForm) {
     return;
   }
 
   let availableVehicles = [];
   let selectedVehicle = null;
+  let currentTrip = null;
+  let currentRentalType = 'rental';
 
-  function getTripDetails() {
+  function getRentTrip() {
     return {
       pickupLocation: document.getElementById('pickupLocation')?.value.trim() || '',
       dropoffLocation: document.getElementById('dropoffLocation')?.value.trim() || '',
@@ -453,8 +473,22 @@ function initVehicleBooking() {
     };
   }
 
+  function getSelfDriveTrip() {
+    return {
+      pickupLocation: document.getElementById('selfPickupLocation')?.value.trim() || '',
+      dropoffLocation: document.getElementById('selfDropoffLocation')?.value.trim() || '',
+      pickupDate: document.getElementById('selfPickupDateTime')?.value || '',
+      returnDate: document.getElementById('selfDropDateTime')?.value || ''
+    };
+  }
+
   function validateTrip(trip) {
-    if (!trip.pickupLocation || !trip.dropoffLocation || !trip.pickupDate || !trip.returnDate) {
+    if (
+      !trip.pickupLocation ||
+      !trip.dropoffLocation ||
+      !trip.pickupDate ||
+      !trip.returnDate
+    ) {
       alert('Please complete all trip details first.');
       return false;
     }
@@ -462,7 +496,10 @@ function initVehicleBooking() {
     const pickup = new Date(trip.pickupDate);
     const returnTime = new Date(trip.returnDate);
 
-    if (Number.isNaN(pickup.getTime()) || Number.isNaN(returnTime.getTime())) {
+    if (
+      Number.isNaN(pickup.getTime()) ||
+      Number.isNaN(returnTime.getTime())
+    ) {
       alert('Please enter valid pickup and drop dates.');
       return false;
     }
@@ -483,9 +520,13 @@ function initVehicleBooking() {
   function closeModal() {
     modal.classList.remove('show');
     document.body.style.overflow = '';
+
     vehicleView.style.display = 'block';
     bookingView.style.display = 'none';
+
     selectedVehicle = null;
+    currentTrip = null;
+    currentRentalType = 'rental';
   }
 
   function showVehicleView() {
@@ -504,7 +545,7 @@ function initVehicleBooking() {
     if (!vehicles.length) {
       results.innerHTML = `
         <div class="vehicle-message">
-          No vehicles are currently available.
+          No vehicles are available for the selected dates.
         </div>
       `;
       return;
@@ -523,9 +564,11 @@ function initVehicleBooking() {
           ${
             imageUrl
               ? `<img src="${imageUrl}" alt="${vehicle.name}">`
-              : `<div class="vehicle-image-placeholder">
-                   <i class="bi bi-car-front"></i>
-                 </div>`
+              : `
+                <div class="vehicle-image-placeholder">
+                  <i class="bi bi-car-front"></i>
+                </div>
+              `
           }
         </div>
 
@@ -573,26 +616,27 @@ function initVehicleBooking() {
     });
   }
 
-  /* FIND VEHICLES */
-  findButton.addEventListener('click', async () => {
-    const trip = getTripDetails();
-
+  async function findVehicles(trip, rentalType, button) {
     if (!validateTrip(trip)) return;
 
-    const originalText = findButton.textContent;
+    currentTrip = trip;
+    currentRentalType = rentalType;
+    selectedVehicle = null;
 
-    findButton.disabled = true;
-    findButton.textContent = 'Finding Vehicles...';
+    const originalText = button.textContent;
+
+    button.disabled = true;
+    button.textContent = 'Finding Vehicles...';
 
     try {
-      const params = new URLSearchParams({
-  pickup: trip.pickupDate,
-  return: trip.returnDate
-});
+      const query = new URLSearchParams({
+        pickup: trip.pickupDate,
+        return: trip.returnDate
+      });
 
-const response = await fetch(
-  `http://127.0.0.1:8000/api/vehicles/?${params.toString()}`
-);
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/vehicles/?${query.toString()}`
+      );
 
       if (!response.ok) {
         throw new Error('Unable to load vehicles.');
@@ -607,16 +651,42 @@ const response = await fetch(
       openModal();
     } catch (error) {
       console.error('Vehicle error:', error);
-      alert('Unable to load vehicles. Please make sure the backend is running.');
+
+      alert(
+        'Unable to load vehicles. Please make sure the backend is running.'
+      );
     } finally {
-      findButton.disabled = false;
-      findButton.textContent = originalText;
+      button.disabled = false;
+      button.textContent = originalText;
     }
+  }
+
+  /* RENT A CAR */
+  rentButton?.addEventListener('click', () => {
+    const trip = getRentTrip();
+
+    findVehicles(
+      trip,
+      'rental',
+      rentButton
+    );
+  });
+
+  /* SELF DRIVE */
+  selfDriveButton?.addEventListener('click', () => {
+    const trip = getSelfDriveTrip();
+
+    findVehicles(
+      trip,
+      'self_drive',
+      selfDriveButton
+    );
   });
 
   /* SELECT VEHICLE */
   results.addEventListener('click', (event) => {
     const button = event.target.closest('.select-vehicle-btn');
+
     if (!button) return;
 
     const vehicleId = Number(button.dataset.vehicleId);
@@ -625,36 +695,60 @@ const response = await fetch(
       (vehicle) => vehicle.id === vehicleId
     );
 
-    if (!selectedVehicle) return;
+    if (!selectedVehicle || !currentTrip) return;
 
-    const trip = getTripDetails();
-
-    if (!validateTrip(trip)) {
+    if (!validateTrip(currentTrip)) {
       closeModal();
       return;
     }
 
-    const pickup = new Date(trip.pickupDate);
-    const returnTime = new Date(trip.returnDate);
+    const pickup = new Date(currentTrip.pickupDate);
+    const returnTime = new Date(currentTrip.returnDate);
     const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
     const rentalDays = Math.max(
       1,
-      Math.ceil((returnTime - pickup) / millisecondsPerDay)
+      Math.ceil(
+        (returnTime - pickup) /
+        millisecondsPerDay
+      )
     );
 
-    const total = rentalDays * Number(selectedVehicle.price_per_day);
+    const total =
+      rentalDays *
+      Number(selectedVehicle.price_per_day);
 
-    document.getElementById('bookingVehicleId').value = selectedVehicle.id;
-    document.getElementById('bookingVehicleName').textContent = selectedVehicle.name;
-    document.getElementById('bookingPickupSummary').textContent = trip.pickupLocation;
-    document.getElementById('bookingDropoffSummary').textContent = trip.dropoffLocation;
+    document.getElementById('bookingVehicleId').value =
+      selectedVehicle.id;
+
+    document.getElementById('bookingVehicleName').textContent =
+      selectedVehicle.name;
+
+    document.getElementById('bookingPickupSummary').textContent =
+      currentTrip.pickupLocation;
+
+    document.getElementById('bookingDropoffSummary').textContent =
+      currentTrip.dropoffLocation;
+
     document.getElementById('bookingDateSummary').textContent =
       `${rentalDays} day${rentalDays > 1 ? 's' : ''}`;
+
     document.getElementById('bookingPriceSummary').textContent =
       `Rs. ${total.toLocaleString()}`;
 
-    const message = document.getElementById('bookingMessage');
+    const modalLabel =
+      bookingView.querySelector('.booking-modal-header span');
+
+    if (modalLabel) {
+      modalLabel.textContent =
+        currentRentalType === 'self_drive'
+          ? 'Complete Your Self Drive Booking'
+          : 'Complete Your Booking';
+    }
+
+    const message =
+      document.getElementById('bookingMessage');
+
     message.className = 'booking-message';
     message.textContent = '';
 
@@ -667,7 +761,10 @@ const response = await fetch(
   overlay?.addEventListener('click', closeModal);
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && modal.classList.contains('show')) {
+    if (
+      event.key === 'Escape' &&
+      modal.classList.contains('show')
+    ) {
       closeModal();
     }
   });
@@ -676,17 +773,26 @@ const response = await fetch(
   bookingForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    if (!selectedVehicle) return;
+    if (!selectedVehicle || !currentTrip) return;
+    if (!validateTrip(currentTrip)) return;
 
-    const trip = getTripDetails();
-    if (!validateTrip(trip)) return;
+    const fullName =
+      document.getElementById('bookingFullName').value.trim();
 
-    const fullName = document.getElementById('bookingFullName').value.trim();
-    const email = document.getElementById('bookingEmail').value.trim();
-    const phone = document.getElementById('bookingPhone').value.trim();
-    const notes = document.getElementById('bookingNotes').value.trim();
-    const message = document.getElementById('bookingMessage');
-    const submitButton = bookingForm.querySelector('.booking-submit-btn');
+    const email =
+      document.getElementById('bookingEmail').value.trim();
+
+    const phone =
+      document.getElementById('bookingPhone').value.trim();
+
+    const notes =
+      document.getElementById('bookingNotes').value.trim();
+
+    const message =
+      document.getElementById('bookingMessage');
+
+    const submitButton =
+      bookingForm.querySelector('.booking-submit-btn');
 
     message.className = 'booking-message error';
 
@@ -724,13 +830,14 @@ const response = await fetch(
 
     const bookingData = {
       vehicle_id: selectedVehicle.id,
+      rental_type: currentRentalType,
       full_name: fullName,
       email,
       phone,
-      pickup_location: trip.pickupLocation,
-      dropoff_location: trip.dropoffLocation,
-      pickup_datetime: trip.pickupDate,
-      return_datetime: trip.returnDate,
+      pickup_location: currentTrip.pickupLocation,
+      dropoff_location: currentTrip.dropoffLocation,
+      pickup_datetime: currentTrip.pickupDate,
+      return_datetime: currentTrip.returnDate,
       notes
     };
 
@@ -738,50 +845,86 @@ const response = await fetch(
     submitButton.textContent = 'Submitting...';
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/bookings/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bookingData)
-      });
+      const response = await fetch(
+        'http://127.0.0.1:8000/api/bookings/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(bookingData)
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Unable to submit booking.');
+        throw new Error(
+          data.error ||
+          'Unable to submit booking.'
+        );
       }
 
-      message.className = 'booking-message success';
-      message.textContent =
-        `Booking submitted successfully. Booking #${data.booking_id}. Total: Rs. ${Number(data.total_price).toLocaleString()}`;
+      message.className =
+        'booking-message success';
+
+      if (currentRentalType === 'self_drive') {
+        message.textContent =
+          `Self Drive booking submitted successfully. Booking #${data.booking_id}. Total: Rs. ${Number(data.total_price).toLocaleString()}`;
+      } else {
+        message.textContent =
+          `Booking submitted successfully. Booking #${data.booking_id}. Total: Rs. ${Number(data.total_price).toLocaleString()}`;
+      }
 
       document.getElementById('bookingFullName').value = '';
       document.getElementById('bookingEmail').value = '';
       document.getElementById('bookingPhone').value = '';
       document.getElementById('bookingNotes').value = '';
+
     } catch (error) {
       console.error('Booking error:', error);
-      message.className = 'booking-message error';
-      message.textContent = error.message;
+
+      message.className =
+        'booking-message error';
+
+      message.textContent =
+        error.message;
+
     } finally {
       submitButton.disabled = false;
       submitButton.textContent = 'Submit Booking';
     }
   });
 }
-document.addEventListener('DOMContentLoaded', initVehicleBooking);
+
+document.addEventListener(
+  'DOMContentLoaded',
+  initVehicleBooking
+);
+
+
 /* =========================
    DRIVER REQUEST FLOW
 ========================= */
 
 function initDriverRequest() {
-  const findButton = document.querySelector('.driver-search-btn');
-  const modal = document.getElementById('driverRequestModal');
-  const overlay = document.getElementById('driverRequestOverlay');
-  const closeButton = document.getElementById('driverRequestClose');
-  const form = document.getElementById('driverRequestForm');
-  const message = document.getElementById('driverRequestMessage');
+  const findButton =
+    document.querySelector('.driver-search-btn');
+
+  const modal =
+    document.getElementById('driverRequestModal');
+
+  const overlay =
+    document.getElementById('driverRequestOverlay');
+
+  const closeButton =
+    document.getElementById('driverRequestClose');
+
+  const form =
+    document.getElementById('driverRequestForm');
+
+  const message =
+    document.getElementById('driverRequestMessage');
 
   if (!findButton || !modal || !form) return;
 
@@ -789,16 +932,31 @@ function initDriverRequest() {
 
   function getDriverTrip() {
     return {
-      pickupLocation: document.getElementById('driverPickupLocation')?.value.trim() || '',
-      dropoffLocation: document.getElementById('driverDropoffLocation')?.value.trim() || '',
-      pickupDate: document.getElementById('driverPickupDateTime')?.value || '',
-      returnDate: document.getElementById('driverDropDateTime')?.value || '',
-      vehicleType: document.getElementById('driverVehicleType')?.value || ''
+      pickupLocation:
+        document.getElementById('driverPickupLocation')?.value.trim() || '',
+
+      dropoffLocation:
+        document.getElementById('driverDropoffLocation')?.value.trim() || '',
+
+      pickupDate:
+        document.getElementById('driverPickupDateTime')?.value || '',
+
+      returnDate:
+        document.getElementById('driverDropDateTime')?.value || '',
+
+      vehicleType:
+        document.getElementById('driverVehicleType')?.value || ''
     };
   }
 
   function validateDriverTrip(data) {
-    if (!data.pickupLocation || !data.dropoffLocation || !data.pickupDate || !data.returnDate || !data.vehicleType) {
+    if (
+      !data.pickupLocation ||
+      !data.dropoffLocation ||
+      !data.pickupDate ||
+      !data.returnDate ||
+      !data.vehicleType
+    ) {
       alert('Please complete all driver trip details.');
       return false;
     }
@@ -806,7 +964,10 @@ function initDriverRequest() {
     const pickup = new Date(data.pickupDate);
     const returnTime = new Date(data.returnDate);
 
-    if (Number.isNaN(pickup.getTime()) || Number.isNaN(returnTime.getTime())) {
+    if (
+      Number.isNaN(pickup.getTime()) ||
+      Number.isNaN(returnTime.getTime())
+    ) {
       alert('Please enter valid pickup and drop dates.');
       return false;
     }
@@ -836,14 +997,22 @@ function initDriverRequest() {
 
     const pickup = new Date(trip.pickupDate);
     const returnTime = new Date(trip.returnDate);
-    const vehicleSelect = document.getElementById('driverVehicleType');
+    const vehicleSelect =
+      document.getElementById('driverVehicleType');
 
-    document.getElementById('driverPickupSummary').textContent = trip.pickupLocation;
-    document.getElementById('driverDropoffSummary').textContent = trip.dropoffLocation;
+    document.getElementById('driverPickupSummary').textContent =
+      trip.pickupLocation;
+
+    document.getElementById('driverDropoffSummary').textContent =
+      trip.dropoffLocation;
+
     document.getElementById('driverDateSummary').textContent =
       `${pickup.toLocaleString()} → ${returnTime.toLocaleString()}`;
+
     document.getElementById('driverVehicleSummary').textContent =
-      vehicleSelect.options[vehicleSelect.selectedIndex].text;
+      vehicleSelect.options[
+        vehicleSelect.selectedIndex
+      ].text;
 
     message.className = 'booking-message';
     message.textContent = '';
@@ -855,7 +1024,10 @@ function initDriverRequest() {
   overlay?.addEventListener('click', closeModal);
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && modal.classList.contains('show')) {
+    if (
+      event.key === 'Escape' &&
+      modal.classList.contains('show')
+    ) {
       closeModal();
     }
   });
@@ -865,11 +1037,20 @@ function initDriverRequest() {
 
     if (!trip || !validateDriverTrip(trip)) return;
 
-    const fullName = document.getElementById('driverFullName').value.trim();
-    const email = document.getElementById('driverEmail').value.trim();
-    const phone = document.getElementById('driverPhone').value.trim();
-    const notes = document.getElementById('driverNotes').value.trim();
-    const submitButton = form.querySelector('.booking-submit-btn');
+    const fullName =
+      document.getElementById('driverFullName').value.trim();
+
+    const email =
+      document.getElementById('driverEmail').value.trim();
+
+    const phone =
+      document.getElementById('driverPhone').value.trim();
+
+    const notes =
+      document.getElementById('driverNotes').value.trim();
+
+    const submitButton =
+      form.querySelector('.booking-submit-btn');
 
     message.className = 'booking-message error';
 
@@ -909,44 +1090,65 @@ function initDriverRequest() {
     submitButton.textContent = 'Submitting...';
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/driver-requests/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          full_name: fullName,
-          email,
-          phone,
-          pickup_location: trip.pickupLocation,
-          dropoff_location: trip.dropoffLocation,
-          pickup_datetime: trip.pickupDate,
-          return_datetime: trip.returnDate,
-          vehicle_type: trip.vehicleType,
-          notes
-        })
-      });
+      const response = await fetch(
+        'http://127.0.0.1:8000/api/driver-requests/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            full_name: fullName,
+            email,
+            phone,
+            pickup_location: trip.pickupLocation,
+            dropoff_location: trip.dropoffLocation,
+            pickup_datetime: trip.pickupDate,
+            return_datetime: trip.returnDate,
+            vehicle_type: trip.vehicleType,
+            notes
+          })
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Unable to submit driver request.');
+        throw new Error(
+          data.error ||
+          'Unable to submit driver request.'
+        );
       }
 
-      message.className = 'booking-message success';
+      message.className =
+        'booking-message success';
+
       message.textContent =
         `Driver request submitted successfully. Request #${data.request_id}.`;
 
       form.reset();
+
     } catch (error) {
-      console.error('Driver request error:', error);
-      message.className = 'booking-message error';
-      message.textContent = error.message;
+      console.error(
+        'Driver request error:',
+        error
+      );
+
+      message.className =
+        'booking-message error';
+
+      message.textContent =
+        error.message;
+
     } finally {
       submitButton.disabled = false;
-      submitButton.textContent = 'Submit Driver Request';
+      submitButton.textContent =
+        'Submit Driver Request';
     }
   });
 }
 
-document.addEventListener('DOMContentLoaded', initDriverRequest);
+document.addEventListener(
+  'DOMContentLoaded',
+  initDriverRequest
+);
