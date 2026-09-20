@@ -770,5 +770,183 @@ const response = await fetch(
     }
   });
 }
-
 document.addEventListener('DOMContentLoaded', initVehicleBooking);
+/* =========================
+   DRIVER REQUEST FLOW
+========================= */
+
+function initDriverRequest() {
+  const findButton = document.querySelector('.driver-search-btn');
+  const modal = document.getElementById('driverRequestModal');
+  const overlay = document.getElementById('driverRequestOverlay');
+  const closeButton = document.getElementById('driverRequestClose');
+  const form = document.getElementById('driverRequestForm');
+  const message = document.getElementById('driverRequestMessage');
+
+  if (!findButton || !modal || !form) return;
+
+  let trip = null;
+
+  function getDriverTrip() {
+    return {
+      pickupLocation: document.getElementById('driverPickupLocation')?.value.trim() || '',
+      dropoffLocation: document.getElementById('driverDropoffLocation')?.value.trim() || '',
+      pickupDate: document.getElementById('driverPickupDateTime')?.value || '',
+      returnDate: document.getElementById('driverDropDateTime')?.value || '',
+      vehicleType: document.getElementById('driverVehicleType')?.value || ''
+    };
+  }
+
+  function validateDriverTrip(data) {
+    if (!data.pickupLocation || !data.dropoffLocation || !data.pickupDate || !data.returnDate || !data.vehicleType) {
+      alert('Please complete all driver trip details.');
+      return false;
+    }
+
+    const pickup = new Date(data.pickupDate);
+    const returnTime = new Date(data.returnDate);
+
+    if (Number.isNaN(pickup.getTime()) || Number.isNaN(returnTime.getTime())) {
+      alert('Please enter valid pickup and drop dates.');
+      return false;
+    }
+
+    if (returnTime <= pickup) {
+      alert('Drop date must be after pickup date.');
+      return false;
+    }
+
+    return true;
+  }
+
+  function openModal() {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  findButton.addEventListener('click', () => {
+    trip = getDriverTrip();
+
+    if (!validateDriverTrip(trip)) return;
+
+    const pickup = new Date(trip.pickupDate);
+    const returnTime = new Date(trip.returnDate);
+    const vehicleSelect = document.getElementById('driverVehicleType');
+
+    document.getElementById('driverPickupSummary').textContent = trip.pickupLocation;
+    document.getElementById('driverDropoffSummary').textContent = trip.dropoffLocation;
+    document.getElementById('driverDateSummary').textContent =
+      `${pickup.toLocaleString()} → ${returnTime.toLocaleString()}`;
+    document.getElementById('driverVehicleSummary').textContent =
+      vehicleSelect.options[vehicleSelect.selectedIndex].text;
+
+    message.className = 'booking-message';
+    message.textContent = '';
+
+    openModal();
+  });
+
+  closeButton?.addEventListener('click', closeModal);
+  overlay?.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (!trip || !validateDriverTrip(trip)) return;
+
+    const fullName = document.getElementById('driverFullName').value.trim();
+    const email = document.getElementById('driverEmail').value.trim();
+    const phone = document.getElementById('driverPhone').value.trim();
+    const notes = document.getElementById('driverNotes').value.trim();
+    const submitButton = form.querySelector('.booking-submit-btn');
+
+    message.className = 'booking-message error';
+
+    if (!fullName) {
+      message.textContent = 'Please enter your full name.';
+      return;
+    }
+
+    if (!email) {
+      message.textContent = 'Please enter your email address.';
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+      message.textContent = 'Please enter a valid email address.';
+      return;
+    }
+
+    if (!phone) {
+      message.textContent = 'Please enter your phone number.';
+      return;
+    }
+
+    const phonePattern = /^[0-9+\-\s()]{7,20}$/;
+
+    if (!phonePattern.test(phone)) {
+      message.textContent = 'Please enter a valid phone number.';
+      return;
+    }
+
+    message.className = 'booking-message';
+    message.textContent = '';
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/driver-requests/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          full_name: fullName,
+          email,
+          phone,
+          pickup_location: trip.pickupLocation,
+          dropoff_location: trip.dropoffLocation,
+          pickup_datetime: trip.pickupDate,
+          return_datetime: trip.returnDate,
+          vehicle_type: trip.vehicleType,
+          notes
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Unable to submit driver request.');
+      }
+
+      message.className = 'booking-message success';
+      message.textContent =
+        `Driver request submitted successfully. Request #${data.request_id}.`;
+
+      form.reset();
+    } catch (error) {
+      console.error('Driver request error:', error);
+      message.className = 'booking-message error';
+      message.textContent = error.message;
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Submit Driver Request';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initDriverRequest);
