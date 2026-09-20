@@ -1,0 +1,137 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Bookings | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+  <div>
+    <h1>Bookings</h1>
+    <p>View and manage customer vehicle bookings.</p>
+  </div>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="dashboard-panel">
+  {% if bookings %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Vehicle</th>
+            <th>Phone</th>
+            <th>Pickup</th>
+            <th>Return</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for booking in bookings %}
+            <tr>
+              <td>
+                <strong>{{ booking.full_name }}</strong><br>
+                <small>{{ booking.email }}</small>
+              </td>
+
+              <td>{{ booking.vehicle.name }}</td>
+              <td>{{ booking.phone }}</td>
+
+              <td>
+                {{ booking.pickup_datetime|date:"M d, Y" }}<br>
+                <small>{{ booking.pickup_datetime|date:"g:i A" }}</small>
+              </td>
+
+              <td>
+                {{ booking.return_datetime|date:"M d, Y" }}<br>
+                <small>{{ booking.return_datetime|date:"g:i A" }}</small>
+              </td>
+
+              <td>
+                {% if booking.total_price %}
+                  Rs. {{ booking.total_price }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+
+              <td>
+                {% if booking.status == 'pending' %}
+                  <span class="badge text-bg-warning">Pending</span>
+                {% elif booking.status == 'confirmed' %}
+                  <span class="badge text-bg-primary">Confirmed</span>
+                {% elif booking.status == 'completed' %}
+                  <span class="badge text-bg-success">Completed</span>
+                {% elif booking.status == 'cancelled' %}
+                  <span class="badge text-bg-secondary">Cancelled</span>
+                {% endif %}
+              </td>
+
+              <td>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{% url 'bookings:detail' booking.id %}" class="btn btn-sm btn-outline-secondary">
+  <i class="bi bi-eye"></i> View
+</a>
+                  {% if booking.status == 'pending' %}
+                    <form method="post" action="{% url 'bookings:confirm' booking.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-success">
+                        <i class="bi bi-check-lg"></i> Confirm
+                      </button>
+                    </form>
+
+                    <form method="post" action="{% url 'bookings:cancel' booking.id %}" onsubmit="return confirm('Cancel this booking?');">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-x-lg"></i> Cancel
+                      </button>
+                    </form>
+
+                  {% elif booking.status == 'confirmed' %}
+                    <form method="post" action="{% url 'bookings:complete' booking.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="bi bi-check2-circle"></i> Complete
+                      </button>
+                    </form>
+
+                    <form method="post" action="{% url 'bookings:cancel' booking.id %}" onsubmit="return confirm('Cancel this booking?');">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-x-lg"></i> Cancel
+                      </button>
+                    </form>
+
+                  {% elif booking.status == 'completed' %}
+                    <span class="text-muted">Completed</span>
+
+                  {% elif booking.status == 'cancelled' %}
+                    <span class="text-muted">Cancelled</span>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  {% else %}
+    <div class="empty-state">
+      <i class="bi bi-calendar2-x"></i>
+      <h5>No bookings yet</h5>
+      <p>Customer booking requests will appear here.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,257 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Vehicles | CarRental{% endblock %}
+
+{% block content %}
+
+<div class="page-heading page-heading-row">
+
+    <div>
+        <h1>Vehicles</h1>
+        <p>Manage vehicles available for rental.</p>
+    </div>
+
+    <a href="{% url 'vehicles:add' %}"
+       class="backend-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add Vehicle
+    </a>
+
+</div>
+
+{% if messages %}
+
+    {% for message in messages %}
+        <div class="backend-alert">
+            <i class="bi bi-check-circle"></i>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+{% endif %}
+
+<div class="dashboard-panel vehicle-panel">
+
+    <div class="panel-header">
+
+        <div>
+            <h4>Vehicle List</h4>
+            <p>All vehicles registered in the system.</p>
+        </div>
+
+        <span class="vehicle-count">
+            {{ vehicles|length }} Vehicles
+        </span>
+
+    </div>
+
+    {% if vehicles %}
+
+        <div class="table-responsive">
+
+            <table class="backend-table">
+
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Type</th>
+                        <th>Seats</th>
+                        <th>Transmission</th>
+                        <th>Fuel</th>
+                        <th>Price / Day</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for vehicle in vehicles %}
+
+                        <tr>
+
+                            <td>
+
+                                <div class="vehicle-info">
+
+                                    {% if vehicle.image %}
+
+                                        <img src="{{ vehicle.image.url }}"
+                                             alt="{{ vehicle.name }}">
+
+                                    {% else %}
+
+                                        <div class="vehicle-placeholder">
+                                            <i class="bi bi-car-front"></i>
+                                        </div>
+
+                                    {% endif %}
+
+                                    <strong>
+                                        {{ vehicle.name }}
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                {{ vehicle.get_vehicle_type_display }}
+                            </td>
+
+                            <td>
+                                {{ vehicle.seats }}
+                            </td>
+
+                            <td>
+                                {{ vehicle.get_transmission_display }}
+                            </td>
+
+                            <td>
+                                {{ vehicle.get_fuel_type_display }}
+                            </td>
+
+                            <td>
+                                Rs. {{ vehicle.price_per_day }}
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-{{ vehicle.status }}">
+                                    {{ vehicle.get_status_display }}
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a href="{% url 'vehicles:edit' vehicle.pk %}"
+                                       class="edit-action"
+                                       title="Edit">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+                                    <button type="button"
+                                            class="delete-action"
+                                            title="Delete"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteVehicleModal{{ vehicle.pk }}">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        <!-- DELETE MODAL -->
+                        <div class="modal fade"
+                             id="deleteVehicleModal{{ vehicle.pk }}"
+                             tabindex="-1"
+                             aria-hidden="true">
+
+                            <div class="modal-dialog modal-dialog-centered">
+
+                                <div class="modal-content backend-modal">
+
+                                    <div class="modal-header">
+
+                                        <h5 class="modal-title">
+                                            Delete Vehicle
+                                        </h5>
+
+                                        <button type="button"
+                                                class="btn-close"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close">
+                                        </button>
+
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <div class="delete-modal-icon">
+                                            <i class="bi bi-trash"></i>
+                                        </div>
+
+                                        <h5>
+                                            Delete {{ vehicle.name }}?
+                                        </h5>
+
+                                        <p>
+                                            This vehicle will be permanently
+                                            removed from the system.
+                                        </p>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <button type="button"
+                                                class="backend-secondary-btn"
+                                                data-bs-dismiss="modal">
+                                            Cancel
+                                        </button>
+
+                                        <form method="POST"
+                                              action="{% url 'vehicles:delete' vehicle.pk %}">
+
+                                            {% csrf_token %}
+
+                                            <button type="submit"
+                                                    class="delete-confirm-btn">
+
+                                                <i class="bi bi-trash"></i>
+                                                Delete
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+
+            <i class="bi bi-car-front"></i>
+
+            <h5>No vehicles added yet</h5>
+
+            <p>
+                Add your first vehicle to start managing
+                the rental fleet.
+            </p>
+
+            <a href="{% url 'vehicles:add' %}"
+               class="backend-btn empty-action">
+                <i class="bi bi-plus-lg"></i>
+                Add Vehicle
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

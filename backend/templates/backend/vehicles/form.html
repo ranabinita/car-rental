@@ -1,0 +1,230 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}{{ page_title }} | CarRental{% endblock %}
+
+{% block content %}
+
+<div class="page-heading page-heading-row">
+
+    <div>
+        <h1>{{ page_title }}</h1>
+
+        {% if vehicle %}
+            <p>Update the vehicle information and rental details.</p>
+        {% else %}
+            <p>Add a new vehicle to the rental fleet.</p>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'vehicles:list' %}"
+       class="backend-secondary-btn">
+        <i class="bi bi-arrow-left"></i>
+        Back
+    </a>
+
+</div>
+
+<div class="dashboard-panel vehicle-form-panel">
+
+    <div class="panel-header">
+        <div>
+            <h4>Vehicle Information</h4>
+
+            {% if vehicle %}
+                <p>Edit the details for {{ vehicle.name }}.</p>
+            {% else %}
+                <p>Enter the vehicle details below.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <form method="POST"
+          enctype="multipart/form-data"
+          class="backend-form">
+
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="form-error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="row g-4">
+
+            <!-- NAME -->
+            <div class="col-md-6">
+                <div class="backend-field">
+
+                    <label for="{{ form.name.id_for_label }}">
+                        Vehicle Name
+                    </label>
+
+                    {{ form.name }}
+                    {{ form.name.errors }}
+
+                </div>
+            </div>
+
+            <!-- TYPE -->
+            <div class="col-md-6">
+                <div class="backend-field">
+
+                    <label for="{{ form.vehicle_type.id_for_label }}">
+                        Vehicle Type
+                    </label>
+
+                    {{ form.vehicle_type }}
+                    {{ form.vehicle_type.errors }}
+
+                </div>
+            </div>
+
+            <!-- SEATS -->
+            <div class="col-md-4">
+                <div class="backend-field">
+
+                    <label for="{{ form.seats.id_for_label }}">
+                        Seats
+                    </label>
+
+                    {{ form.seats }}
+                    {{ form.seats.errors }}
+
+                </div>
+            </div>
+
+            <!-- TRANSMISSION -->
+            <div class="col-md-4">
+                <div class="backend-field">
+
+                    <label for="{{ form.transmission.id_for_label }}">
+                        Transmission
+                    </label>
+
+                    {{ form.transmission }}
+                    {{ form.transmission.errors }}
+
+                </div>
+            </div>
+
+            <!-- FUEL -->
+            <div class="col-md-4">
+                <div class="backend-field">
+
+                    <label for="{{ form.fuel_type.id_for_label }}">
+                        Fuel Type
+                    </label>
+
+                    {{ form.fuel_type }}
+                    {{ form.fuel_type.errors }}
+
+                </div>
+            </div>
+
+            <!-- PRICE -->
+            <div class="col-md-6">
+                <div class="backend-field">
+
+                    <label for="{{ form.price_per_day.id_for_label }}">
+                        Price Per Day (Rs.)
+                    </label>
+
+                    {{ form.price_per_day }}
+                    {{ form.price_per_day.errors }}
+
+                </div>
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-md-6">
+                <div class="backend-field">
+
+                    <label for="{{ form.status.id_for_label }}">
+                        Status
+                    </label>
+
+                    {{ form.status }}
+                    {{ form.status.errors }}
+
+                </div>
+            </div>
+
+            <!-- IMAGE -->
+            <div class="col-12">
+                <div class="backend-field">
+
+                    <label for="{{ form.image.id_for_label }}">
+                        Vehicle Image
+                    </label>
+
+                    {% if vehicle and vehicle.image %}
+
+                        <div class="current-vehicle-image">
+
+                            <img src="{{ vehicle.image.url }}"
+                                 alt="{{ vehicle.name }}">
+
+                            <div class="current-image-info">
+                                <strong>Current Image</strong>
+
+                                <span>
+                                    Upload another image below only if
+                                    you want to replace this image.
+                                </span>
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                    {{ form.image }}
+                    {{ form.image.errors }}
+
+                    <small>
+                        JPG, PNG or WebP image recommended.
+                    </small>
+
+                </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="col-12">
+                <div class="backend-field">
+
+                    <label for="{{ form.description.id_for_label }}">
+                        Description
+                    </label>
+
+                    {{ form.description }}
+                    {{ form.description.errors }}
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <a href="{% url 'vehicles:list' %}"
+               class="backend-secondary-btn">
+                Cancel
+            </a>
+
+            <button type="submit" class="backend-btn">
+                <i class="bi bi-check-lg"></i>
+
+                {% if vehicle %}
+                    Update Vehicle
+                {% else %}
+                    Save Vehicle
+                {% endif %}
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

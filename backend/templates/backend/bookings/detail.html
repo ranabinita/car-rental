@@ -1,0 +1,176 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Booking #{{ booking.id }} | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+  <div>
+    <h1>Booking #{{ booking.id }}</h1>
+    <p>View customer, vehicle and trip information.</p>
+  </div>
+
+  <a href="{% url 'bookings:list' %}" class="backend-secondary-btn">
+    <i class="bi bi-arrow-left"></i> Back to Bookings
+  </a>
+</div>
+
+<div class="booking-detail-grid">
+  <div class="dashboard-panel">
+    <div class="panel-header">
+      <div>
+        <h4>Customer Information</h4>
+        <p>Contact details provided with the booking.</p>
+      </div>
+    </div>
+
+    <div class="booking-detail-body">
+      <div class="booking-detail-item">
+        <span>Full Name</span>
+        <strong>{{ booking.full_name }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Email</span>
+        <strong>{{ booking.email }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Phone</span>
+        <strong>{{ booking.phone }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-panel">
+    <div class="panel-header">
+      <div>
+        <h4>Vehicle Information</h4>
+        <p>Vehicle selected by the customer.</p>
+      </div>
+    </div>
+
+    <div class="booking-detail-body">
+      <div class="booking-detail-item">
+        <span>Vehicle</span>
+        <strong>{{ booking.vehicle.name }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Type</span>
+        <strong>{{ booking.vehicle.get_vehicle_type_display }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Price Per Day</span>
+        <strong>Rs. {{ booking.vehicle.price_per_day }}</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-panel booking-trip-panel">
+  <div class="panel-header">
+    <div>
+      <h4>Trip Information</h4>
+      <p>Pickup, return and rental information.</p>
+    </div>
+  </div>
+
+  <div class="booking-detail-body booking-trip-grid">
+    <div class="booking-detail-item">
+      <span>Pickup Location</span>
+      <strong>{{ booking.pickup_location }}</strong>
+    </div>
+
+    <div class="booking-detail-item">
+      <span>Drop-off Location</span>
+      <strong>{{ booking.dropoff_location }}</strong>
+    </div>
+
+    <div class="booking-detail-item">
+      <span>Pickup Date & Time</span>
+      <strong>{{ booking.pickup_datetime|date:"M d, Y - g:i A" }}</strong>
+    </div>
+
+    <div class="booking-detail-item">
+      <span>Return Date & Time</span>
+      <strong>{{ booking.return_datetime|date:"M d, Y - g:i A" }}</strong>
+    </div>
+
+    <div class="booking-detail-item">
+      <span>Total Price</span>
+      <strong>
+        {% if booking.total_price %}
+          Rs. {{ booking.total_price }}
+        {% else %}
+          —
+        {% endif %}
+      </strong>
+    </div>
+
+    <div class="booking-detail-item">
+      <span>Status</span>
+
+      {% if booking.status == 'pending' %}
+        <strong class="booking-status status-pending">Pending</strong>
+      {% elif booking.status == 'confirmed' %}
+        <strong class="booking-status status-confirmed">Confirmed</strong>
+      {% elif booking.status == 'completed' %}
+        <strong class="booking-status status-completed">Completed</strong>
+      {% elif booking.status == 'cancelled' %}
+        <strong class="booking-status status-cancelled">Cancelled</strong>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-panel booking-notes-panel">
+  <div class="panel-header">
+    <div>
+      <h4>Customer Notes</h4>
+      <p>Additional information included with the booking.</p>
+    </div>
+  </div>
+
+  <div class="booking-notes">
+    {% if booking.notes %}
+      {{ booking.notes|linebreaksbr }}
+    {% else %}
+      <span>No additional notes were provided.</span>
+    {% endif %}
+  </div>
+</div>
+
+<div class="booking-detail-actions">
+  {% if booking.status == 'pending' %}
+    <form method="post" action="{% url 'bookings:confirm' booking.id %}">
+      {% csrf_token %}
+      <button type="submit" class="backend-btn">
+        <i class="bi bi-check-lg"></i> Confirm Booking
+      </button>
+    </form>
+
+    <form method="post" action="{% url 'bookings:cancel' booking.id %}" onsubmit="return confirm('Cancel this booking?');">
+      {% csrf_token %}
+      <button type="submit" class="booking-cancel-btn">
+        <i class="bi bi-x-lg"></i> Cancel Booking
+      </button>
+    </form>
+
+  {% elif booking.status == 'confirmed' %}
+    <form method="post" action="{% url 'bookings:complete' booking.id %}">
+      {% csrf_token %}
+      <button type="submit" class="backend-btn">
+        <i class="bi bi-check2-circle"></i> Complete Booking
+      </button>
+    </form>
+
+    <form method="post" action="{% url 'bookings:cancel' booking.id %}" onsubmit="return confirm('Cancel this booking?');">
+      {% csrf_token %}
+      <button type="submit" class="booking-cancel-btn">
+        <i class="bi bi-x-lg"></i> Cancel Booking
+      </button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}
