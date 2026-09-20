@@ -3,230 +3,208 @@
 {% block title %}Dashboard | CarRental{% endblock %}
 
 {% block content %}
-
 <div class="page-heading">
-    <div>
-        <h1>Dashboard</h1>
-        <p>Welcome back. Here's what's happening with CarRental.</p>
-    </div>
+  <div>
+    <h1>Dashboard</h1>
+    <p>Welcome back. Here's what's happening with CarRental.</p>
+  </div>
 </div>
 
 <!-- STATS -->
 <div class="row g-4 dashboard-stats">
 
-    <div class="col-xl-3 col-md-6">
-        <a href="{% url 'vehicles:list' %}" class="stat-card-link">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-car-front"></i>
-                </div>
+  <div class="col-xl-3 col-md-6">
+    <a href="{% url 'vehicles:list' %}" class="stat-card-link">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="bi bi-car-front"></i>
+        </div>
+        <div>
+          <span>Total Vehicles</span>
+          <h3>{{ total_vehicles }}</h3>
+        </div>
+      </div>
+    </a>
+  </div>
 
-                <div>
-                    <span>Total Vehicles</span>
-                    <h3>{{ total_vehicles }}</h3>
-                </div>
-            </div>
-        </a>
-    </div>
+  <div class="col-xl-3 col-md-6">
+    <a href="{% url 'bookings:list' %}" class="stat-card-link">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="bi bi-calendar-check"></i>
+        </div>
+        <div>
+          <span>Total Bookings</span>
+          <h3>{{ total_bookings }}</h3>
+        </div>
+      </div>
+    </a>
+  </div>
 
-    <div class="col-xl-3 col-md-6">
-        <a href="{% url 'vehicles:list' %}" class="stat-card-link">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-check-circle"></i>
-                </div>
+  <div class="col-xl-3 col-md-6">
+    <a href="{% url 'driver_requests:list' %}" class="stat-card-link">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="bi bi-person-badge"></i>
+        </div>
+        <div>
+          <span>Driver Requests</span>
+          <h3>{{ total_driver_requests }}</h3>
+        </div>
+      </div>
+    </a>
+  </div>
 
-                <div>
-                    <span>Available Vehicles</span>
-                    <h3>{{ available_vehicles }}</h3>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <a href="{% url 'bookings:list' %}" class="stat-card-link">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-calendar-check"></i>
-                </div>
-
-                <div>
-                    <span>Total Bookings</span>
-                    <h3>{{ total_bookings }}</h3>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <a href="{% url 'driver_requests:list' %}" class="stat-card-link">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="bi bi-person-badge"></i>
-                </div>
-
-                <div>
-                    <span>Driver Requests</span>
-                    <h3>{{ total_driver_requests }}</h3>
-                </div>
-            </div>
-        </a>
-    </div>
+  <div class="col-xl-3 col-md-6">
+    <a href="{% url 'corporate_requests:list' %}" class="stat-card-link">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="bi bi-buildings"></i>
+        </div>
+        <div>
+          <span>Corporate Requests</span>
+          <h3>{{ total_corporate_requests }}</h3>
+        </div>
+      </div>
+    </a>
+  </div>
 
 </div>
 
 <!-- LOWER DASHBOARD -->
 <div class="row g-4 dashboard-details">
 
-    <!-- RECENT BOOKINGS -->
-    <div class="col-xl-8">
-        <div class="dashboard-panel dashboard-detail-card">
+  <!-- RECENT BOOKINGS -->
+  <div class="col-xl-8">
+    <div class="dashboard-panel dashboard-detail-card">
 
-            <div class="panel-header">
-                <div>
-                    <h4>Recent Bookings</h4>
-                    <p>Latest customer booking requests.</p>
-                </div>
-
-                <a href="{% url 'bookings:list' %}"
-                   class="btn btn-sm btn-outline-dark">
-                    View All
-                </a>
-            </div>
-
-            {% if recent_bookings %}
-
-            <div class="table-responsive">
-                <table class="table align-middle mb-0">
-
-                    <thead>
-                        <tr>
-                            <th>Customer</th>
-                            <th>Vehicle</th>
-                            <th>Pickup</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        {% for booking in recent_bookings %}
-                        <tr>
-                            <td>
-                                <strong>{{ booking.full_name }}</strong>
-                            </td>
-
-                            <td>
-                                {{ booking.vehicle.name }}
-                            </td>
-
-                            <td>
-                                {{ booking.pickup_datetime|date:"M d, Y" }}
-                            </td>
-
-                            <td>
-                                {{ booking.get_status_display }}
-                            </td>
-                        </tr>
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
-            </div>
-
-            {% else %}
-
-            <div class="empty-state dashboard-booking-empty">
-                <i class="bi bi-calendar2-x"></i>
-                <h5>No bookings yet</h5>
-                <p>New booking requests will appear here.</p>
-            </div>
-
-            {% endif %}
-
+      <div class="panel-header">
+        <div>
+          <h4>Recent Bookings</h4>
+          <p>Latest customer booking requests.</p>
         </div>
-    </div>
 
-    <!-- QUICK ACTIONS -->
-    <div class="col-xl-4">
-        <div class="dashboard-panel dashboard-detail-card">
+        <a href="{% url 'bookings:list' %}" class="btn btn-sm btn-outline-dark">
+          View All
+        </a>
+      </div>
 
-            <div class="panel-header">
-                <div>
-                    <h4>Quick Actions</h4>
-                    <p>Manage your rental system.</p>
-                </div>
-            </div>
+      {% if recent_bookings %}
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Vehicle</th>
+                <th>Rental Type</th>
+                <th>Pickup</th>
+                <th>Status</th>
+              </tr>
+            </thead>
 
-            <div class="dashboard-actions">
+            <tbody>
+              {% for booking in recent_bookings %}
+                <tr>
+                  <td><strong>{{ booking.full_name }}</strong></td>
+                  <td>{{ booking.vehicle.name }}</td>
 
-                <a href="{% url 'vehicles:add' %}"
-                   class="dashboard-action-item">
+                  <td>
+                    {% if booking.rental_type == 'self_drive' %}
+                      <span class="badge text-bg-dark">Self Drive</span>
+                    {% else %}
+                      <span class="badge text-bg-info">Rent a Car</span>
+                    {% endif %}
+                  </td>
 
-                    <div class="dashboard-action-icon">
-                        <i class="bi bi-plus-lg"></i>
-                    </div>
-
-                    <div class="dashboard-action-info">
-                        <strong>Add Vehicle</strong>
-                        <span>Add a new vehicle to the fleet</span>
-                    </div>
-
-                    <i class="bi bi-chevron-right dashboard-action-arrow"></i>
-                </a>
-
-                <a href="{% url 'vehicles:list' %}"
-                   class="dashboard-action-item">
-
-                    <div class="dashboard-action-icon">
-                        <i class="bi bi-car-front"></i>
-                    </div>
-
-                    <div class="dashboard-action-info">
-                        <strong>Manage Vehicles</strong>
-                        <span>View, edit and delete vehicles</span>
-                    </div>
-
-                    <i class="bi bi-chevron-right dashboard-action-arrow"></i>
-                </a>
-
-                <a href="{% url 'bookings:list' %}"
-                   class="dashboard-action-item">
-
-                    <div class="dashboard-action-icon">
-                        <i class="bi bi-calendar-check"></i>
-                    </div>
-
-                    <div class="dashboard-action-info">
-                        <strong>Bookings</strong>
-                        <span>Manage customer bookings</span>
-                    </div>
-
-                    <i class="bi bi-chevron-right dashboard-action-arrow"></i>
-                </a>
-
-                <a href="{% url 'driver_requests:list' %}"
-                   class="dashboard-action-item">
-
-                    <div class="dashboard-action-icon">
-                        <i class="bi bi-person-badge"></i>
-                    </div>
-
-                    <div class="dashboard-action-info">
-                        <strong>Driver Requests</strong>
-                        <span>Manage driver requests</span>
-                    </div>
-
-                    <i class="bi bi-chevron-right dashboard-action-arrow"></i>
-                </a>
-
-            </div>
-
+                  <td>{{ booking.pickup_datetime|date:"M d, Y" }}</td>
+                  <td>{{ booking.get_status_display }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
+      {% else %}
+        <div class="empty-state dashboard-booking-empty">
+          <i class="bi bi-calendar2-x"></i>
+          <h5>No bookings yet</h5>
+          <p>New booking requests will appear here.</p>
+        </div>
+      {% endif %}
+
     </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="col-xl-4">
+    <div class="dashboard-panel dashboard-detail-card">
+
+      <div class="panel-header">
+        <div>
+          <h4>Quick Actions</h4>
+          <p>Manage your rental system.</p>
+        </div>
+      </div>
+
+      <div class="dashboard-actions">
+
+        <a href="{% url 'vehicles:add' %}" class="dashboard-action-item">
+          <div class="dashboard-action-icon">
+            <i class="bi bi-plus-lg"></i>
+          </div>
+          <div class="dashboard-action-info">
+            <strong>Add Vehicle</strong>
+            <span>Add a new vehicle to the fleet</span>
+          </div>
+          <i class="bi bi-chevron-right dashboard-action-arrow"></i>
+        </a>
+
+        <a href="{% url 'vehicles:list' %}" class="dashboard-action-item">
+          <div class="dashboard-action-icon">
+            <i class="bi bi-car-front"></i>
+          </div>
+          <div class="dashboard-action-info">
+            <strong>Manage Vehicles</strong>
+            <span>View, edit and delete vehicles</span>
+          </div>
+          <i class="bi bi-chevron-right dashboard-action-arrow"></i>
+        </a>
+
+        <a href="{% url 'bookings:list' %}" class="dashboard-action-item">
+          <div class="dashboard-action-icon">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+          <div class="dashboard-action-info">
+            <strong>Bookings</strong>
+            <span>Manage customer bookings</span>
+          </div>
+          <i class="bi bi-chevron-right dashboard-action-arrow"></i>
+        </a>
+
+        <a href="{% url 'driver_requests:list' %}" class="dashboard-action-item">
+          <div class="dashboard-action-icon">
+            <i class="bi bi-person-badge"></i>
+          </div>
+          <div class="dashboard-action-info">
+            <strong>Driver Requests</strong>
+            <span>Manage driver requests</span>
+          </div>
+          <i class="bi bi-chevron-right dashboard-action-arrow"></i>
+        </a>
+
+        <a href="{% url 'corporate_requests:list' %}" class="dashboard-action-item">
+          <div class="dashboard-action-icon">
+            <i class="bi bi-buildings"></i>
+          </div>
+          <div class="dashboard-action-info">
+            <strong>Corporate Requests</strong>
+            <span>Manage corporate rental requests</span>
+          </div>
+          <i class="bi bi-chevron-right dashboard-action-arrow"></i>
+        </a>
+
+      </div>
+    </div>
+  </div>
 
 </div>
-
 {% endblock %}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'vehicles',
     'bookings',
     'driver_requests',
+    'corporate_requests',
 ]
 
 MIDDLEWARE = [

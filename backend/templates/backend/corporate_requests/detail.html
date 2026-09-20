@@ -1,0 +1,133 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Corporate Request #{{ corporate_request.id }} | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+  <div>
+    <h1>Corporate Request #{{ corporate_request.id }}</h1>
+    <p>View company, contact and rental requirement information.</p>
+  </div>
+
+  <a href="{% url 'corporate_requests:list' %}" class="backend-secondary-btn">
+    <i class="bi bi-arrow-left"></i> Back to Corporate Requests
+  </a>
+</div>
+
+<div class="booking-detail-grid">
+
+  <div class="dashboard-panel">
+    <div class="panel-header">
+      <div>
+        <h4>Company Information</h4>
+        <p>Company details provided with the request.</p>
+      </div>
+    </div>
+
+    <div class="booking-detail-body">
+      <div class="booking-detail-item">
+        <span>Company Name</span>
+        <strong>{{ corporate_request.company_name }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Contact Person</span>
+        <strong>{{ corporate_request.contact_person }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Submitted</span>
+        <strong>{{ corporate_request.created_at|date:"M d, Y - g:i A" }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-panel">
+    <div class="panel-header">
+      <div>
+        <h4>Contact Information</h4>
+        <p>Contact details for the corporate request.</p>
+      </div>
+    </div>
+
+    <div class="booking-detail-body">
+      <div class="booking-detail-item">
+        <span>Phone</span>
+        <strong>{{ corporate_request.phone }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Email</span>
+        <strong>{{ corporate_request.email }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Status</span>
+
+        {% if corporate_request.status == 'pending' %}
+          <strong class="booking-status status-pending">Pending</strong>
+        {% elif corporate_request.status == 'confirmed' %}
+          <strong class="booking-status status-confirmed">Confirmed</strong>
+        {% elif corporate_request.status == 'completed' %}
+          <strong class="booking-status status-completed">Completed</strong>
+        {% elif corporate_request.status == 'cancelled' %}
+          <strong class="booking-status status-cancelled">Cancelled</strong>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="dashboard-panel booking-notes-panel">
+  <div class="panel-header">
+    <div>
+      <h4>Rental Requirement</h4>
+      <p>Vehicle requirements provided by the company.</p>
+    </div>
+  </div>
+
+  <div class="booking-notes">
+    {% if corporate_request.rental_requirement %}
+      {{ corporate_request.rental_requirement|linebreaksbr }}
+    {% else %}
+      <span>No rental requirements were provided.</span>
+    {% endif %}
+  </div>
+</div>
+
+<div class="booking-detail-actions">
+
+  {% if corporate_request.status == 'pending' %}
+    <form method="post" action="{% url 'corporate_requests:confirm' corporate_request.id %}">
+      {% csrf_token %}
+      <button type="submit" class="backend-btn">
+        <i class="bi bi-check-lg"></i> Confirm Request
+      </button>
+    </form>
+
+    <form method="post" action="{% url 'corporate_requests:cancel' corporate_request.id %}" onsubmit="return confirm('Cancel this corporate request?');">
+      {% csrf_token %}
+      <button type="submit" class="booking-cancel-btn">
+        <i class="bi bi-x-lg"></i> Cancel Request
+      </button>
+    </form>
+
+  {% elif corporate_request.status == 'confirmed' %}
+    <form method="post" action="{% url 'corporate_requests:complete' corporate_request.id %}">
+      {% csrf_token %}
+      <button type="submit" class="backend-btn">
+        <i class="bi bi-check2-circle"></i> Complete Request
+      </button>
+    </form>
+
+    <form method="post" action="{% url 'corporate_requests:cancel' corporate_request.id %}" onsubmit="return confirm('Cancel this corporate request?');">
+      {% csrf_token %}
+      <button type="submit" class="booking-cancel-btn">
+        <i class="bi bi-x-lg"></i> Cancel Request
+      </button>
+    </form>
+  {% endif %}
+
+</div>
+{% endblock %}

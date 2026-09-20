@@ -1,195 +1,123 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CarRental Dashboard{% endblock %}</title>
 
-    <title>{% block title %}CarRental Dashboard{% endblock %}</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-          rel="stylesheet">
-
-    <!-- Backend CSS -->
-    <link rel="stylesheet"
-          href="{% static 'backend/css/dashboard.css' %}?v=5">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'backend/css/dashboard.css' %}?v=5">
 </head>
 
 <body>
-
 <div class="backend-layout">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="backendSidebar">
-
-        <div class="sidebar-top">
-
-            <a href="{% url 'dashboard:home' %}"
-               class="sidebar-brand">
-                Car<span>Rental</span>
-            </a>
-
-            <button type="button"
-                    class="sidebar-close"
-                    id="sidebarClose">
-                <i class="bi bi-x-lg"></i>
-            </button>
-
-        </div>
-
-        <nav class="sidebar-nav">
-
-            <!-- DASHBOARD -->
-            <a href="{% url 'dashboard:home' %}"
-               class="{% if request.resolver_match.namespace == 'dashboard' %}active{% endif %}">
-                <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
-            </a>
-
-            <!-- VEHICLES -->
-            <a href="{% url 'vehicles:list' %}"
-               class="{% if request.resolver_match.namespace == 'vehicles' %}active{% endif %}">
-                <i class="bi bi-car-front"></i>
-                <span>Vehicles</span>
-            </a>
-
-            <!-- BOOKINGS -->
-            <a href="{% url 'bookings:list' %}"
-               class="{% if request.resolver_match.namespace == 'bookings' %}active{% endif %}">
-                <i class="bi bi-calendar-check"></i>
-                <span>Bookings</span>
-            </a>
-
-            <!-- DRIVER REQUESTS -->
-            <a href="{% url 'driver_requests:list' %}"
-               class="{% if request.resolver_match.namespace == 'driver_requests' %}active{% endif %}">
-                <i class="bi bi-person-badge"></i>
-                <span>Driver Requests</span>
-            </a>
-
-            <!-- CORPORATE -->
-            <div class="sidebar-disabled">
-                <i class="bi bi-buildings"></i>
-                <span>Corporate Requests</span>
-                <small>Soon</small>
-            </div>
-
-            <!-- BLOG -->
-            <div class="sidebar-disabled">
-                <i class="bi bi-journal-text"></i>
-                <span>Blogs</span>
-                <small>Soon</small>
-            </div>
-
-            <!-- CONTACT -->
-            <div class="sidebar-disabled">
-                <i class="bi bi-envelope"></i>
-                <span>Contact Messages</span>
-                <small>Soon</small>
-            </div>
-
-            <!-- SETTINGS -->
-            <div class="sidebar-disabled">
-                <i class="bi bi-gear"></i>
-                <span>Settings</span>
-                <small>Soon</small>
-            </div>
-
-        </nav>
-
-        <!-- LOGOUT -->
-        <div class="sidebar-bottom">
-
-            <a href="{% url 'dashboard:logout' %}"
-               class="logout-link">
-                <i class="bi bi-box-arrow-left"></i>
-                <span>Logout</span>
-            </a>
-
-        </div>
-
-    </aside>
-
-    <!-- MOBILE OVERLAY -->
-    <div class="sidebar-overlay"
-         id="sidebarOverlay">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="backendSidebar">
+    <div class="sidebar-top">
+      <a href="{% url 'dashboard:home' %}" class="sidebar-brand">Car<span>Rental</span></a>
+      <button type="button" class="sidebar-close" id="sidebarClose">
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
 
-    <!-- MAIN -->
-    <main class="backend-main">
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard:home' %}" class="{% if request.resolver_match.namespace == 'dashboard' %}active{% endif %}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
 
-        <!-- HEADER -->
-        <header class="backend-header">
+      <a href="{% url 'vehicles:list' %}" class="{% if request.resolver_match.namespace == 'vehicles' %}active{% endif %}">
+        <i class="bi bi-car-front"></i>
+        <span>Vehicles</span>
+      </a>
 
-            <button type="button"
-                    class="sidebar-toggle"
-                    id="sidebarToggle">
-                <i class="bi bi-list"></i>
-            </button>
+      <a href="{% url 'bookings:list' %}" class="{% if request.resolver_match.namespace == 'bookings' %}active{% endif %}">
+        <i class="bi bi-calendar-check"></i>
+        <span>Bookings</span>
+      </a>
 
-            <div class="header-title">
-                <span>Management Dashboard</span>
-            </div>
+      <a href="{% url 'driver_requests:list' %}" class="{% if request.resolver_match.namespace == 'driver_requests' %}active{% endif %}">
+        <i class="bi bi-person-badge"></i>
+        <span>Driver Requests</span>
+      </a>
 
-            <div class="admin-profile">
+      <a href="{% url 'corporate_requests:list' %}" class="{% if request.resolver_match.namespace == 'corporate_requests' %}active{% endif %}">
+        <i class="bi bi-buildings"></i>
+        <span>Corporate Requests</span>
+      </a>
 
-                <div class="admin-avatar">
-                    <i class="bi bi-person"></i>
-                </div>
+      <div class="sidebar-disabled">
+        <i class="bi bi-journal-text"></i>
+        <span>Blogs</span>
+        <small>Soon</small>
+      </div>
 
-                <div class="admin-info">
+      <div class="sidebar-disabled">
+        <i class="bi bi-envelope"></i>
+        <span>Contact Messages</span>
+        <small>Soon</small>
+      </div>
 
-                    <strong>
-                        {{ request.user.username }}
-                    </strong>
+      <div class="sidebar-disabled">
+        <i class="bi bi-gear"></i>
+        <span>Settings</span>
+        <small>Soon</small>
+      </div>
+    </nav>
 
-                    <span>
-                        Administrator
-                    </span>
+    <div class="sidebar-bottom">
+      <a href="{% url 'dashboard:logout' %}" class="logout-link">
+        <i class="bi bi-box-arrow-left"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
 
-                </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-            </div>
+  <!-- MAIN -->
+  <main class="backend-main">
+    <header class="backend-header">
+      <button type="button" class="sidebar-toggle" id="sidebarToggle">
+        <i class="bi bi-list"></i>
+      </button>
 
-        </header>
+      <div class="header-title">
+        <span>Management Dashboard</span>
+      </div>
 
-        <!-- PAGE CONTENT -->
-        <div class="backend-content">
-
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
-                         role="alert">
-                        {{ message }}
-
-                        <button type="button"
-                                class="btn-close"
-                                data-bs-dismiss="alert">
-                        </button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-            {% block content %}
-            {% endblock %}
-
+      <div class="admin-profile">
+        <div class="admin-avatar">
+          <i class="bi bi-person"></i>
         </div>
 
-    </main>
+        <div class="admin-info">
+          <strong>{{ request.user.username }}</strong>
+          <span>Administrator</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="backend-content">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
 
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Backend JS -->
 <script src="{% static 'backend/js/dashboard.js' %}?v=5"></script>
-
 </body>
 </html>

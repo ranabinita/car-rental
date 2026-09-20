@@ -6,6 +6,7 @@ from django.views.generic import RedirectView
 from bookings import views as booking_views
 from driver_requests import views as driver_request_views
 from vehicles import views as vehicle_views
+from corporate_requests import views as corporate_requests_views
 
 
 urlpatterns = [
@@ -14,11 +15,13 @@ urlpatterns = [
     path('api/vehicles/',vehicle_views.vehicle_api,name='vehicle_api'),
     path('api/bookings/',booking_views.create_booking,name='create_booking'),
     path('api/driver-requests/',driver_request_views.create_driver_request,name='create_driver_request'),
+    path('api/corporate-requests/',corporate_requests_views.create_corporate_request,name='create_corporate_request'),
     # CUSTOM BACKEND
     path('backend/vehicles/',include('vehicles.urls')),
     path('backend/bookings/',include('bookings.urls')),
     path('backend/driver-requests/',include('driver_requests.urls')),
     path('backend/',include('dashboard.urls')),
+    path('backend/corporate-requests/',include('corporate_requests.urls')),
 ]
 
 if settings.DEBUG:
