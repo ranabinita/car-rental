@@ -420,3 +420,51 @@
     padding: 10px 6px;
   }
 }
+/* =========================
+   TESTIMONIAL REVIEW
+========================= */
+
+.testimonial-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-review-wrap {
+  margin-bottom: 20px;
+}
+
+.testimonial-review-text {
+  margin-bottom: 0;
+  line-height: 1.7;
+}
+
+.testimonial-review-text.testimonial-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.testimonial-read-more {
+  padding: 0;
+  margin-top: 8px;
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  cursor: pointer;
+}
+
+.testimonial-read-more:hover {
+  text-decoration: underline;
+}
+
+.testimonial-person {
+  margin-top: auto;
+}
+
+.testimonial-person h5 {
+  margin-bottom: 3px;
+}

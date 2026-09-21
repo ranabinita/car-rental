@@ -140,6 +140,7 @@ body {
 .sidebar-overlay {
     display: none;
 }
+
 /* ===== HEADER ===== */
 
 .backend-header {
@@ -366,6 +367,10 @@ body {
     font-size: 11px;
 }
 
+.empty-state .empty-action {
+    margin-top: 18px;
+}
+
 .coming-soon-badge,
 .soon-badge {
     padding: 4px 8px;
@@ -440,7 +445,7 @@ body {
     opacity: .5;
 }
 
-/* ===== VEHICLE TABLE ===== */
+/* ===== BACKEND TABLE ===== */
 
 .vehicle-count {
     padding: 5px 9px;
@@ -477,6 +482,19 @@ body {
     font-size: 11px;
 }
 
+.backend-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.backend-table td strong {
+    color: var(--navy);
+}
+
+.backend-table td small {
+    color: #9298a1;
+    font-size: 9px;
+}
+
 .vehicle-info {
     display: flex;
     align-items: center;
@@ -507,32 +525,54 @@ body {
     font-size: 11px;
 }
 
+/* ===== STATUS BADGES ===== */
+
 .status-badge {
     padding: 5px 9px;
     display: inline-block;
     border-radius: 20px;
     font-size: 9px;
     font-weight: 700;
+    white-space: nowrap;
 }
 
-.status-available {
-    color: #24734d;
+.status-available,
+.status-completed {
+    color: #24734d !important;
     background: #e8f6ef;
 }
 
 .status-unavailable {
-    color: #9b352c;
+    color: #9b352c !important;
     background: #fbeceb;
 }
 
-.status-maintenance {
-    color: #91651b;
+.status-maintenance,
+.status-pending {
+    color: #91651b !important;
     background: #fff4dc;
 }
 
+.status-confirmed {
+    color: #285ea8 !important;
+    background: #eaf2ff;
+}
+
+.status-cancelled {
+    color: #777e89 !important;
+    background: #f0f1f3;
+}
+
+/* ===== TABLE ACTIONS ===== */
+
 .table-actions {
     display: flex;
+    align-items: center;
     gap: 7px;
+}
+
+.table-actions form {
+    margin: 0;
 }
 
 .table-actions a,
@@ -552,13 +592,65 @@ body {
 
 .table-actions a:hover {
     color: var(--navy);
+    background: #eceef1;
 }
 
 .table-actions button:hover {
     color: var(--red);
+    background: #fbeceb;
 }
 
-/* ===== VEHICLE FORM ===== */
+/* ===== TESTIMONIALS ===== */
+
+.testimonial-customer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 150px;
+}
+
+.testimonial-avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    color: var(--navy);
+    background: #f1f3f6;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.testimonial-customer strong {
+    color: var(--navy);
+    font-size: 11px;
+}
+
+.testimonial-review-column {
+    width: 30%;
+    min-width: 220px;
+}
+
+.testimonial-review-preview {
+    max-width: 350px;
+    color: #626975;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.testimonial-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
+.testimonial-rating i {
+    color: var(--gold);
+}
+
+/* ===== BACKEND FORMS ===== */
 
 .vehicle-form-panel {
     max-width: 950px;
@@ -605,6 +697,21 @@ body {
     font-size: 10px;
 }
 
+.form-check-label {
+    color: #626975;
+    font-size: 11px;
+}
+
+.form-check-input:checked {
+    background-color: var(--red);
+    border-color: var(--red);
+}
+
+.form-check-input:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(166, 61, 47, .07);
+}
+
 .errorlist {
     margin: 6px 0 0;
     padding: 0;
@@ -622,7 +729,7 @@ body {
     border-top: 1px solid var(--border);
 }
 
-/* ===== CURRENT IMAGE ===== */
+/* ===== CURRENT VEHICLE IMAGE ===== */
 
 .current-vehicle-image {
     margin-bottom: 12px;
@@ -680,9 +787,27 @@ body {
     border-color: var(--border);
 }
 
+.backend-modal .modal-title {
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 700;
+}
+
 .backend-modal .modal-body {
     padding: 25px 20px;
     text-align: center;
+}
+
+.backend-modal .modal-body h5 {
+    margin: 0 0 7px;
+    color: var(--navy);
+    font-size: 14px;
+}
+
+.backend-modal .modal-body p {
+    margin: 0;
+    color: #8a9099;
+    font-size: 11px;
 }
 
 .delete-modal-icon {
@@ -706,61 +831,11 @@ body {
     cursor: pointer;
 }
 
-/* ===== RESPONSIVE ===== */
-
-@media (max-width: 991px) {
-    .sidebar {
-        transform: translateX(-100%);
-        transition: .25s;
-    }
-
-    .sidebar.active {
-        transform: translateX(0);
-    }
-
-    .backend-main {
-        margin-left: 0;
-    }
-
-    .sidebar-toggle {
-        display: block;
-    }
-
-    .backend-content {
-        padding: 22px;
-    }
+.delete-confirm-btn:hover {
+    background: var(--red-dark);
 }
 
-@media (max-width: 576px) {
-    .backend-header,
-    .backend-content {
-        padding-left: 18px;
-        padding-right: 18px;
-    }
-
-    .page-heading-row {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .admin-profile > div:last-child {
-        display: none;
-    }
-
-    .backend-form {
-        padding: 18px;
-    }
-
-    .form-actions {
-        flex-direction: column-reverse;
-    }
-
-    .form-actions .backend-btn,
-    .form-actions .backend-secondary-btn {
-        width: 100%;
-    }
-}
-/* ===== BOOKING DETAILS ===== */
+/* ===== DETAIL PAGES ===== */
 
 .booking-detail-grid {
     margin-bottom: 20px;
@@ -814,29 +889,6 @@ body {
 
 .booking-status {
     width: fit-content;
-    padding: 5px 9px;
-    border-radius: 20px;
-    font-size: 9px !important;
-}
-
-.status-pending {
-    color: #91651b !important;
-    background: #fff4dc;
-}
-
-.status-confirmed {
-    color: #285ea8 !important;
-    background: #eaf2ff;
-}
-
-.status-completed {
-    color: #24734d !important;
-    background: #e8f6ef;
-}
-
-.status-cancelled {
-    color: #777e89 !important;
-    background: #f0f1f3;
 }
 
 .booking-notes {
@@ -877,6 +929,31 @@ body {
     background: var(--red);
 }
 
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 991px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .25s;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .backend-main {
+        margin-left: 0;
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .backend-content {
+        padding: 22px;
+    }
+}
+
 @media (max-width: 768px) {
     .booking-detail-grid,
     .booking-trip-grid {
@@ -888,7 +965,41 @@ body {
         flex-direction: column;
     }
 
-    .booking-detail-actions button {
+    .booking-detail-actions .backend-btn,
+    .booking-detail-actions .backend-secondary-btn,
+    .booking-detail-actions .booking-cancel-btn,
+    .booking-detail-actions form,
+    .booking-detail-actions form button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .backend-header,
+    .backend-content {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .page-heading-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-profile > div:last-child {
+        display: none;
+    }
+
+    .backend-form {
+        padding: 18px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .form-actions .backend-btn,
+    .form-actions .backend-secondary-btn {
         width: 100%;
     }
 }

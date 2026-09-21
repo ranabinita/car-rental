@@ -4,103 +4,109 @@
 
 {% block content %}
 <div class="page-heading">
-  <div>
-    <h1>Corporate Requests</h1>
-    <p>View and manage corporate vehicle rental requests.</p>
-  </div>
+    <div>
+        <h1>Corporate Requests</h1>
+        <p>View and manage corporate vehicle rental requests.</p>
+    </div>
 </div>
 
 <div class="dashboard-panel">
-  {% if corporate_requests %}
-    <div class="table-responsive">
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Contact Person</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Submitted</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {% for corporate_request in corporate_requests %}
-            <tr>
-              <td><strong>{{ corporate_request.company_name }}</strong></td>
-              <td>{{ corporate_request.contact_person }}</td>
-              <td>{{ corporate_request.phone }}</td>
-              <td>{{ corporate_request.email }}</td>
-
-              <td>
-                {{ corporate_request.created_at|date:"M d, Y" }}<br>
-                <small>{{ corporate_request.created_at|date:"g:i A" }}</small>
-              </td>
-
-              <td>
-                {% if corporate_request.status == 'pending' %}
-                  <span class="badge text-bg-warning">Pending</span>
-                {% elif corporate_request.status == 'confirmed' %}
-                  <span class="badge text-bg-primary">Confirmed</span>
-                {% elif corporate_request.status == 'completed' %}
-                  <span class="badge text-bg-success">Completed</span>
-                {% elif corporate_request.status == 'cancelled' %}
-                  <span class="badge text-bg-secondary">Cancelled</span>
-                {% endif %}
-              </td>
-
-              <td>
-                <div class="d-flex gap-2 flex-wrap">
-                  <a href="{% url 'corporate_requests:detail' corporate_request.id %}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-eye"></i>
-                  </a>
-
-                  {% if corporate_request.status == 'pending' %}
-                    <form method="post" action="{% url 'corporate_requests:confirm' corporate_request.id %}">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-success">
-                        <i class="bi bi-check-lg"></i>
-                      </button>
-                    </form>
-
-                    <form method="post" action="{% url 'corporate_requests:cancel' corporate_request.id %}" onsubmit="return confirm('Cancel this corporate request?');">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-x-lg"></i>
-                      </button>
-                    </form>
-
-                  {% elif corporate_request.status == 'confirmed' %}
-                    <form method="post" action="{% url 'corporate_requests:complete' corporate_request.id %}">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-primary">
-                        <i class="bi bi-check2-circle"></i>
-                      </button>
-                    </form>
-
-                    <form method="post" action="{% url 'corporate_requests:cancel' corporate_request.id %}" onsubmit="return confirm('Cancel this corporate request?');">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-x-lg"></i>
-                      </button>
-                    </form>
-                  {% endif %}
-                </div>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="panel-header">
+        <div>
+            <h4>Corporate Request List</h4>
+            <p>All corporate vehicle rental requests in the system.</p>
+        </div>
+        <span class="vehicle-count">{{ corporate_requests|length }} Requests</span>
     </div>
 
-  {% else %}
-    <div class="empty-state">
-      <i class="bi bi-buildings"></i>
-      <h5>No corporate requests yet</h5>
-      <p>Corporate rental requests will appear here.</p>
-    </div>
-  {% endif %}
+    {% if corporate_requests %}
+        <div class="table-responsive">
+            <table class="backend-table">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Contact Person</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Submitted</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for corporate_request in corporate_requests %}
+                        <tr>
+                            <td><strong>{{ corporate_request.company_name }}</strong></td>
+                            <td>{{ corporate_request.contact_person }}</td>
+                            <td>{{ corporate_request.phone }}</td>
+                            <td>{{ corporate_request.email }}</td>
+
+                            <td>
+                                {{ corporate_request.created_at|date:"M d, Y" }}<br>
+                                <small>{{ corporate_request.created_at|date:"g:i A" }}</small>
+                            </td>
+
+                            <td>
+                                {% if corporate_request.status == 'pending' %}
+                                    <span class="status-badge status-pending">Pending</span>
+                                {% elif corporate_request.status == 'confirmed' %}
+                                    <span class="status-badge status-confirmed">Confirmed</span>
+                                {% elif corporate_request.status == 'completed' %}
+                                    <span class="status-badge status-completed">Completed</span>
+                                {% elif corporate_request.status == 'cancelled' %}
+                                    <span class="status-badge status-cancelled">Cancelled</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <div class="table-actions">
+                                    <a href="{% url 'corporate_requests:detail' corporate_request.id %}" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    {% if corporate_request.status == 'pending' %}
+                                        <form method="post" action="{% url 'corporate_requests:confirm' corporate_request.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" title="Confirm">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                        </form>
+
+                                        <form method="post" action="{% url 'corporate_requests:cancel' corporate_request.id %}" onsubmit="return confirm('Cancel this corporate request?');">
+                                            {% csrf_token %}
+                                            <button type="submit" title="Cancel">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </form>
+
+                                    {% elif corporate_request.status == 'confirmed' %}
+                                        <form method="post" action="{% url 'corporate_requests:complete' corporate_request.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" title="Complete">
+                                                <i class="bi bi-check2-circle"></i>
+                                            </button>
+                                        </form>
+
+                                        <form method="post" action="{% url 'corporate_requests:cancel' corporate_request.id %}" onsubmit="return confirm('Cancel this corporate request?');">
+                                            {% csrf_token %}
+                                            <button type="submit" title="Cancel">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-buildings"></i>
+            <h5>No corporate requests yet</h5>
+            <p>Corporate rental requests will appear here.</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

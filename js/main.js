@@ -21,8 +21,9 @@ async function loadLayout() {
     loadComponent('footer', 'components/footer.html')
   ]);
 
-  setActiveNav();
-  setCurrentYear();
+ setActiveNav();
+ setCurrentYear();
+ await loadSiteSettings();
 }
 
 function setActiveNav() {
@@ -334,210 +335,282 @@ if (qualityTabs.length && qualityTitle && qualityText) {
 }
 
 
-/* =========================
-   AUTH MODAL
-========================= */
+// /* =========================
+//    AUTH MODAL
+// ========================= */
 
-function initSigninModal() {
-  const modal = document.getElementById('signinModal');
-  const closeButton = document.getElementById('closeSignin');
-  const signinView = document.getElementById('signinView');
-  const registerView = document.getElementById('registerView');
-  const forgotView = document.getElementById('forgotView');
-  const otpView = document.getElementById('otpView');
-  const resetView = document.getElementById('resetView');
+// function initSigninModal() {
+//   const modal = document.getElementById('signinModal');
+//   const closeButton = document.getElementById('closeSignin');
+//   const signinView = document.getElementById('signinView');
+//   const registerView = document.getElementById('registerView');
+//   const forgotView = document.getElementById('forgotView');
+//   const otpView = document.getElementById('otpView');
+//   const resetView = document.getElementById('resetView');
 
-  const showRegister = document.getElementById('showRegister');
-  const showSignin = document.getElementById('showSignin');
-  const showForgot = document.getElementById('showForgot');
-  const forgotBackSignin = document.getElementById('forgotBackSignin');
-  const otpBack = document.getElementById('otpBack');
-  const resetBackSignin = document.getElementById('resetBackSignin');
+//   const showRegister = document.getElementById('showRegister');
+//   const showSignin = document.getElementById('showSignin');
+//   const showForgot = document.getElementById('showForgot');
+//   const forgotBackSignin = document.getElementById('forgotBackSignin');
+//   const otpBack = document.getElementById('otpBack');
+//   const resetBackSignin = document.getElementById('resetBackSignin');
 
-  const signinForm = document.getElementById('signinForm');
-  const registerForm = document.getElementById('registerForm');
-  const forgotForm = document.getElementById('forgotForm');
-  const otpForm = document.getElementById('otpForm');
-  const resetForm = document.getElementById('resetForm');
+//   const signinForm = document.getElementById('signinForm');
+//   const registerForm = document.getElementById('registerForm');
+//   const forgotForm = document.getElementById('forgotForm');
+//   const otpForm = document.getElementById('otpForm');
+//   const resetForm = document.getElementById('resetForm');
 
-  const registerPassword = document.getElementById('registerPassword');
-  const confirmPassword = document.getElementById('confirmPassword');
-  const registerError = document.getElementById('registerError');
-  const resetError = document.getElementById('resetError');
+//   const registerPassword = document.getElementById('registerPassword');
+//   const confirmPassword = document.getElementById('confirmPassword');
+//   const registerError = document.getElementById('registerError');
+//   const resetError = document.getElementById('resetError');
 
-  if (!modal || !signinView) return;
+//   if (!modal || !signinView) return;
 
-  const authViews = [
-    signinView,
-    registerView,
-    forgotView,
-    otpView,
-    resetView
-  ];
+//   const authViews = [
+//     signinView,
+//     registerView,
+//     forgotView,
+//     otpView,
+//     resetView
+//   ];
 
-  function showAuthView(view) {
-    authViews.forEach((item) => item?.classList.remove('active'));
-    view?.classList.add('active');
+//   function showAuthView(view) {
+//     authViews.forEach((item) => item?.classList.remove('active'));
+//     view?.classList.add('active');
 
-    if (registerError) registerError.textContent = '';
-    if (resetError) resetError.textContent = '';
-  }
+//     if (registerError) registerError.textContent = '';
+//     if (resetError) resetError.textContent = '';
+//   }
 
-  function openModal() {
-    showAuthView(signinView);
-    modal.classList.add('active');
-    document.body.classList.add('modal-open');
-  }
+//   function openModal() {
+//     showAuthView(signinView);
+//     modal.classList.add('active');
+//     document.body.classList.add('modal-open');
+//   }
 
-  function closeModal() {
-    modal.classList.remove('active');
-    document.body.classList.remove('modal-open');
-  }
+//   function closeModal() {
+//     modal.classList.remove('active');
+//     document.body.classList.remove('modal-open');
+//   }
 
-  document.addEventListener('click', (event) => {
-    const signinButton = event.target.closest('.signin-btn');
-    if (!signinButton) return;
+//   document.addEventListener('click', (event) => {
+//     const signinButton = event.target.closest('.signin-btn');
+//     if (!signinButton) return;
 
-    event.preventDefault();
-    openModal();
-  });
+//     event.preventDefault();
+//     openModal();
+//   });
 
-  closeButton?.addEventListener('click', closeModal);
+//   closeButton?.addEventListener('click', closeModal);
 
-  modal.addEventListener('click', (event) => {
-    if (event.target === modal) closeModal();
-  });
+//   modal.addEventListener('click', (event) => {
+//     if (event.target === modal) closeModal();
+//   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && modal.classList.contains('active')) {
-      closeModal();
-    }
-  });
+//   document.addEventListener('keydown', (event) => {
+//     if (event.key === 'Escape' && modal.classList.contains('active')) {
+//       closeModal();
+//     }
+//   });
 
-  showRegister?.addEventListener('click', () => showAuthView(registerView));
-  showSignin?.addEventListener('click', () => showAuthView(signinView));
-  showForgot?.addEventListener('click', () => showAuthView(forgotView));
-  forgotBackSignin?.addEventListener('click', () => showAuthView(signinView));
-  otpBack?.addEventListener('click', () => showAuthView(forgotView));
-  resetBackSignin?.addEventListener('click', () => showAuthView(signinView));
+//   showRegister?.addEventListener('click', () => showAuthView(registerView));
+//   showSignin?.addEventListener('click', () => showAuthView(signinView));
+//   showForgot?.addEventListener('click', () => showAuthView(forgotView));
+//   forgotBackSignin?.addEventListener('click', () => showAuthView(signinView));
+//   otpBack?.addEventListener('click', () => showAuthView(forgotView));
+//   resetBackSignin?.addEventListener('click', () => showAuthView(signinView));
 
-  document.querySelectorAll('.password-toggle').forEach((button) => {
-    button.addEventListener('click', () => {
-      const input = document.getElementById(button.dataset.password);
-      if (!input) return;
+//   document.querySelectorAll('.password-toggle').forEach((button) => {
+//     button.addEventListener('click', () => {
+//       const input = document.getElementById(button.dataset.password);
+//       if (!input) return;
 
-      const passwordVisible = input.type === 'text';
-      input.type = passwordVisible ? 'password' : 'text';
+//       const passwordVisible = input.type === 'text';
+//       input.type = passwordVisible ? 'password' : 'text';
 
-      button.innerHTML = passwordVisible
-        ? '<i class="bi bi-eye"></i>'
-        : '<i class="bi bi-eye-slash"></i>';
+//       button.innerHTML = passwordVisible
+//         ? '<i class="bi bi-eye"></i>'
+//         : '<i class="bi bi-eye-slash"></i>';
 
-      button.setAttribute(
-        'aria-label',
-        passwordVisible ? 'Show password' : 'Hide password'
-      );
-    });
-  });
+//       button.setAttribute(
+//         'aria-label',
+//         passwordVisible ? 'Show password' : 'Hide password'
+//       );
+//     });
+//   });
 
-  const otpInputs = document.querySelectorAll('.otp-inputs input');
+//   const otpInputs = document.querySelectorAll('.otp-inputs input');
 
-  otpInputs.forEach((input, index) => {
-    input.addEventListener('input', () => {
-      input.value = input.value.replace(/\D/g, '');
+//   otpInputs.forEach((input, index) => {
+//     input.addEventListener('input', () => {
+//       input.value = input.value.replace(/\D/g, '');
 
-      if (input.value && index < otpInputs.length - 1) {
-        otpInputs[index + 1].focus();
-      }
-    });
+//       if (input.value && index < otpInputs.length - 1) {
+//         otpInputs[index + 1].focus();
+//       }
+//     });
 
-    input.addEventListener('keydown', (event) => {
-      if (event.key === 'Backspace' && !input.value && index > 0) {
-        otpInputs[index - 1].focus();
-      }
-    });
-  });
+//     input.addEventListener('keydown', (event) => {
+//       if (event.key === 'Backspace' && !input.value && index > 0) {
+//         otpInputs[index - 1].focus();
+//       }
+//     });
+//   });
 
-  signinForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    console.log('Sign in ready for Django backend.');
-  });
+// signinForm?.addEventListener('submit', async (event) => {
+//   event.preventDefault();
 
-  registerForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
+//   const email = document.getElementById('signinEmail').value.trim();
+//   const password = document.getElementById('signinPassword').value;
+//   const error = document.getElementById('signinError');
+//   const button = signinForm.querySelector('.auth-submit');
 
-    if (registerError) registerError.textContent = '';
+//   error.textContent = '';
+//   button.disabled = true;
+//   button.textContent = 'Signing In...';
 
-    if (
-      registerPassword &&
-      confirmPassword &&
-      registerPassword.value !== confirmPassword.value
-    ) {
-      registerError.textContent = 'Passwords do not match.';
-      confirmPassword.focus();
-      return;
-    }
+//   try {
+//     const csrfToken = await getAuthCsrfToken();
 
-    console.log('Registration ready for Django backend.');
-  });
+//     const response = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+//       method: 'POST',
+//       credentials: 'include',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': csrfToken
+//       },
+//       body: JSON.stringify({email, password})
+//     });
 
-  forgotForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    showAuthView(otpView);
-  });
+//     const data = await response.json();
+//     if (!response.ok) throw new Error(data.error || 'Unable to sign in.');
 
-  otpForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    showAuthView(resetView);
-  });
+//     signinForm.reset();
+//     closeAuthModal();
+//     await updateAuthNavbar();
+//   } catch (err) {
+//     error.textContent = err.message;
+//   } finally {
+//     button.disabled = false;
+//     button.textContent = 'Sign In';
+//   }
+// });
 
-  resetForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
+// registerForm?.addEventListener('submit', async (event) => {
+//   event.preventDefault();
 
-    const newPassword = document.getElementById('newPassword');
-    const confirmNewPassword = document.getElementById('confirmNewPassword');
+//   const firstName = document.getElementById('firstName').value.trim();
+//   const lastName = document.getElementById('lastName').value.trim();
+//   const phone = document.getElementById('registerPhone').value.trim();
+//   const email = document.getElementById('registerEmail').value.trim();
+//   const password = document.getElementById('registerPassword').value;
+//   const confirmPassword = document.getElementById('confirmPassword').value;
+//   const error = document.getElementById('registerError');
+//   const button = registerForm.querySelector('.auth-submit');
 
-    if (!newPassword || !confirmNewPassword) return;
+//   error.textContent = '';
 
-    if (newPassword.value !== confirmNewPassword.value) {
-      if (resetError) resetError.textContent = 'Passwords do not match.';
-      confirmNewPassword.focus();
-      return;
-    }
+//   if (password !== confirmPassword) {
+//     error.textContent = 'Passwords do not match.';
+//     return;
+//   }
 
-    if (resetError) resetError.textContent = '';
+//   button.disabled = true;
+//   button.textContent = 'Creating Account...';
 
-    console.log('Password reset ready for Django backend.');
+//   try {
+//     const csrfToken = await getAuthCsrfToken();
 
-    resetForm.reset();
-    showAuthView(signinView);
-  });
-}
+//     const response = await fetch('http://127.0.0.1:8000/api/auth/register/', {
+//       method: 'POST',
+//       credentials: 'include',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRFToken': csrfToken
+//       },
+//       body: JSON.stringify({
+//         first_name: firstName,
+//         last_name: lastName,
+//         phone,
+//         email,
+//         password,
+//         confirm_password: confirmPassword
+//       })
+//     });
+
+//     const data = await response.json();
+//     if (!response.ok) throw new Error(data.error || 'Unable to create account.');
+
+//     registerForm.reset();
+//     closeAuthModal();
+//     await updateAuthNavbar();
+//   } catch (err) {
+//     error.textContent = err.message;
+//   } finally {
+//     button.disabled = false;
+//     button.textContent = 'Create Account';
+//   }
+// });
+
+//   forgotForm?.addEventListener('submit', (event) => {
+//     event.preventDefault();
+//     showAuthView(otpView);
+//   });
+
+//   otpForm?.addEventListener('submit', (event) => {
+//     event.preventDefault();
+//     showAuthView(resetView);
+//   });
+
+//   resetForm?.addEventListener('submit', (event) => {
+//     event.preventDefault();
+
+//     const newPassword = document.getElementById('newPassword');
+//     const confirmNewPassword = document.getElementById('confirmNewPassword');
+
+//     if (!newPassword || !confirmNewPassword) return;
+
+//     if (newPassword.value !== confirmNewPassword.value) {
+//       if (resetError) resetError.textContent = 'Passwords do not match.';
+//       confirmNewPassword.focus();
+//       return;
+//     }
+
+//     if (resetError) resetError.textContent = '';
+
+//     console.log('Password reset ready for Django backend.');
+
+//     resetForm.reset();
+//     showAuthView(signinView);
+//   });
+// }
 
 
-/* =========================
-   LOAD AUTH MODAL
-========================= */
+// /* =========================
+//    LOAD AUTH MODAL
+// ========================= */
 
-async function loadSigninModal() {
-  const container = document.getElementById('signin-modal-container');
-  if (!container) return;
+// async function loadSigninModal() {
+//   const container = document.getElementById('signin-modal-container');
+//   if (!container) return;
 
-  try {
-    const response = await fetch('components/signin-modal.html');
+//   try {
+//     const response = await fetch('components/signin-modal.html');
 
-    if (!response.ok) {
-      throw new Error('Could not load auth modal.');
-    }
+//     if (!response.ok) {
+//       throw new Error('Could not load auth modal.');
+//     }
 
-    container.innerHTML = await response.text();
-    initSigninModal();
-  } catch (error) {
-    console.error('Could not load auth modal:', error);
-  }
-}
+//     container.innerHTML = await response.text();
+//     initSigninModal();
+//   } catch (error) {
+//     console.error('Could not load auth modal:', error);
+//   }
+// }
 
-document.addEventListener('DOMContentLoaded', loadSigninModal);
+// document.addEventListener('DOMContentLoaded', loadSigninModal);
 
 
 /* =========================
@@ -1557,5 +1630,165 @@ function initContactForm() {
     }
   });
 }
-
 document.addEventListener('DOMContentLoaded', initContactForm);
+/* SITE SETTINGS */
+
+async function loadSiteSettings() {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/site-settings/');
+    if (!response.ok) throw new Error('Unable to load site settings.');
+
+    const data = await response.json();
+
+    /* CONTACT PAGE */
+    const siteAddress = document.getElementById('siteAddress');
+    const sitePhone = document.getElementById('sitePhone');
+    const siteEmail = document.getElementById('siteEmail');
+    const siteBusinessHours = document.getElementById('siteBusinessHours');
+    const mapContainer = document.getElementById('siteMapContainer');
+    const mapDescription = document.getElementById('siteMapDescription');
+
+    if (siteAddress) siteAddress.textContent = data.address || 'Location will be added by client';
+    if (sitePhone) sitePhone.textContent = data.phone || 'Phone number will be added';
+    if (siteEmail) siteEmail.textContent = data.email || 'Email address will be added';
+    if (siteBusinessHours) siteBusinessHours.textContent = data.business_hours || 'Business hours will be added';
+
+    if (mapDescription && data.address) {
+      mapDescription.textContent = `Visit us at ${data.address}.`;
+    }
+
+    if (mapContainer && data.google_map_url) {
+      mapContainer.innerHTML = `
+        <iframe
+          src="${escapeHtml(data.google_map_url)}"
+          width="100%"
+          height="450"
+          style="border:0;"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      `;
+    }
+
+    /* FOOTER */
+    const companyName = document.getElementById('footerCompanyName');
+    const copyrightName = document.getElementById('footerCopyrightName');
+    const footerAddress = document.getElementById('footerAddress');
+    const footerPhone = document.getElementById('footerPhone');
+    const footerEmail = document.getElementById('footerEmail');
+    const facebook = document.getElementById('footerFacebook');
+    const instagram = document.getElementById('footerInstagram');
+
+    if (companyName) companyName.textContent = data.company_name || 'CarRental';
+    if (copyrightName) copyrightName.textContent = data.company_name || 'CarRental';
+    if (footerAddress) footerAddress.textContent = data.address || 'Location will be added by client';
+
+    if (footerPhone) {
+      footerPhone.textContent = data.phone || 'Phone number will be added';
+      footerPhone.href = data.phone ? `tel:${data.phone.replace(/[^\d+]/g, '')}` : '#';
+    }
+
+    if (footerEmail) {
+      footerEmail.textContent = data.email || 'Email address will be added';
+      footerEmail.href = data.email ? `mailto:${data.email}` : '#';
+    }
+
+    if (facebook) {
+      facebook.href = data.facebook_url || '#';
+      facebook.style.display = data.facebook_url ? '' : 'none';
+    }
+
+    if (instagram) {
+      instagram.href = data.instagram_url || '#';
+      instagram.style.display = data.instagram_url ? '' : 'none';
+    }
+  } catch (error) {
+    console.error('Site settings error:', error);
+  }
+}
+
+/* TESTIMONIALS */
+
+async function loadTestimonials() {
+  const container = document.getElementById('testimonialList');
+  if (!container) return;
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/testimonials/');
+    if (!response.ok) throw new Error('Unable to load testimonials.');
+
+    const data = await response.json();
+    const testimonials = data.testimonials || [];
+
+    if (!testimonials.length) {
+      container.innerHTML = `
+        <div class="col-12 text-center">
+          <p>No testimonials available yet.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = testimonials.map((testimonial) => {
+      const rating = Math.max(1, Math.min(5, Number(testimonial.rating) || 5));
+      const stars = Array.from({length: 5}, (_, index) =>
+        `<i class="bi ${index < rating ? 'bi-star-fill' : 'bi-star'}"></i>`
+      ).join('');
+
+      const review = escapeHtml(testimonial.review);
+      const isLong = testimonial.review.length > 160;
+
+      return `
+        <div class="col-lg-4 col-md-6">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">${stars}</div>
+
+            <div class="testimonial-review-wrap">
+              <p class="testimonial-review-text ${isLong ? 'testimonial-clamped' : ''}">
+                ${review}
+              </p>
+
+              ${isLong ? `
+                <button type="button" class="testimonial-read-more">
+                  Read more
+                </button>
+              ` : ''}
+            </div>
+
+            <div class="testimonial-person">
+              <h5>${escapeHtml(testimonial.customer_name)}</h5>
+              ${testimonial.location ? `<span>${escapeHtml(testimonial.location)}</span>` : ''}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  } catch (error) {
+    console.error('Testimonial error:', error);
+
+    container.innerHTML = `
+      <div class="col-12 text-center">
+        <p>Unable to load testimonials.</p>
+      </div>
+    `;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadTestimonials);
+
+/* TESTIMONIAL READ MORE */
+
+document.addEventListener('click', (event) => {
+  const button = event.target.closest('.testimonial-read-more');
+  if (!button) return;
+
+  const review = button.closest('.testimonial-review-wrap')
+    ?.querySelector('.testimonial-review-text');
+
+  if (!review) return;
+
+  const expanded = review.classList.toggle('expanded');
+  review.classList.toggle('testimonial-clamped', !expanded);
+  button.textContent = expanded ? 'Show less' : 'Read more';
+});

@@ -4,75 +4,92 @@
 
 {% block content %}
 <div class="page-heading">
-  <h1>Contact Messages</h1>
-  <p>View and manage messages submitted through the website.</p>
+    <div>
+        <h1>Contact Messages</h1>
+        <p>View and manage messages submitted through the website.</p>
+    </div>
 </div>
 
 <div class="dashboard-panel">
-  {% if contact_messages %}
-    <div class="table-responsive">
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Subject</th>
-            <th>Email</th>
-            <th>Received</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {% for message in contact_messages %}
-            <tr>
-              <td><strong>{{ message.name }}</strong></td>
-              <td>{{ message.subject }}</td>
-              <td>{{ message.email }}</td>
-              <td>{{ message.created_at|date:"M d, Y" }}</td>
-
-              <td>
-                {% if message.status == 'new' %}
-                  <span class="badge text-bg-warning">New</span>
-                {% elif message.status == 'read' %}
-                  <span class="badge text-bg-primary">Read</span>
-                {% else %}
-                  <span class="badge text-bg-success">Resolved</span>
-                {% endif %}
-              </td>
-
-              <td>
-                <div class="d-flex gap-2 flex-wrap">
-                  <a href="{% url 'contact_messages:detail' message.id %}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-eye"></i>
-                  </a>
-
-                  {% if message.status == 'new' %}
-                    <form method="post" action="{% url 'contact_messages:read' message.id %}">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-outline-primary">Mark Read</button>
-                    </form>
-                  {% endif %}
-
-                  {% if message.status != 'resolved' %}
-                    <form method="post" action="{% url 'contact_messages:resolve' message.id %}">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-outline-success">Resolve</button>
-                    </form>
-                  {% endif %}
-                </div>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="panel-header">
+        <div>
+            <h4>Message List</h4>
+            <p>All contact messages submitted through the website.</p>
+        </div>
+        <span class="vehicle-count">{{ contact_messages|length }} Messages</span>
     </div>
-  {% else %}
-    <div class="empty-state">
-      <i class="bi bi-envelope"></i>
-      <h5>No contact messages</h5>
-      <p>Messages submitted through the website will appear here.</p>
-    </div>
-  {% endif %}
+
+    {% if contact_messages %}
+        <div class="table-responsive">
+            <table class="backend-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Subject</th>
+                        <th>Email</th>
+                        <th>Received</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for message in contact_messages %}
+                        <tr>
+                            <td><strong>{{ message.name }}</strong></td>
+                            <td>{{ message.subject }}</td>
+                            <td>{{ message.email }}</td>
+                            <td>
+                                {{ message.created_at|date:"M d, Y" }}<br>
+                                <small>{{ message.created_at|date:"g:i A" }}</small>
+                            </td>
+
+                            <td>
+                                {% if message.status == 'new' %}
+                                    <span class="status-badge status-pending">New</span>
+                                {% elif message.status == 'read' %}
+                                    <span class="status-badge status-confirmed">Read</span>
+                                {% else %}
+                                    <span class="status-badge status-completed">Resolved</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <div class="table-actions">
+                                    <a href="{% url 'contact_messages:detail' message.id %}" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    {% if message.status == 'new' %}
+                                        <form method="post" action="{% url 'contact_messages:read' message.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" title="Mark as Read">
+                                                <i class="bi bi-envelope-open"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if message.status != 'resolved' %}
+                                        <form method="post" action="{% url 'contact_messages:resolve' message.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" title="Resolve">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-envelope"></i>
+            <h5>No contact messages</h5>
+            <p>Messages submitted through the website will appear here.</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

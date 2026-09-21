@@ -4,81 +4,92 @@
 
 {% block content %}
 <div class="page-heading page-heading-row">
-  <div>
-    <h1>Blogs</h1>
-    <p>Create and manage blog posts displayed on the website.</p>
-  </div>
+    <div>
+        <h1>Blogs</h1>
+        <p>Create and manage blog posts displayed on the website.</p>
+    </div>
 
-  <a href="{% url 'blogs:add' %}" class="backend-btn">
-    <i class="bi bi-plus-lg"></i> Add Blog
-  </a>
+    <a href="{% url 'blogs:add' %}" class="backend-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add Blog
+    </a>
 </div>
 
 <div class="dashboard-panel">
-  {% if blogs %}
-    <div class="table-responsive">
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th>Blog</th>
-            <th>Category</th>
-            <th>Read Time</th>
-            <th>Published</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {% for blog in blogs %}
-            <tr>
-              <td>
-                <strong>{{ blog.title }}</strong><br>
-                <small>{{ blog.excerpt|truncatechars:65 }}</small>
-              </td>
-
-              <td>{{ blog.category }}</td>
-              <td>{{ blog.read_time }} min</td>
-              <td>{{ blog.published_at|date:"M d, Y" }}</td>
-
-              <td>
-                {% if blog.status == 'published' %}
-                  <span class="badge text-bg-success">Published</span>
-                {% else %}
-                  <span class="badge text-bg-secondary">Draft</span>
-                {% endif %}
-              </td>
-
-              <td>
-                <div class="d-flex gap-2 flex-wrap">
-                  <a href="{% url 'blogs:detail' blog.id %}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-eye"></i>
-                  </a>
-
-                  <a href="{% url 'blogs:edit' blog.id %}" class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-pencil"></i>
-                  </a>
-
-                  <form method="post" action="{% url 'blogs:delete' blog.id %}" onsubmit="return confirm('Delete this blog?');">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
-                </div>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="panel-header">
+        <div>
+            <h4>Blog List</h4>
+            <p>All blog posts registered in the system.</p>
+        </div>
+        <span class="vehicle-count">{{ blogs|length }} Blogs</span>
     </div>
 
-  {% else %}
-    <div class="empty-state">
-      <i class="bi bi-journal-text"></i>
-      <h5>No blogs yet</h5>
-      <p>Create your first blog post to get started.</p>
-    </div>
-  {% endif %}
+    {% if blogs %}
+        <div class="table-responsive">
+            <table class="backend-table">
+                <thead>
+                    <tr>
+                        <th>Blog</th>
+                        <th>Category</th>
+                        <th>Read Time</th>
+                        <th>Published</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for blog in blogs %}
+                        <tr>
+                            <td>
+                                <strong>{{ blog.title }}</strong><br>
+                                <small>{{ blog.excerpt|truncatechars:65 }}</small>
+                            </td>
+
+                            <td>{{ blog.category }}</td>
+                            <td>{{ blog.read_time }} min</td>
+                            <td>{{ blog.published_at|date:"M d, Y" }}</td>
+
+                            <td>
+                                {% if blog.status == 'published' %}
+                                    <span class="status-badge status-available">Published</span>
+                                {% else %}
+                                    <span class="status-badge status-unavailable">Draft</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <div class="table-actions">
+                                    <a href="{% url 'blogs:detail' blog.id %}" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <a href="{% url 'blogs:edit' blog.id %}" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <form method="post" action="{% url 'blogs:delete' blog.id %}" onsubmit="return confirm('Delete this blog?');">
+                                        {% csrf_token %}
+                                        <button type="submit" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-journal-text"></i>
+            <h5>No blogs yet</h5>
+            <p>Create your first blog post to get started.</p>
+            <a href="{% url 'blogs:add' %}" class="backend-btn empty-action">
+                <i class="bi bi-plus-lg"></i>
+                Add Blog
+            </a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
