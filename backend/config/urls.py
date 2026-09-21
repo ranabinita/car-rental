@@ -9,6 +9,8 @@ from vehicles import views as vehicle_views
 from corporate_requests import views as corporate_requests_views
 from blogs import views as blog_views
 from contact_messages import views as contact_message_views
+from site_settings import views as site_settings_views
+from testimonials import views as testimonial_views
 
 
 urlpatterns = [
@@ -20,6 +22,8 @@ urlpatterns = [
     path('api/corporate-requests/',corporate_requests_views.create_corporate_request,name='create_corporate_request'),
     path('api/blogs/', blog_views.blog_api, name='blog_api'),
     path('api/contact-messages/', contact_message_views.create_contact_message, name='create_contact_message'),
+    path('api/site-settings/', site_settings_views.settings_api),
+    path('api/testimonials/', testimonial_views.testimonial_api),
     # CUSTOM BACKEND
     path('backend/vehicles/',include('vehicles.urls')),
     path('backend/bookings/',include('bookings.urls')),
@@ -29,7 +33,8 @@ urlpatterns = [
     path('backend/blogs/', include('blogs.urls')),
     path('backend/contact-messages/', include('contact_messages.urls')),
     path('api/auth/', include('accounts.urls')),
-
+    path('backend/settings/', include('site_settings.urls')),
+    path('backend/testimonials/', include('testimonials.urls')),
 ]
 
 if settings.DEBUG:

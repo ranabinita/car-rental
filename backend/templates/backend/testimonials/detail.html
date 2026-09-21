@@ -1,0 +1,135 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Testimonial Details | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+    <div>
+        <h1>Testimonial Details</h1>
+        <p>View the complete customer testimonial.</p>
+    </div>
+    <a href="{% url 'testimonials:list' %}" class="backend-secondary-btn">
+        <i class="bi bi-arrow-left"></i>
+        Back to Testimonials
+    </a>
+</div>
+
+<div class="booking-detail-grid">
+    <div class="dashboard-panel">
+        <div class="panel-header">
+            <div>
+                <h4>Customer Information</h4>
+                <p>Customer and testimonial details.</p>
+            </div>
+        </div>
+
+        <div class="booking-detail-body">
+            <div class="booking-detail-item">
+                <span>Customer Name</span>
+                <strong>{{ testimonial.customer_name }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Location</span>
+                <strong>{{ testimonial.location|default:"Not specified" }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Rating</span>
+                <strong class="testimonial-rating">
+                    <i class="bi bi-star-fill"></i>
+                    {{ testimonial.rating }}/5
+                </strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Display Order</span>
+                <strong>{{ testimonial.order }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Status</span>
+
+                {% if testimonial.is_active %}
+                    <strong>
+                        <span class="status-badge status-available">Active</span>
+                    </strong>
+                {% else %}
+                    <strong>
+                        <span class="status-badge status-unavailable">Inactive</span>
+                    </strong>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-panel">
+        <div class="panel-header">
+            <div>
+                <h4>Customer Review</h4>
+                <p>Full testimonial submitted for display.</p>
+            </div>
+        </div>
+
+        <div class="booking-notes">
+            {{ testimonial.review|linebreaksbr }}
+        </div>
+    </div>
+</div>
+
+<div class="booking-detail-actions">
+    <a href="{% url 'testimonials:edit' testimonial.pk %}" class="backend-btn">
+        <i class="bi bi-pencil"></i>
+        Edit Testimonial
+    </a>
+
+    <button type="button"
+            class="booking-cancel-btn"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteTestimonialModal">
+        <i class="bi bi-trash"></i>
+        Delete
+    </button>
+</div>
+
+<div class="modal fade" id="deleteTestimonialModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content backend-modal">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Testimonial</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="delete-modal-icon">
+                    <i class="bi bi-trash"></i>
+                </div>
+
+                <h5>Delete testimonial from {{ testimonial.customer_name }}?</h5>
+                <p>This testimonial will be permanently removed from the system.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="backend-secondary-btn"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <form method="POST"
+                      action="{% url 'testimonials:delete' testimonial.pk %}">
+                    {% csrf_token %}
+
+                    <button type="submit" class="delete-confirm-btn">
+                        <i class="bi bi-trash"></i>
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

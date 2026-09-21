@@ -1,0 +1,134 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Testimonials | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+    <div>
+        <h1>Testimonials</h1>
+        <p>Manage customer reviews displayed on the About page.</p>
+    </div>
+    <a href="{% url 'testimonials:add' %}" class="backend-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add Testimonial
+    </a>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="backend-alert">
+            <i class="bi bi-check-circle"></i>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="dashboard-panel testimonial-panel">
+    <div class="panel-header">
+        <div>
+            <h4>Testimonial List</h4>
+            <p>All customer testimonials registered in the system.</p>
+        </div>
+        <span class="vehicle-count">{{ testimonials|length }} Testimonials</span>
+    </div>
+
+    {% if testimonials %}
+        <div class="table-responsive">
+            <table class="backend-table testimonial-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Location</th>
+                        <th>Review</th>
+                        <th>Rating</th>
+                        <th>Order</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for testimonial in testimonials %}
+                        <tr>
+                            <td>
+                                <div class="testimonial-customer">
+                                    <div class="testimonial-avatar">{{ testimonial.customer_name|first|upper }}</div>
+                                    <strong>{{ testimonial.customer_name }}</strong>
+                                </div>
+                            </td>
+                            <td>{{ testimonial.location|default:"—" }}</td>
+                            <td class="testimonial-review-column">
+                                <div class="testimonial-review-preview">{{ testimonial.review|truncatechars:90 }}</div>
+                            </td>
+                            <td>
+                                <span class="testimonial-rating">
+                                    <i class="bi bi-star-fill"></i>
+                                    {{ testimonial.rating }}/5
+                                </span>
+                            </td>
+                            <td>{{ testimonial.order }}</td>
+                            <td>
+                                {% if testimonial.is_active %}
+                                    <span class="status-badge status-available">Active</span>
+                                {% else %}
+                                    <span class="status-badge status-unavailable">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="{% url 'testimonials:detail' testimonial.pk %}" class="view-action" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{% url 'testimonials:edit' testimonial.pk %}" class="edit-action" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="delete-action" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteTestimonialModal{{ testimonial.pk }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <div class="modal fade" id="deleteTestimonialModal{{ testimonial.pk }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content backend-modal">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Delete Testimonial</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="delete-modal-icon">
+                                            <i class="bi bi-trash"></i>
+                                        </div>
+                                        <h5>Delete testimonial from {{ testimonial.customer_name }}?</h5>
+                                        <p>This testimonial will be permanently removed from the system.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="backend-secondary-btn" data-bs-dismiss="modal">Cancel</button>
+                                        <form method="POST" action="{% url 'testimonials:delete' testimonial.pk %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="delete-confirm-btn">
+                                                <i class="bi bi-trash"></i>
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <i class="bi bi-chat-quote"></i>
+            <h5>No testimonials added yet</h5>
+            <p>Add your first customer testimonial to display it on the About page.</p>
+            <a href="{% url 'testimonials:add' %}" class="backend-btn empty-action">
+                <i class="bi bi-plus-lg"></i>
+                Add Testimonial
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

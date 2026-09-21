@@ -1,0 +1,92 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}{% if testimonial %}Edit{% else %}Add{% endif %} Testimonial | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+    <div>
+        <h1>{% if testimonial %}Edit{% else %}Add{% endif %} Testimonial</h1>
+        <p>{% if testimonial %}Update customer testimonial information.{% else %}Add a new customer testimonial to the website.{% endif %}</p>
+    </div>
+
+    <a href="{% url 'testimonials:list' %}" class="backend-secondary-btn">
+        <i class="bi bi-arrow-left"></i>
+        Back to Testimonials
+    </a>
+</div>
+
+<div class="dashboard-panel vehicle-form-panel">
+    <div class="panel-header">
+        <div>
+            <h4>{% if testimonial %}Edit Testimonial{% else %}Testimonial Information{% endif %}</h4>
+            <p>Enter the customer review details below.</p>
+        </div>
+    </div>
+
+    <form method="post" class="backend-form">
+        {% csrf_token %}
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="backend-field">
+                    <label for="customerName">Customer Name</label>
+                    <input type="text" id="customerName" name="customer_name" class="form-control" value="{{ testimonial.customer_name|default:'' }}" placeholder="Enter customer name" required>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="backend-field">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" class="form-control" value="{{ testimonial.location|default:'' }}" placeholder="e.g. Kathmandu">
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="backend-field">
+                    <label for="review">Customer Review</label>
+                    <textarea id="review" name="review" class="form-control" rows="5" placeholder="Enter the customer's testimonial" required>{{ testimonial.review|default:'' }}</textarea>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="backend-field">
+                    <label for="rating">Rating</label>
+                    <select id="rating" name="rating" class="form-select">
+                        <option value="5" {% if not testimonial or testimonial.rating == 5 %}selected{% endif %}>5 Stars</option>
+                        <option value="4" {% if testimonial.rating == 4 %}selected{% endif %}>4 Stars</option>
+                        <option value="3" {% if testimonial.rating == 3 %}selected{% endif %}>3 Stars</option>
+                        <option value="2" {% if testimonial.rating == 2 %}selected{% endif %}>2 Stars</option>
+                        <option value="1" {% if testimonial.rating == 1 %}selected{% endif %}>1 Star</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="backend-field">
+                    <label for="displayOrder">Display Order</label>
+                    <input type="number" id="displayOrder" name="order" class="form-control" min="0" value="{{ testimonial.order|default:0 }}">
+                    <small>Lower numbers appear first on the website.</small>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-check">
+                    <input type="checkbox" id="testimonialActive" name="is_active" class="form-check-input" {% if testimonial.is_active or not testimonial %}checked{% endif %}>
+                    <label class="form-check-label" for="testimonialActive">
+                        Show this testimonial on the website
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'testimonials:list' %}" class="backend-secondary-btn">Cancel</a>
+
+            <button type="submit" class="backend-btn">
+                <i class="bi bi-check-lg"></i>
+                {% if testimonial %}Save Changes{% else %}Add Testimonial{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

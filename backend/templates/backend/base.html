@@ -59,11 +59,15 @@
         <span>Contact Messages</span>
       </a>
 
-      <div class="sidebar-disabled">
+      <a href="{% url 'testimonials:list' %}" class="{% if request.resolver_match.namespace == 'testimonials' %}active{% endif %}">
+        <i class="bi bi-chat-quote"></i>
+        <span>Testimonials</span>
+      </a>
+
+      <a href="{% url 'site_settings:settings' %}" class="{% if request.resolver_match.namespace == 'site_settings' %}active{% endif %}">
         <i class="bi bi-gear"></i>
         <span>Settings</span>
-        <small>Soon</small>
-      </div>
+      </a>
     </nav>
 
     <div class="sidebar-bottom">
