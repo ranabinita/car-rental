@@ -52,17 +52,17 @@
               <td>
                 <div class="d-flex gap-2 flex-wrap">
                   <a href="{% url 'blogs:detail' blog.id %}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-eye"></i> View
+                    <i class="bi bi-eye"></i>
                   </a>
 
                   <a href="{% url 'blogs:edit' blog.id %}" class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-pencil"></i> Edit
+                    <i class="bi bi-pencil"></i>
                   </a>
 
                   <form method="post" action="{% url 'blogs:delete' blog.id %}" onsubmit="return confirm('Delete this blog?');">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-sm btn-outline-danger">
-                      <i class="bi bi-trash"></i> Delete
+                      <i class="bi bi-trash"></i>
                     </button>
                   </form>
                 </div>

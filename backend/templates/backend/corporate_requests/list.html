@@ -54,21 +54,21 @@
               <td>
                 <div class="d-flex gap-2 flex-wrap">
                   <a href="{% url 'corporate_requests:detail' corporate_request.id %}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-eye"></i> View
+                    <i class="bi bi-eye"></i>
                   </a>
 
                   {% if corporate_request.status == 'pending' %}
                     <form method="post" action="{% url 'corporate_requests:confirm' corporate_request.id %}">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-sm btn-success">
-                        <i class="bi bi-check-lg"></i> Confirm
+                        <i class="bi bi-check-lg"></i>
                       </button>
                     </form>
 
                     <form method="post" action="{% url 'corporate_requests:cancel' corporate_request.id %}" onsubmit="return confirm('Cancel this corporate request?');">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-x-lg"></i> Cancel
+                        <i class="bi bi-x-lg"></i>
                       </button>
                     </form>
 
@@ -76,22 +76,16 @@
                     <form method="post" action="{% url 'corporate_requests:complete' corporate_request.id %}">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-sm btn-primary">
-                        <i class="bi bi-check2-circle"></i> Complete
+                        <i class="bi bi-check2-circle"></i>
                       </button>
                     </form>
 
                     <form method="post" action="{% url 'corporate_requests:cancel' corporate_request.id %}" onsubmit="return confirm('Cancel this corporate request?');">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-x-lg"></i> Cancel
+                        <i class="bi bi-x-lg"></i>
                       </button>
                     </form>
-
-                  {% elif corporate_request.status == 'completed' %}
-                    <span class="text-muted">Completed</span>
-
-                  {% elif corporate_request.status == 'cancelled' %}
-                    <span class="text-muted">Cancelled</span>
                   {% endif %}
                 </div>
               </td>

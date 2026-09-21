@@ -83,21 +83,21 @@
               <td>
                 <div class="d-flex gap-2 flex-wrap">
                   <a href="{% url 'bookings:detail' booking.id %}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-eye"></i> View
+                    <i class="bi bi-eye"></i>
                   </a>
 
                   {% if booking.status == 'pending' %}
                     <form method="post" action="{% url 'bookings:confirm' booking.id %}">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-sm btn-success">
-                        <i class="bi bi-check-lg"></i> Confirm
+                        <i class="bi bi-check-lg"></i> 
                       </button>
                     </form>
 
                     <form method="post" action="{% url 'bookings:cancel' booking.id %}" onsubmit="return confirm('Cancel this booking?');">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-x-lg"></i> Cancel
+                        <i class="bi bi-x-lg"></i>
                       </button>
                     </form>
 
@@ -105,22 +105,16 @@
                     <form method="post" action="{% url 'bookings:complete' booking.id %}">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-sm btn-primary">
-                        <i class="bi bi-check2-circle"></i> Complete
+                        <i class="bi bi-check2-circle"></i>
                       </button>
                     </form>
 
                     <form method="post" action="{% url 'bookings:cancel' booking.id %}" onsubmit="return confirm('Cancel this booking?');">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-x-lg"></i> Cancel
+                        <i class="bi bi-x-lg"></i> 
                       </button>
                     </form>
-
-                  {% elif booking.status == 'completed' %}
-                    <span class="text-muted">Completed</span>
-
-                  {% elif booking.status == 'cancelled' %}
-                    <span class="text-muted">Cancelled</span>
                   {% endif %}
                 </div>
               </td>
