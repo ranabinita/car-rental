@@ -54,11 +54,10 @@
         <span>Blogs</span>
       </a>
 
-      <div class="sidebar-disabled">
+      <a href="{% url 'contact_messages:list' %}" class="{% if request.resolver_match.namespace == 'contact_messages' %}active{% endif %}">
         <i class="bi bi-envelope"></i>
         <span>Contact Messages</span>
-        <small>Soon</small>
-      </div>
+      </a>
 
       <div class="sidebar-disabled">
         <i class="bi bi-gear"></i>

@@ -8,6 +8,7 @@ from driver_requests import views as driver_request_views
 from vehicles import views as vehicle_views
 from corporate_requests import views as corporate_requests_views
 from blogs import views as blog_views
+from contact_messages import views as contact_message_views
 
 
 urlpatterns = [
@@ -18,6 +19,7 @@ urlpatterns = [
     path('api/driver-requests/',driver_request_views.create_driver_request,name='create_driver_request'),
     path('api/corporate-requests/',corporate_requests_views.create_corporate_request,name='create_corporate_request'),
     path('api/blogs/', blog_views.blog_api, name='blog_api'),
+    path('api/contact-messages/', contact_message_views.create_contact_message, name='create_contact_message'),
     # CUSTOM BACKEND
     path('backend/vehicles/',include('vehicles.urls')),
     path('backend/bookings/',include('bookings.urls')),
@@ -25,6 +27,8 @@ urlpatterns = [
     path('backend/',include('dashboard.urls')),
     path('backend/corporate-requests/',include('corporate_requests.urls')),
     path('backend/blogs/', include('blogs.urls')),
+    path('backend/contact-messages/', include('contact_messages.urls')),
+
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,105 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Contact Message | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+  <div>
+    <h1>Contact Message #{{ contact_message.id }}</h1>
+    <p>View the submitted message and contact information.</p>
+  </div>
+
+  <a href="{% url 'contact_messages:list' %}" class="backend-secondary-btn">
+    <i class="bi bi-arrow-left"></i> Back
+  </a>
+</div>
+
+<div class="booking-detail-grid">
+  <div class="dashboard-panel">
+    <div class="panel-header">
+      <div>
+        <h4>Contact Information</h4>
+        <p>Information provided by the customer.</p>
+      </div>
+    </div>
+
+    <div class="booking-detail-body">
+      <div class="booking-detail-item">
+        <span>Name</span>
+        <strong>{{ contact_message.name }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Email</span>
+        <strong>{{ contact_message.email }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Phone</span>
+        <strong>{{ contact_message.phone|default:"Not provided" }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Received</span>
+        <strong>{{ contact_message.created_at|date:"M d, Y - g:i A" }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-panel">
+    <div class="panel-header">
+      <div>
+        <h4>Message Information</h4>
+        <p>Subject and current message status.</p>
+      </div>
+    </div>
+
+    <div class="booking-detail-body">
+      <div class="booking-detail-item">
+        <span>Subject</span>
+        <strong>{{ contact_message.subject }}</strong>
+      </div>
+
+      <div class="booking-detail-item">
+        <span>Status</span>
+        {% if contact_message.status == 'new' %}
+          <strong><span class="badge text-bg-warning">New</span></strong>
+        {% elif contact_message.status == 'read' %}
+          <strong><span class="badge text-bg-primary">Read</span></strong>
+        {% else %}
+          <strong><span class="badge text-bg-success">Resolved</span></strong>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-panel booking-notes-panel">
+  <div class="panel-header">
+    <div>
+      <h4>Message</h4>
+      <p>Message submitted through the contact form.</p>
+    </div>
+  </div>
+
+  <div class="booking-notes">{{ contact_message.message|linebreaksbr }}</div>
+</div>
+
+<div class="booking-detail-actions">
+  {% if contact_message.status != 'resolved' %}
+    <form method="post" action="{% url 'contact_messages:resolve' contact_message.id %}">
+      {% csrf_token %}
+      <button type="submit" class="backend-btn">
+        <i class="bi bi-check-lg"></i> Mark Resolved
+      </button>
+    </form>
+  {% endif %}
+
+  <form method="post" action="{% url 'contact_messages:delete' contact_message.id %}" onsubmit="return confirm('Delete this contact message?');">
+    {% csrf_token %}
+    <button type="submit" class="booking-cancel-btn">
+      <i class="bi bi-trash"></i> Delete
+    </button>
+  </form>
+</div>
+{% endblock %}

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'driver_requests',
     'corporate_requests',
     'blogs',
+    'contact_messages',
 ]
 
 MIDDLEWARE = [
