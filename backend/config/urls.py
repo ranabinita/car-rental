@@ -28,6 +28,7 @@ urlpatterns = [
     path('backend/corporate-requests/',include('corporate_requests.urls')),
     path('backend/blogs/', include('blogs.urls')),
     path('backend/contact-messages/', include('contact_messages.urls')),
+    path('api/auth/', include('accounts.urls')),
 
 ]
 
