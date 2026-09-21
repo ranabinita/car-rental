@@ -1484,3 +1484,78 @@ function formatBlogContent(content) {
 }
 
 document.addEventListener('DOMContentLoaded', loadBlogDetail);
+/* CONTACT MESSAGE */
+
+function initContactForm() {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  const formMessage = document.getElementById('contactFormMessage');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    const subject = document.getElementById('contactSubject').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
+    const button = form.querySelector('.contact-submit-btn');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^[0-9+\-\s()]{7,20}$/;
+
+    formMessage.className = 'mt-3 text-danger';
+
+    if (!name) {
+      formMessage.textContent = 'Please enter your name.';
+      return;
+    }
+
+    if (!emailPattern.test(email)) {
+      formMessage.textContent = 'Please enter a valid email address.';
+      return;
+    }
+
+    if (phone && !phonePattern.test(phone)) {
+      formMessage.textContent = 'Please enter a valid phone number.';
+      return;
+    }
+
+    if (!subject) {
+      formMessage.textContent = 'Please enter a subject.';
+      return;
+    }
+
+    if (!message) {
+      formMessage.textContent = 'Please enter your message.';
+      return;
+    }
+
+    button.disabled = true;
+    button.innerHTML = 'Sending...';
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/contact-messages/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name, email, phone, subject, message})
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Unable to send message.');
+
+      form.reset();
+      formMessage.className = 'mt-3 text-success';
+      formMessage.textContent = 'Your message has been sent successfully.';
+    } catch (error) {
+      console.error('Contact message error:', error);
+      formMessage.className = 'mt-3 text-danger';
+      formMessage.textContent = error.message;
+    } finally {
+      button.disabled = false;
+      button.innerHTML = 'Send Message <i class="bi bi-arrow-right"></i>';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initContactForm);
