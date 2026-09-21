@@ -1,0 +1,91 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}{{ destination.name }} | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+    <div>
+        <h1>{{ destination.name }}</h1>
+        <p>Destination details.</p>
+    </div>
+    <a href="{% url 'destinations:edit' destination.pk %}" class="backend-btn">
+        <i class="bi bi-pencil"></i> Edit Destination
+    </a>
+</div>
+
+<div class="booking-detail-grid">
+    <div class="dashboard-panel">
+        <div class="panel-header">
+            <div>
+                <h4>Destination Information</h4>
+                <p>Website Explore section details.</p>
+            </div>
+        </div>
+
+        <div class="booking-detail-body">
+            <div class="booking-detail-item">
+                <span>Destination</span>
+                <strong>{{ destination.name }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Starting Price</span>
+                <strong>Rs. {{ destination.starting_price|floatformat:0 }}/day</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Display Order</span>
+                <strong>{{ destination.order }}</strong>
+            </div>
+
+            <div class="booking-detail-item">
+                <span>Status</span>
+                {% if destination.is_active %}
+                    <strong class="status-badge status-available">Active</strong>
+                {% else %}
+                    <strong class="status-badge status-unavailable">Inactive</strong>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-panel">
+        <div class="panel-header">
+            <div>
+                <h4>Destination Image</h4>
+                <p>Image displayed on the website.</p>
+            </div>
+        </div>
+
+        <div class="booking-detail-body">
+            {% if destination.image %}
+                <img src="{{ destination.image.url }}" alt="{{ destination.name }}" style="width:100%;max-height:300px;object-fit:cover;border-radius:7px;">
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-image"></i>
+                    <p>No image available.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-panel booking-notes-panel">
+    <div class="panel-header">
+        <div>
+            <h4>Description</h4>
+            <p>Description displayed on the Explore card.</p>
+        </div>
+    </div>
+    <div class="booking-notes">{{ destination.description|linebreaksbr }}</div>
+</div>
+
+<div class="booking-detail-actions">
+    <a href="{% url 'destinations:list' %}" class="backend-secondary-btn">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+    <a href="{% url 'destinations:edit' destination.pk %}" class="backend-btn">
+        <i class="bi bi-pencil"></i> Edit Destination
+    </a>
+</div>
+{% endblock %}

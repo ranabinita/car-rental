@@ -11,6 +11,7 @@ from blogs import views as blog_views
 from contact_messages import views as contact_message_views
 from site_settings import views as site_settings_views
 from testimonials import views as testimonial_views
+from destinations import views as destination_views
 
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     path('api/contact-messages/', contact_message_views.create_contact_message, name='create_contact_message'),
     path('api/site-settings/', site_settings_views.settings_api),
     path('api/testimonials/', testimonial_views.testimonial_api),
+    path('api/destinations/', destination_views.destination_api),
     # CUSTOM BACKEND
     path('backend/vehicles/',include('vehicles.urls')),
     path('backend/bookings/',include('bookings.urls')),
@@ -35,6 +37,7 @@ urlpatterns = [
     path('api/auth/', include('accounts.urls')),
     path('backend/settings/', include('site_settings.urls')),
     path('backend/testimonials/', include('testimonials.urls')),
+    path('backend/destinations/', include('destinations.urls')),
 ]
 
 if settings.DEBUG:

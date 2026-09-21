@@ -1,0 +1,86 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}{{ form_title }} | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h1>{{ form_title }}</h1>
+    <p>Add or update a destination shown in the Explore section.</p>
+</div>
+
+<div class="dashboard-panel vehicle-form-panel">
+    <div class="panel-header">
+        <div>
+            <h4>Destination Information</h4>
+            <p>Enter the destination details below.</p>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="backend-form">
+        {% csrf_token %}
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="backend-field">
+                    <label for="name">Destination Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ destination.name|default:'' }}" required>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="backend-field">
+                    <label for="starting_price">Starting Price Per Day</label>
+                    <input type="number" class="form-control" id="starting_price" name="starting_price" min="0" step="0.01" value="{{ destination.starting_price|default:'' }}" required>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="backend-field">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" required>{{ destination.description|default:'' }}</textarea>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="backend-field">
+                    <label for="image">Destination Image</label>
+
+                    {% if destination and destination.image %}
+                    <div class="current-vehicle-image">
+                        <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+                        <div class="current-image-info">
+                            <strong>Current Image</strong>
+                            <span>Choose another image only if you want to replace it.</span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*" {% if not destination %}required{% endif %}>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="backend-field">
+                    <label for="order">Display Order</label>
+                    <input type="number" class="form-control" id="order" name="order" min="0" value="{{ destination.order|default:0 }}">
+                    <small>Lower numbers appear first.</small>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {% if not destination or destination.is_active %}checked{% endif %}>
+                    <label class="form-check-label" for="is_active">Show this destination on the website</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'destinations:list' %}" class="backend-secondary-btn">Cancel</a>
+            <button type="submit" class="backend-btn">
+                {% if destination %}Update Destination{% else %}Add Destination{% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

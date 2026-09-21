@@ -1,0 +1,107 @@
+{% extends 'backend/base.html' %}
+
+{% block title %}Destinations | CarRental{% endblock %}
+
+{% block content %}
+<div class="page-heading page-heading-row">
+    <div>
+        <h1>Destinations</h1>
+        <p>Manage destinations displayed in the Explore section.</p>
+    </div>
+    <a href="{% url 'destinations:add' %}" class="backend-btn">
+        <i class="bi bi-plus-lg"></i> Add Destination
+    </a>
+</div>
+
+<div class="dashboard-panel">
+    <div class="panel-header">
+        <div>
+            <h4>Destination List</h4>
+            <p>Manage popular rental destinations.</p>
+        </div>
+        <span class="vehicle-count">{{ destinations|length }} Destinations</span>
+    </div>
+
+    {% if destinations %}
+    <div class="table-responsive">
+        <table class="backend-table">
+            <thead>
+                <tr>
+                    <th>Destination</th>
+                    <th>Starting Price</th>
+                    <th>Order</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for destination in destinations %}
+                <tr>
+                    <td>
+                        <div class="vehicle-info">
+                            {% if destination.image %}
+                                <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+                            {% else %}
+                                <div class="vehicle-placeholder"><i class="bi bi-image"></i></div>
+                            {% endif %}
+                            <div>
+                                <strong>{{ destination.name }}</strong>
+                                <small>{{ destination.description|truncatechars:55 }}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>Rs. {{ destination.starting_price|floatformat:0 }}/day</td>
+                    <td>{{ destination.order }}</td>
+                    <td>
+                        {% if destination.is_active %}
+                            <span class="status-badge status-available">Active</span>
+                        {% else %}
+                            <span class="status-badge status-unavailable">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="table-actions">
+                            <a href="{% url 'destinations:detail' destination.pk %}" title="View"><i class="bi bi-eye"></i></a>
+                            <a href="{% url 'destinations:edit' destination.pk %}" title="Edit"><i class="bi bi-pencil"></i></a>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#deleteDestination{{ destination.pk }}" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <div class="modal fade" id="deleteDestination{{ destination.pk }}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content backend-modal">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Delete Destination</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="delete-modal-icon"><i class="bi bi-trash"></i></div>
+                                <h5>Delete {{ destination.name }}?</h5>
+                                <p>This destination will be permanently removed.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="backend-secondary-btn" data-bs-dismiss="modal">Cancel</button>
+                                <form method="post" action="{% url 'destinations:delete' destination.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="delete-confirm-btn">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="bi bi-geo-alt"></i>
+        <h5>No destinations yet</h5>
+        <p>Add your first destination to display it on the website.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

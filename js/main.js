@@ -1792,3 +1792,81 @@ document.addEventListener('click', (event) => {
   review.classList.toggle('testimonial-clamped', !expanded);
   button.textContent = expanded ? 'Show less' : 'Read more';
 });
+/* DESTINATIONS */
+
+async function loadDestinations() {
+    const container = document.getElementById('destinationList');
+    if (!container) return;
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/destinations/');
+        if (!response.ok) throw new Error('Unable to load destinations.');
+
+        const data = await response.json();
+        const destinations = data.destinations || [];
+
+        if (!destinations.length) {
+            container.innerHTML = `
+                <div class="col-12 text-center">
+                    <p>No destinations available yet.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = destinations.map((destination) => `
+            <div class="col-lg-4 col-md-6">
+                <div class="tour-card">
+                    <div class="tour-image">
+                        <img src="${destination.image}" alt="${escapeHtml(destination.name)}">
+                        <div class="tour-price">From Rs. ${Number(destination.starting_price).toLocaleString()}/day</div>
+                    </div>
+                    <div class="tour-content">
+                        <h4>${escapeHtml(destination.name)}</h4>
+                        <p>${escapeHtml(destination.description)}</p>
+                        <a href="#booking" class="tour-link destination-book-btn" data-destination="${escapeHtml(destination.name)}">Book Now →</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Destination error:', error);
+        container.innerHTML = `
+            <div class="col-12 text-center">
+                <p>Unable to load destinations.</p>
+            </div>
+        `;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadDestinations);
+
+/* DESTINATION BOOKING */
+
+document.addEventListener('click', (event) => {
+    const button = event.target.closest('.destination-book-btn');
+    if (!button) return;
+
+    event.preventDefault();
+
+    const destination = button.dataset.destination;
+    const bookingSection = document.getElementById('booking');
+    const dropoffInput = document.getElementById('dropoffLocation');
+    const pickupInput = document.getElementById('pickupLocation');
+    const rentOption = document.querySelector('.service-option[data-service="rent"]');
+
+    if (!destination || !bookingSection || !dropoffInput) return;
+
+    if (rentOption) rentOption.click();
+
+    dropoffInput.value = destination;
+
+    bookingSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+    });
+
+    setTimeout(() => {
+        pickupInput?.focus();
+    }, 500);
+});
