@@ -1,7 +1,7 @@
 /* =========================
    SHARED COMPONENTS
 ========================= */
-
+const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
 async function loadComponent(id, path) {
   const container = document.getElementById(id);
   if (!container) return;
@@ -204,8 +204,7 @@ function initCorporateRequest() {
       'Submitting...';
 
     try {
-      const response = await fetch(
-        'http://127.0.0.1:8000/api/corporate-requests/',
+      const response = await fetch(`${API_BASE_URL}/api/vehicles/`)/api/corporate-requests/',
         {
           method: 'POST',
           headers: {
@@ -1635,7 +1634,7 @@ document.addEventListener('DOMContentLoaded', initContactForm);
 
 async function loadSiteSettings() {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/site-settings/');
+    const response = await fetch('https://thakur-logistics-backend.onrender.com');
     if (!response.ok) throw new Error('Unable to load site settings.');
 
     const data = await response.json();
