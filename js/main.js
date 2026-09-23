@@ -2,6 +2,7 @@
    SHARED COMPONENTS
 ========================= */
 const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
+
 async function loadComponent(id, path) {
   const container = document.getElementById(id);
   if (!container) return;
@@ -21,9 +22,9 @@ async function loadLayout() {
     loadComponent('footer', 'components/footer.html')
   ]);
 
- setActiveNav();
- setCurrentYear();
- await loadSiteSettings();
+  setActiveNav();
+  setCurrentYear();
+  await loadSiteSettings();
 }
 
 function setActiveNav() {
@@ -143,6 +144,8 @@ if (statsSection) {
 
   statsObserver.observe(statsSection);
 }
+
+
 /* =========================
    CORPORATE PARTNER FORM
 ========================= */
@@ -200,30 +203,24 @@ function initCorporateRequest() {
     }
 
     submitButton.disabled = true;
-    submitButton.innerHTML =
-      'Submitting...';
+    submitButton.innerHTML = 'Submitting...';
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/vehicles/`)/api/corporate-requests/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type':
-              'application/json'
-          },
-          body: JSON.stringify({
-            company_name: companyName,
-            contact_person: contactPerson,
-            phone,
-            email,
-            rental_requirement:
-              rentalRequirement
-          })
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/corporate-requests/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          company_name: companyName,
+          contact_person: contactPerson,
+          phone,
+          email,
+          rental_requirement: rentalRequirement
+        })
+      });
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -268,6 +265,8 @@ document.addEventListener(
   'DOMContentLoaded',
   initCorporateRequest
 );
+
+
 /* =========================
    ABOUT WING ANIMATION
 ========================= */
@@ -728,7 +727,7 @@ function initVehicleBooking() {
 
     vehicles.forEach((vehicle) => {
       const imageUrl = vehicle.image
-        ? `http://127.0.0.1:8000${vehicle.image}`
+        ? `${API_BASE_URL}${vehicle.image}`
         : '';
 
       const card = document.createElement('article');
@@ -810,7 +809,7 @@ function initVehicleBooking() {
       });
 
       const response = await fetch(
-        `http://127.0.0.1:8000/api/vehicles/?${query.toString()}`
+        `${API_BASE_URL}/api/vehicles/?${query.toString()}`
       );
 
       if (!response.ok) {
@@ -828,7 +827,7 @@ function initVehicleBooking() {
       console.error('Vehicle error:', error);
 
       alert(
-        'Unable to load vehicles. Please make sure the backend is running.'
+        'Unable to load vehicles. Please try again.'
       );
     } finally {
       button.disabled = false;
@@ -1021,7 +1020,7 @@ function initVehicleBooking() {
 
     try {
       const response = await fetch(
-        'http://127.0.0.1:8000/api/bookings/',
+        `${API_BASE_URL}/api/bookings/`,
         {
           method: 'POST',
           headers: {
@@ -1076,8 +1075,6 @@ document.addEventListener(
   'DOMContentLoaded',
   initVehicleBooking
 );
-
-
 /* =========================
    DRIVER REQUEST FLOW
 ========================= */
@@ -1266,7 +1263,7 @@ function initDriverRequest() {
 
     try {
       const response = await fetch(
-        'http://127.0.0.1:8000/api/driver-requests/',
+        `${API_BASE_URL}/api/driver-requests/`,
         {
           method: 'POST',
           headers: {
@@ -1324,6 +1321,8 @@ function initDriverRequest() {
 }
 
 document.addEventListener('DOMContentLoaded',initDriverRequest);
+
+
 /*BLOGS*/
 
 function escapeHtml(value) {
@@ -1343,7 +1342,7 @@ async function loadBlogs() {
   const categoriesContainer = document.getElementById('blogCategories');
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/blogs/');
+    const response = await fetch(`${API_BASE_URL}/api/blogs/`);
     if (!response.ok) throw new Error('Unable to load blogs.');
 
     const data = await response.json();
@@ -1411,7 +1410,8 @@ function renderBlogCards(blogs) {
           <h3>${escapeHtml(blog.title)}</h3>
           <p>${escapeHtml(blog.excerpt)}</p>
 
-            <a href="blog-detail.html?id=${blog.id}" class="blog-read-btn">            Read More
+          <a href="blog-detail.html?id=${blog.id}" class="blog-read-btn">
+            Read More
             <i class="bi bi-arrow-right"></i>
           </a>
         </div>
@@ -1488,6 +1488,8 @@ function renderBlogCategories(blogs) {
 }
 
 document.addEventListener('DOMContentLoaded', loadBlogs);
+
+
 /*BLOG DETAIL */
 
 async function loadBlogDetail() {
@@ -1504,7 +1506,7 @@ async function loadBlogDetail() {
   }
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/blogs/');
+    const response = await fetch(`${API_BASE_URL}/api/blogs/`);
     if (!response.ok) throw new Error('Unable to load blog.');
 
     const data = await response.json();
@@ -1556,6 +1558,8 @@ function formatBlogContent(content) {
 }
 
 document.addEventListener('DOMContentLoaded', loadBlogDetail);
+
+
 /* CONTACT MESSAGE */
 
 function initContactForm() {
@@ -1607,7 +1611,7 @@ function initContactForm() {
     button.innerHTML = 'Sending...';
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/contact-messages/', {
+      const response = await fetch(`${API_BASE_URL}/api/contact-messages/`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({name, email, phone, subject, message})
@@ -1629,12 +1633,15 @@ function initContactForm() {
     }
   });
 }
+
 document.addEventListener('DOMContentLoaded', initContactForm);
+
+
 /* SITE SETTINGS */
 
 async function loadSiteSettings() {
   try {
-    const response = await fetch('https://thakur-logistics-backend.onrender.com');
+    const response = await fetch(`${API_BASE_URL}/api/site-settings/`);
     if (!response.ok) throw new Error('Unable to load site settings.');
 
     const data = await response.json();
@@ -1707,6 +1714,7 @@ async function loadSiteSettings() {
   }
 }
 
+
 /* TESTIMONIALS */
 
 async function loadTestimonials() {
@@ -1714,7 +1722,7 @@ async function loadTestimonials() {
   if (!container) return;
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/testimonials/');
+    const response = await fetch(`${API_BASE_URL}/api/testimonials/`);
     if (!response.ok) throw new Error('Unable to load testimonials.');
 
     const data = await response.json();
@@ -1763,6 +1771,7 @@ async function loadTestimonials() {
         </div>
       `;
     }).join('');
+
   } catch (error) {
     console.error('Testimonial error:', error);
 
@@ -1775,6 +1784,7 @@ async function loadTestimonials() {
 }
 
 document.addEventListener('DOMContentLoaded', loadTestimonials);
+
 
 /* TESTIMONIAL READ MORE */
 
@@ -1791,81 +1801,97 @@ document.addEventListener('click', (event) => {
   review.classList.toggle('testimonial-clamped', !expanded);
   button.textContent = expanded ? 'Show less' : 'Read more';
 });
+
+
 /* DESTINATIONS */
 
 async function loadDestinations() {
-    const container = document.getElementById('destinationList');
-    if (!container) return;
+  const container = document.getElementById('destinationList');
+  if (!container) return;
 
-    try {
-        const response = await fetch('http://127.0.0.1:8000/api/destinations/');
-        if (!response.ok) throw new Error('Unable to load destinations.');
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/destinations/`);
+    if (!response.ok) throw new Error('Unable to load destinations.');
 
-        const data = await response.json();
-        const destinations = data.destinations || [];
+    const data = await response.json();
+    const destinations = data.destinations || [];
 
-        if (!destinations.length) {
-            container.innerHTML = `
-                <div class="col-12 text-center">
-                    <p>No destinations available yet.</p>
-                </div>
-            `;
-            return;
-        }
-
-        container.innerHTML = destinations.map((destination) => `
-            <div class="col-lg-4 col-md-6">
-                <div class="tour-card">
-                    <div class="tour-image">
-                        <img src="${destination.image}" alt="${escapeHtml(destination.name)}">
-                        <div class="tour-price">From Rs. ${Number(destination.starting_price).toLocaleString()}/day</div>
-                    </div>
-                    <div class="tour-content">
-                        <h4>${escapeHtml(destination.name)}</h4>
-                        <p>${escapeHtml(destination.description)}</p>
-                        <a href="#booking" class="tour-link destination-book-btn" data-destination="${escapeHtml(destination.name)}">Book Now →</a>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error('Destination error:', error);
-        container.innerHTML = `
-            <div class="col-12 text-center">
-                <p>Unable to load destinations.</p>
-            </div>
-        `;
+    if (!destinations.length) {
+      container.innerHTML = `
+        <div class="col-12 text-center">
+          <p>No destinations available yet.</p>
+        </div>
+      `;
+      return;
     }
+
+    container.innerHTML = destinations.map((destination) => `
+      <div class="col-lg-4 col-md-6">
+        <div class="tour-card">
+          <div class="tour-image">
+            <img src="${destination.image}" alt="${escapeHtml(destination.name)}">
+            <div class="tour-price">
+              From Rs. ${Number(destination.starting_price).toLocaleString()}/day
+            </div>
+          </div>
+
+          <div class="tour-content">
+            <h4>${escapeHtml(destination.name)}</h4>
+            <p>${escapeHtml(destination.description)}</p>
+
+            <a
+              href="#booking"
+              class="tour-link destination-book-btn"
+              data-destination="${escapeHtml(destination.name)}"
+            >
+              Book Now →
+            </a>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+  } catch (error) {
+    console.error('Destination error:', error);
+
+    container.innerHTML = `
+      <div class="col-12 text-center">
+        <p>Unable to load destinations.</p>
+      </div>
+    `;
+  }
 }
 
 document.addEventListener('DOMContentLoaded', loadDestinations);
 
+
 /* DESTINATION BOOKING */
 
 document.addEventListener('click', (event) => {
-    const button = event.target.closest('.destination-book-btn');
-    if (!button) return;
+  const button = event.target.closest('.destination-book-btn');
+  if (!button) return;
 
-    event.preventDefault();
+  event.preventDefault();
 
-    const destination = button.dataset.destination;
-    const bookingSection = document.getElementById('booking');
-    const dropoffInput = document.getElementById('dropoffLocation');
-    const pickupInput = document.getElementById('pickupLocation');
-    const rentOption = document.querySelector('.service-option[data-service="rent"]');
+  const destination = button.dataset.destination;
+  const bookingSection = document.getElementById('booking');
+  const dropoffInput = document.getElementById('dropoffLocation');
+  const pickupInput = document.getElementById('pickupLocation');
+  const rentOption =
+    document.querySelector('.service-option[data-service="rent"]');
 
-    if (!destination || !bookingSection || !dropoffInput) return;
+  if (!destination || !bookingSection || !dropoffInput) return;
 
-    if (rentOption) rentOption.click();
+  if (rentOption) rentOption.click();
 
-    dropoffInput.value = destination;
+  dropoffInput.value = destination;
 
-    bookingSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-    });
+  bookingSection.scrollIntoView({
+    behavior: 'smooth',
+    block: 'center'
+  });
 
-    setTimeout(() => {
-        pickupInput?.focus();
-    }, 500);
+  setTimeout(() => {
+    pickupInput?.focus();
+  }, 500);
 });
