@@ -2,6 +2,7 @@
    SHARED COMPONENTS
 ========================= */
 const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
+// const API_BASE_URL = 'http://127.0.0.1:8000';
 
 async function loadComponent(id, path) {
   const container = document.getElementById(id);
@@ -1641,10 +1642,22 @@ document.addEventListener('DOMContentLoaded', initContactForm);
 
 async function loadSiteSettings() {
   try {
+
     const response = await fetch(`${API_BASE_URL}/api/site-settings/`);
     if (!response.ok) throw new Error('Unable to load site settings.');
 
     const data = await response.json();
+
+        /* HOMEPAGE STATS */
+const statVehicles = document.getElementById('statVehicles');
+const statCustomers = document.getElementById('statCustomers');
+const statDrivers = document.getElementById('statDrivers');
+const statExperience = document.getElementById('statExperience');
+
+if (statVehicles) statVehicles.dataset.target = data.vehicles_available || 0;
+if (statCustomers) statCustomers.dataset.target = data.happy_customers || 0;
+if (statDrivers) statDrivers.dataset.target = data.professional_drivers || 0;
+if (statExperience) statExperience.dataset.target = data.years_experience || 0;
 
     /* CONTACT PAGE */
     const siteAddress = document.getElementById('siteAddress');

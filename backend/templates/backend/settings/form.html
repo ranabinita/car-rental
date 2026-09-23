@@ -6,7 +6,7 @@
 <div class="page-heading">
   <div>
     <h1>Site Settings</h1>
-    <p>Manage company contact information and location displayed on the website.</p>
+    <p>Manage company information and homepage statistics displayed on the website.</p>
   </div>
 </div>
 
@@ -14,7 +14,7 @@
   <div class="panel-header">
     <div>
       <h5>Company Information</h5>
-      <p class="mb-0">These details are displayed on the public Contact page.</p>
+      <p class="mb-0">These details are displayed on the public website.</p>
     </div>
   </div>
 
@@ -67,6 +67,36 @@
         <div class="col-md-6">
           <label class="form-label">WhatsApp Number</label>
           <input type="text" name="whatsapp_number" class="form-control" value="{{ settings.whatsapp_number }}" placeholder="+97798XXXXXXXX">
+        </div>
+      </div>
+
+      <!-- HOMEPAGE STATISTICS -->
+      <hr class="my-4">
+
+      <div class="mb-3">
+        <h5 class="mb-1">Homepage Statistics</h5>
+        <p class="text-muted mb-0">Update the numbers displayed in the statistics section of the homepage.</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Vehicles Available</label>
+          <input type="number" name="vehicles_available" class="form-control" value="{{ settings.vehicles_available }}" min="0" required>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Happy Customers</label>
+          <input type="number" name="happy_customers" class="form-control" value="{{ settings.happy_customers }}" min="0" required>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Professional Drivers</label>
+          <input type="number" name="professional_drivers" class="form-control" value="{{ settings.professional_drivers }}" min="0" required>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <label class="form-label">Years of Experience</label>
+          <input type="number" name="years_experience" class="form-control" value="{{ settings.years_experience }}" min="0" required>
         </div>
       </div>
 

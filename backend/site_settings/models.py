@@ -10,6 +10,13 @@ class SiteSettings(models.Model):
     facebook_url = models.URLField(blank=True)
     instagram_url = models.URLField(blank=True)
     whatsapp_number = models.CharField(max_length=30, blank=True)
+
+    # Homepage statistics
+    vehicles_available = models.PositiveIntegerField(default=0)
+    happy_customers = models.PositiveIntegerField(default=0)
+    professional_drivers = models.PositiveIntegerField(default=0)
+    years_experience = models.PositiveIntegerField(default=0)
+
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
