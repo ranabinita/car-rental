@@ -3,6 +3,7 @@ databases:
     plan: free
 
 services:
+  # DJANGO BACKEND
   - type: web
     name: thakur-logistics-backend
     runtime: python
@@ -22,3 +23,10 @@ services:
 
       - key: WEB_CONCURRENCY
         value: 4
+
+  # STATIC FRONTEND
+  - type: web
+    name: thakur-logistics-frontend
+    runtime: static
+    buildCommand: "./build-frontend.sh"
+    staticPublishPath: "./dist"
