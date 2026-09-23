@@ -1835,18 +1835,23 @@ async function loadDestinations() {
             </div>
           </div>
 
-          <div class="tour-content">
-            <h4>${escapeHtml(destination.name)}</h4>
-            <p>${escapeHtml(destination.description.length > 120 ? destination.description.slice(0, 120) + '...' : destination.description)}</p>
+<div class="tour-content">
+  <h4>${escapeHtml(destination.name)}</h4>
 
-            <a
-              href="#booking"
-              class="tour-link destination-book-btn"
-              data-destination="${escapeHtml(destination.name)}"
-            >
-              Book Now →
-            </a>
-          </div>
+  <p>
+    ${escapeHtml(destination.description.length > 120
+      ? destination.description.slice(0, 120) + '...'
+      : destination.description)}
+  </p>
+
+  ${destination.description.length > 120
+    ? `<button type="button" class="destination-more-btn" data-description="${escapeHtml(destination.description)}">Read More</button>`
+    : ''}
+
+  <a href="#booking" class="tour-link destination-book-btn" data-destination="${escapeHtml(destination.name)}">
+    Book Now →
+  </a>
+</div>
         </div>
       </div>
     `).join('');
@@ -1863,6 +1868,22 @@ async function loadDestinations() {
 }
 
 document.addEventListener('DOMContentLoaded', loadDestinations);
+document.addEventListener('click', (event) => {
+  const button = event.target.closest('.destination-more-btn');
+  if (!button) return;
+
+  const paragraph = button.closest('.tour-content')?.querySelector('p');
+  if (!paragraph) return;
+
+  const fullDescription = button.dataset.description;
+  const expanded = button.classList.toggle('expanded');
+
+  paragraph.textContent = expanded
+    ? fullDescription
+    : fullDescription.slice(0, 120) + '...';
+
+  button.textContent = expanded ? 'Show Less' : 'Read More';
+});
 
 
 /* DESTINATION BOOKING */
