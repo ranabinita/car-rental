@@ -65,8 +65,6 @@ body {
 }
 /* MOBILE TOGGLE */
 .navbar-toggler {
-  position: relative;
-  z-index: 1100;
   border: 1px solid rgba(20, 33, 61, 0.25);
   box-shadow: none !important;
 }
@@ -1236,9 +1234,7 @@ body {
 /* TABLET + MOBILE (Max 991px) */
 @media (max-width: 991px) {
   .custom-navbar {
-    position: relative;
-    z-index: 1000;
-}
+    padding: 12px 0;
   }
 
   .navbar-logo {
@@ -1247,13 +1243,11 @@ body {
   }
 
   .navbar-collapse {
-  position: relative;
-  z-index: 1090;
-  margin-top: 14px;
-  padding: 18px;
-  background: var(--navy-light);
-  border-radius: 10px;
-}
+    margin-top: 14px;
+    padding: 18px;
+    background: var(--navy-light);
+    border-radius: 10px;
+  }
 
   .custom-navbar .nav-link {
     margin: 2px 0;
@@ -1263,7 +1257,6 @@ body {
   .custom-navbar .nav-link::after {
     display: none;
   }
-
   .signin-btn {
     width: 100%;
     margin-top: 12px;
