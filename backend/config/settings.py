@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'site_settings',
     'testimonials',
     'destinations',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 
@@ -164,9 +166,15 @@ STATICFILES_DIRS = [
 # STORAGE
 # =========================================================
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('veswbq2x'),
+    'API_KEY': os.environ.get('869497624764734'),
+    'API_SECRET': os.environ.get('79wmbsk8D8UT0ZbHCsOysGStUxM'),
+}
+
 STORAGES = {
     'default': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
     },
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
