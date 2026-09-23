@@ -63,15 +63,16 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 7px 16px rgba(166, 61, 47, 0.25);
 }
-
 /* MOBILE TOGGLE */
 .navbar-toggler {
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  position: relative;
+  z-index: 1100;
+  border: 1px solid rgba(20, 33, 61, 0.25);
   box-shadow: none !important;
 }
 
 .navbar-toggler-icon {
-  filter: brightness(0) invert(1);
+  filter: none;
 }
 
 /* ==========================================
@@ -1235,7 +1236,9 @@ body {
 /* TABLET + MOBILE (Max 991px) */
 @media (max-width: 991px) {
   .custom-navbar {
-    padding: 12px 0;
+    position: relative;
+    z-index: 1000;
+}
   }
 
   .navbar-logo {
@@ -1244,11 +1247,13 @@ body {
   }
 
   .navbar-collapse {
-    margin-top: 14px;
-    padding: 18px;
-    background: var(--navy-light);
-    border-radius: 10px;
-  }
+  position: relative;
+  z-index: 1090;
+  margin-top: 14px;
+  padding: 18px;
+  background: var(--navy-light);
+  border-radius: 10px;
+}
 
   .custom-navbar .nav-link {
     margin: 2px 0;

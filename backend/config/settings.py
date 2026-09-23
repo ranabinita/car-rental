@@ -167,9 +167,9 @@ STATICFILES_DIRS = [
 # =========================================================
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('veswbq2x'),
-    'API_KEY': os.environ.get('869497624764734'),
-    'API_SECRET': os.environ.get('79wmbsk8D8UT0ZbHCsOysGStUxM'),
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
 STORAGES = {
