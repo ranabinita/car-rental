@@ -24,6 +24,9 @@ services:
       - key: WEB_CONCURRENCY
         value: 4
 
+      - key: FRONTEND_URL
+        value: https://thakur-logistics-frontend.onrender.com
+
   # STATIC FRONTEND
   - type: web
     name: thakur-logistics-frontend
