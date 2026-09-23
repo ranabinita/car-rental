@@ -1837,7 +1837,7 @@ async function loadDestinations() {
 
           <div class="tour-content">
             <h4>${escapeHtml(destination.name)}</h4>
-            <p>${escapeHtml(destination.description)}</p>
+            <p>${escapeHtml(destination.description.length > 120 ? destination.description.slice(0, 120) + '...' : destination.description)}</p>
 
             <a
               href="#booking"
