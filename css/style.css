@@ -63,27 +63,6 @@ body {
   color: var(--red);
 }
 
-/* SIGN IN BUTTON */
-/* .signin-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  color: var(--white);
-  background: var(--red);
-  border-radius: 7px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.signin-btn:hover {
-  color: var(--white);
-  background: var(--red-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 7px 16px rgba(166, 61, 47, 0.25);
-} */
 /* MOBILE TOGGLE */
 .navbar-toggler {
   position: relative;
@@ -1352,13 +1331,6 @@ body {
   .custom-navbar .nav-link::after {
     display: none;
   }
-
-  .signin-btn {
-    width: 100%;
-    margin-top: 12px;
-    padding: 12px 20px;
-    font-family: inherit;
-  }
   .hero-section {
     height: 650px;
     min-height: 650px;
@@ -1498,88 +1470,154 @@ body {
     padding: 25px 20px;
   }
 }
-/* COMPACT MOBILE FOOTER */
-.site-footer {
-  padding-top: 28px;
-}
+@media (max-width: 576px) {
 
-.site-footer .row {
-  --bs-gutter-y: 1.35rem;
-}
+  /* COMPACT MOBILE FOOTER */
+  .site-footer {
+    padding-top: 25px;
+  }
 
-.footer-brand {
-  margin-bottom: 8px;
-  font-size: 21px;
-}
+  .site-footer .row {
+    --bs-gutter-x: 12px;
+    --bs-gutter-y: 18px;
+  }
 
-.footer-about {
-  max-width: 100%;
-  margin-bottom: 12px;
-  font-size: 12px;
-  line-height: 1.5;
-}
+  /* Brand - full width */
+  .site-footer .row > div:first-child {
+    width: 100%;
+  }
 
-.footer-socials {
-  gap: 7px;
-}
+  /* Quick Links + Services - side by side */
+  .site-footer .row > div:nth-child(2),
+  .site-footer .row > div:nth-child(3) {
+    width: 50%;
+  }
 
-.footer-socials a {
-  width: 32px;
-  height: 32px;
-  font-size: 13px;
-}
+  /* Contact - full width */
+  .site-footer .row > div:nth-child(4) {
+    width: 100%;
+  }
 
-.site-footer h5 {
-  margin: 0 0 10px;
-  padding-bottom: 6px;
-  font-size: 14px;
-}
+  .footer-brand {
+    margin-bottom: 7px;
+    font-size: 21px;
+  }
 
-.site-footer h5::after {
-  width: 24px;
-}
+  .footer-about {
+    max-width: 100%;
+    margin-bottom: 10px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
 
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px 16px;
-}
+  .footer-socials {
+    gap: 7px;
+  }
 
-.footer-links li {
-  margin: 0;
-}
+  .footer-socials a {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
 
-.footer-links a {
-  font-size: 12px;
-}
+  .site-footer h5 {
+    margin: 0 0 9px;
+    padding-bottom: 6px;
+    font-size: 13px;
+  }
 
-.footer-contact {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
+  .site-footer h5::after {
+    width: 24px;
+  }
 
-.footer-contact li {
-  margin: 0;
-  gap: 8px;
-  font-size: 12px;
-}
+  .footer-links {
+    display: block;
+  }
 
-.footer-contact i {
-  font-size: 13px;
-}
+  .footer-links li {
+    margin-bottom: 6px;
+  }
 
-.footer-bottom {
-  margin-top: 20px;
-  padding: 14px 0;
-  gap: 7px;
-}
+  .footer-links a {
+    font-size: 11px;
+  }
 
-.footer-bottom p,
-.footer-bottom-links a {
-  font-size: 11px;
-}
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
 
-.footer-bottom-links {
-  gap: 13px;
+  .footer-contact li {
+    margin: 0;
+    gap: 7px;
+    font-size: 11px;
+  }
+
+  .footer-contact i {
+    font-size: 13px;
+  }
+
+  .footer-bottom {
+    margin-top: 16px;
+    padding: 12px 0;
+    gap: 6px;
+  }
+
+  .footer-bottom p,
+  .footer-bottom-links a {
+    font-size: 11px;
+  }
+
+  .footer-bottom-links {
+    gap: 13px;
+    flex-wrap: wrap;
+  }
+
+  /* HOW IT WORKS: 2 x 2 MOBILE GRID */
+  .how-it-works {
+    padding: 44px 0;
+  }
+
+  .how-it-works .row {
+    margin-top: 12px !important;
+    --bs-gutter-x: .65rem;
+    --bs-gutter-y: .65rem;
+  }
+
+  .how-it-works .row > div {
+    width: 50%;
+  }
+
+  .work-step {
+    height: 100%;
+    padding: 14px 8px;
+    background: #fff;
+    border: 1px solid rgba(20, 33, 61, 0.08);
+    border-radius: 10px;
+  }
+
+  .step-icon {
+    width: 43px;
+    height: 43px;
+    margin-bottom: 9px;
+    font-size: 19px;
+  }
+
+  .step-number {
+    top: 5px;
+    right: 9px;
+    font-size: 25px;
+  }
+
+  .work-step h4 {
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  .work-step p {
+    max-width: 150px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
 }

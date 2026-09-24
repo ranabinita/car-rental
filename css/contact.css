@@ -1,9 +1,25 @@
 /* ================= CONTACT PAGE ================= */
 
-.contact-hero { position: relative; min-height: 360px; display: flex; align-items: center; overflow: hidden; background: #0d172c; }
-.contact-hero::before { content: ""; position: absolute; inset: -4%; background: url("../images/hero-2.png") center/cover no-repeat; animation: heroImageMove 12s ease-in-out infinite alternate; }
-.contact-hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(7,15,32,.93), rgba(7,15,32,.45)); }
-.contact-hero-content { position: relative; z-index: 2; color: #fff; }
+.contact-hero { 
+  position: relative; 
+  min-height: 360px; 
+  display: flex; 
+  align-items: center; 
+  overflow: hidden; 
+  background: #0d172c; }
+.contact-hero::before { 
+  content: "";
+  position: absolute; 
+  inset: -4%; 
+  background: url("../images/hero-2.png") center/cover no-repeat; 
+  animation: heroImageMove 12s ease-in-out infinite alternate; }
+.contact-hero-overlay { 
+  position: absolute; 
+  inset: 0; 
+  z-index: 1; 
+  background: linear-gradient(90deg, rgba(7,15,32,.93), rgba(7,15,32,.45)); }
+.contact-hero-content { 
+  position: relative; z-index: 2; color: #fff; }
 .contact-hero-content > span { display: inline-block; margin-bottom: 8px; color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: 1.6px; }
 .contact-hero-content h1 { margin: 0 0 11px; color: #fff; font-size: clamp(38px, 5.5vw, 56px); font-weight: 700; }
 .contact-hero-content p { max-width: 600px; margin: 0; color: rgba(255,255,255,.8); font-size: 14px; line-height: 1.6; }
