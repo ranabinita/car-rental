@@ -41,9 +41,30 @@ body {
   max-width: 260px;
   object-fit: contain;
 }
+/* NAVIGATION LINKS */
+.custom-navbar {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.custom-navbar .nav-link {
+  margin: 0 5px;
+  padding: 10px 8px !important;
+  color: var(--navy);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link.active {
+  color: var(--red);
+}
 
 /* SIGN IN BUTTON */
-.signin-btn {
+/* .signin-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +83,7 @@ body {
   background: var(--red-dark);
   transform: translateY(-2px);
   box-shadow: 0 7px 16px rgba(166, 61, 47, 0.25);
-}
+} */
 /* MOBILE TOGGLE */
 .navbar-toggler {
   position: relative;
@@ -1477,98 +1498,88 @@ body {
     padding: 25px 20px;
   }
 }
+/* COMPACT MOBILE FOOTER */
+.site-footer {
+  padding-top: 28px;
+}
 
-/* ==========================================
-   COMPACT MOBILE UI (Max 576px)
-========================================== */
-@media (max-width: 576px) {
-  .custom-navbar { min-height: 64px; padding: 9px 0; }
-  .navbar-logo { height: 42px; max-width: 185px; }
-  .navbar-collapse { margin-top: 9px; padding: 7px 13px; border-radius: 10px; }
-  .custom-navbar .nav-link { padding: 10px 3px !important; font-size: 13px; }
-  .signin-btn { margin-top: 9px; padding: 10px 17px; font-size: 13px; }
+.site-footer .row {
+  --bs-gutter-y: 1.35rem;
+}
 
-  .hero-section { height: 515px; min-height: 515px; }
-  .hero-image { object-position: 64% center; }
-  .hero-overlay { background: linear-gradient(90deg, rgba(7,15,32,.95) 0%, rgba(7,15,32,.80) 70%, rgba(7,15,32,.50) 100%); }
-  .hero-content { padding: 0 16px; }
-  .hero-kicker { margin-bottom: 10px; font-size: 10px; letter-spacing: 1.4px; }
-  .hero-content h1 { font-size: clamp(35px, 10.5vw, 45px); line-height: 1.06; letter-spacing: -1px; }
-  .hero-content p { max-width: 95%; margin: 15px 0 20px; font-size: 14px; line-height: 1.55; }
-  .hero-buttons { max-width: 270px; flex-direction: column; align-items: stretch; gap: 8px; }
-  .hero-primary-btn, .hero-secondary-btn { width: 100%; padding: 11px 18px; font-size: 13px; }
-  .hero-indicators { bottom: 20px; }
+.footer-brand {
+  margin-bottom: 8px;
+  font-size: 21px;
+}
 
-  .booking-wrapper { margin-top: -24px; padding-bottom: 42px; }
-  .booking-panel { padding: 17px; border-radius: 11px; }
-  .booking-label { margin-bottom: 9px; font-size: 14px; }
-  .service-selector { gap: 6px; }
-  .service-option { min-height: 80px; padding: 8px 3px; gap: 5px; }
-  .service-option-icon { width: 31px; height: 31px; font-size: 20px; }
-  .service-option span { font-size: 10px; }
-  .selected-check { top: 5px; right: 5px; width: 16px; height: 16px; }
-  .booking-panel .row { --bs-gutter-y: .75rem; }
-  .booking-control { min-height: 44px; padding: 8px 11px; }
-  .find-vehicle-btn, .driver-search-btn { width: 100%; min-height: 44px; }
+.footer-about {
+  max-width: 100%;
+  margin-bottom: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+}
 
-  .how-it-works, .why-section, .tour-section { padding: 44px 0; }
-  .section-heading span { margin-bottom: 5px; font-size: 10px; letter-spacing: 1.4px; }
-  .section-heading h2 { margin-bottom: 7px; font-size: 26px; line-height: 1.2; }
-  .section-heading p { font-size: 13px; line-height: 1.5; }
+.footer-socials {
+  gap: 7px;
+}
 
-  .how-it-works .row { margin-top: 10px !important; --bs-gutter-y: .65rem; }
-  .work-step { padding: 16px 14px; border-right: 0; }
-  .step-icon { width: 50px; height: 50px; margin-bottom: 12px; font-size: 22px; }
-  .step-number { right: 14px; font-size: 31px; }
-  .work-step h4 { margin-bottom: 5px; font-size: 16px; }
-  .work-step p { line-height: 1.5; }
+.footer-socials a {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
 
-  .vehicle-track { animation-duration: 18s; }
-  .vehicle-type { width: 132px; min-width: 132px; padding: 14px 12px; gap: 8px; font-size: 11px; }
-  .vehicle-type i { font-size: 17px; }
+.site-footer h5 {
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  font-size: 14px;
+}
 
-  .why-content { min-height: auto; margin-top: 25px; display: flex; flex-direction: column; gap: 20px; }
-  .why-car { order: 1; margin-bottom: 0; }
-  .why-left { order: 2; }
-  .why-right { order: 3; }
-  .why-car img { max-width: 270px; }
-  .why-side { width: 100%; gap: 16px; }
-  .why-left .why-item { flex-direction: row; text-align: left; }
-  .why-left .why-item p { margin-left: 0; }
-  .why-item { gap: 12px; }
-  .why-icon { width: 43px; height: 43px; flex-basis: 43px; font-size: 17px; }
-  .why-item h4 { margin-bottom: 4px; font-size: 16px; }
-  .why-item p { max-width: none; line-height: 1.5; }
-  .wing-left, .wing-right { transform: translateY(30px); }
-  .why-section.animate .why-item { transform: translateY(0); }
+.site-footer h5::after {
+  width: 24px;
+}
 
-  .stats-section { padding: 32px 0; background-attachment: scroll; }
-  .stat-item { margin: 0; padding: 13px 6px; }
-  .stat-item h3 { margin-bottom: 4px; font-size: 28px; }
-  .stat-item p { font-size: 11px; }
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 16px;
+}
 
-  .tour-section .row { margin-top: 12px !important; --bs-gutter-y: .85rem; }
-  .tour-card { border-radius: 12px; }
-  .tour-card:hover { transform: none; }
-  .tour-image { height: 190px; }
-  .tour-content { padding: 16px; }
-  .tour-content h4 { margin-bottom: 6px; font-size: 19px; }
-  .tour-content p { font-size: 13px; line-height: 1.5; }
-  .destination-more-btn { margin-top: 6px; font-size: 13px; }
-  .tour-link { margin-top: 11px; font-size: 13px; }
-  .tour-price { top: 12px; right: 12px; padding: 6px 11px; font-size: 11px; }
+.footer-links li {
+  margin: 0;
+}
 
-  .available-vehicles-section { padding: 42px 0; }
-  .vehicle-results { grid-template-columns: 1fr; gap: 14px; }
-  .vehicle-card-body { padding: 17px; }
-  .booking-form-row, .booking-summary { grid-template-columns: 1fr; }
-  .booking-modal { padding: 12px; }
-  .booking-modal-box { padding: 22px 17px; }
+.footer-links a {
+  font-size: 12px;
+}
 
-  .site-footer { padding-top: 42px; }
-  .site-footer h5 { margin-bottom: 16px; }
-  .footer-about { margin-bottom: 18px; line-height: 1.65; }
-  .footer-links li, .footer-contact li { margin-bottom: 9px; }
-  .footer-bottom { margin-top: 26px; padding: 18px 0; flex-direction: column; align-items: flex-start; gap: 10px; }
-  .footer-bottom-links { gap: 15px; flex-wrap: wrap; }
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.footer-contact li {
+  margin: 0;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.footer-contact i {
+  font-size: 13px;
+}
+
+.footer-bottom {
+  margin-top: 20px;
+  padding: 14px 0;
+  gap: 7px;
+}
+
+.footer-bottom p,
+.footer-bottom-links a {
+  font-size: 11px;
+}
+
+.footer-bottom-links {
+  gap: 13px;
 }
