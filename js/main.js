@@ -727,9 +727,7 @@ function initVehicleBooking() {
     }
 
     vehicles.forEach((vehicle) => {
-      const imageUrl = vehicle.image
-        ? `${API_BASE_URL}${vehicle.image}`
-        : '';
+      const imageUrl = vehicle.image || '';
 
       const card = document.createElement('article');
       card.className = 'vehicle-card';
