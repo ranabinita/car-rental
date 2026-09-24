@@ -32,10 +32,7 @@ if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
 # =========================================================
 # APPLICATIONS
 # =========================================================
-
 INSTALLED_APPS = [
-    'cloudinary_storage',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'cloudinary',
     'corsheaders',
 
     'dashboard',
@@ -57,9 +53,10 @@ INSTALLED_APPS = [
     'site_settings',
     'testimonials',
     'destinations',
+
+    'cloudinary_storage',
+    'cloudinary',
 ]
-
-
 # =========================================================
 # MIDDLEWARE
 # =========================================================
