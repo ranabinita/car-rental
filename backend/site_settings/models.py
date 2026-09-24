@@ -1,7 +1,9 @@
 from django.db import models
 
+
 class SiteSettings(models.Model):
     company_name = models.CharField(max_length=150, default='CarRental')
+    logo = models.ImageField(upload_to='site/logo/', blank=True, null=True)
     phone = models.CharField(max_length=30, blank=True)
     email = models.EmailField(blank=True)
     address = models.CharField(max_length=255, blank=True)

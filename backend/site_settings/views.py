@@ -81,6 +81,9 @@ def settings_page(request):
         settings.instagram_url = instagram_url
         settings.whatsapp_number = whatsapp_number
 
+        if request.FILES.get('logo'):
+            settings.logo = request.FILES['logo']
+
         settings.vehicles_available = int(vehicles_available)
         settings.happy_customers = int(happy_customers)
         settings.professional_drivers = int(professional_drivers)
@@ -98,8 +101,16 @@ def settings_page(request):
 def settings_api(request):
     settings = get_settings()
 
+    logo_url = None
+    if settings.logo:
+        try:
+            logo_url = request.build_absolute_uri(settings.logo.url)
+        except ValueError:
+            logo_url = None
+
     return JsonResponse({
         'company_name': settings.company_name,
+        'logo': logo_url,
         'phone': settings.phone,
         'email': settings.email,
         'address': settings.address,

@@ -1,8 +1,8 @@
 /* =========================
    SHARED COMPONENTS
 ========================= */
-const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
-// const API_BASE_URL = 'http://127.0.0.1:8000';
+// const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 async function loadComponent(id, path) {
   const container = document.getElementById(id);
@@ -1653,6 +1653,15 @@ const statVehicles = document.getElementById('statVehicles');
 const statCustomers = document.getElementById('statCustomers');
 const statDrivers = document.getElementById('statDrivers');
 const statExperience = document.getElementById('statExperience');
+const navbarLogo = document.getElementById('navbarLogo');
+
+if (navbarLogo && data.logo) {
+  navbarLogo.src = data.logo;
+}
+
+if (navbarLogo && data.company_name) {
+  navbarLogo.alt = data.company_name;
+}
 
 if (statVehicles) statVehicles.dataset.target = data.vehicles_available || 0;
 if (statCustomers) statCustomers.dataset.target = data.happy_customers || 0;

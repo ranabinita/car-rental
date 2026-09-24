@@ -1,111 +1,375 @@
 {% extends 'backend/base.html' %}
 
-{% block title %}Settings | CarRental{% endblock %}
+{% block title %}Site Settings | CarRental{% endblock %}
 
 {% block content %}
+
 <div class="page-heading">
-  <div>
-    <h1>Site Settings</h1>
-    <p>Manage company information and homepage statistics displayed on the website.</p>
-  </div>
-</div>
-
-<div class="dashboard-panel">
-  <div class="panel-header">
     <div>
-      <h5>Company Information</h5>
-      <p class="mb-0">These details are displayed on the public website.</p>
+        <h1>Site Settings</h1>
+        <p>Manage company information, branding and homepage statistics.</p>
     </div>
-  </div>
-
-  <div class="p-4">
-    <form method="post">
-      {% csrf_token %}
-
-      <div class="row g-4">
-        <div class="col-md-6">
-          <label class="form-label">Company Name</label>
-          <input type="text" name="company_name" class="form-control" value="{{ settings.company_name }}" required>
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Phone</label>
-          <input type="text" name="phone" class="form-control" value="{{ settings.phone }}">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Email</label>
-          <input type="email" name="email" class="form-control" value="{{ settings.email }}">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Business Hours</label>
-          <input type="text" name="business_hours" class="form-control" value="{{ settings.business_hours }}" placeholder="Sun - Fri, 9:00 AM - 6:00 PM">
-        </div>
-
-        <div class="col-12">
-          <label class="form-label">Address</label>
-          <input type="text" name="address" class="form-control" value="{{ settings.address }}" placeholder="Company address">
-        </div>
-
-        <div class="col-12">
-          <label class="form-label">Google Maps Embed URL</label>
-          <input type="url" name="google_map_url" class="form-control" value="{{ settings.google_map_url }}" placeholder="https://www.google.com/maps/embed?...">
-          <small class="text-muted">Use the URL from Google Maps → Share → Embed a map → src="...".</small>
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Facebook URL</label>
-          <input type="url" name="facebook_url" class="form-control" value="{{ settings.facebook_url }}" placeholder="https://facebook.com/...">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Instagram URL</label>
-          <input type="url" name="instagram_url" class="form-control" value="{{ settings.instagram_url }}" placeholder="https://instagram.com/...">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">WhatsApp Number</label>
-          <input type="text" name="whatsapp_number" class="form-control" value="{{ settings.whatsapp_number }}" placeholder="+97798XXXXXXXX">
-        </div>
-      </div>
-
-      <!-- HOMEPAGE STATISTICS -->
-      <hr class="my-4">
-
-      <div class="mb-3">
-        <h5 class="mb-1">Homepage Statistics</h5>
-        <p class="text-muted mb-0">Update the numbers displayed in the statistics section of the homepage.</p>
-      </div>
-
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-3">
-          <label class="form-label">Vehicles Available</label>
-          <input type="number" name="vehicles_available" class="form-control" value="{{ settings.vehicles_available }}" min="0" required>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <label class="form-label">Happy Customers</label>
-          <input type="number" name="happy_customers" class="form-control" value="{{ settings.happy_customers }}" min="0" required>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <label class="form-label">Professional Drivers</label>
-          <input type="number" name="professional_drivers" class="form-control" value="{{ settings.professional_drivers }}" min="0" required>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <label class="form-label">Years of Experience</label>
-          <input type="number" name="years_experience" class="form-control" value="{{ settings.years_experience }}" min="0" required>
-        </div>
-      </div>
-
-      <div class="mt-4">
-        <button type="submit" class="btn btn-dark">
-          <i class="bi bi-check-lg"></i> Save Changes
-        </button>
-      </div>
-    </form>
-  </div>
 </div>
+
+<div class="dashboard-panel vehicle-form-panel">
+
+    <div class="panel-header">
+        <div>
+            <h4>Website Information</h4>
+            <p>Update the information displayed on the public website.</p>
+        </div>
+    </div>
+
+    <form method="POST"
+          enctype="multipart/form-data"
+          class="backend-form">
+
+        {% csrf_token %}
+
+        <!-- BRANDING -->
+        <div class="settings-section">
+
+            <div class="settings-section-title">
+                <h4>Branding</h4>
+                <p>Manage your company name and website logo.</p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="company_name">
+                            Company Name
+                        </label>
+
+                        <input type="text"
+                               id="company_name"
+                               name="company_name"
+                               class="form-control"
+                               value="{{ settings.company_name }}"
+                               required>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="logo">
+                            Company Logo
+                        </label>
+
+                        {% if settings.logo %}
+
+                            <div class="current-vehicle-image">
+
+                                <img src="{{ settings.logo.url }}"
+                                     alt="{{ settings.company_name }}">
+
+                                <div class="current-image-info">
+                                    <strong>Current Logo</strong>
+
+                                    <span>
+                                        Upload another image below only if
+                                        you want to replace this logo.
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                        <input type="file"
+                               id="logo"
+                               name="logo"
+                               class="form-control"
+                               accept="image/png,image/jpeg,image/webp">
+
+                        <small>
+                            JPG, PNG or WebP image recommended.
+                        </small>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTACT INFORMATION -->
+        <div class="settings-section">
+
+            <div class="settings-section-title">
+                <h4>Contact Information</h4>
+                <p>Contact details displayed throughout the website.</p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="phone">
+                            Phone
+                        </label>
+
+                        <input type="text"
+                               id="phone"
+                               name="phone"
+                               class="form-control"
+                               value="{{ settings.phone }}"
+                               placeholder="+977 98XXXXXXXX">
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input type="email"
+                               id="email"
+                               name="email"
+                               class="form-control"
+                               value="{{ settings.email }}"
+                               placeholder="example@company.com">
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="business_hours">
+                            Business Hours
+                        </label>
+
+                        <input type="text"
+                               id="business_hours"
+                               name="business_hours"
+                               class="form-control"
+                               value="{{ settings.business_hours }}"
+                               placeholder="Sun - Fri, 9:00 AM - 6:00 PM">
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="whatsapp_number">
+                            WhatsApp Number
+                        </label>
+
+                        <input type="text"
+                               id="whatsapp_number"
+                               name="whatsapp_number"
+                               class="form-control"
+                               value="{{ settings.whatsapp_number }}"
+                               placeholder="+97798XXXXXXXX">
+
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="backend-field">
+
+                        <label for="address">
+                            Address
+                        </label>
+
+                        <input type="text"
+                               id="address"
+                               name="address"
+                               class="form-control"
+                               value="{{ settings.address }}"
+                               placeholder="Company address">
+
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="backend-field">
+
+                        <label for="google_map_url">
+                            Google Maps Embed URL
+                        </label>
+
+                        <input type="url"
+                               id="google_map_url"
+                               name="google_map_url"
+                               class="form-control"
+                               value="{{ settings.google_map_url }}"
+                               placeholder="https://www.google.com/maps/embed?...">
+
+                        <small>
+                            Google Maps → Share → Embed a map → copy the URL inside src="".
+                        </small>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SOCIAL MEDIA -->
+        <div class="settings-section">
+
+            <div class="settings-section-title">
+                <h4>Social Media</h4>
+                <p>Manage the social media links displayed on the website.</p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="facebook_url">
+                            Facebook URL
+                        </label>
+
+                        <input type="url"
+                               id="facebook_url"
+                               name="facebook_url"
+                               class="form-control"
+                               value="{{ settings.facebook_url }}"
+                               placeholder="https://facebook.com/...">
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="instagram_url">
+                            Instagram URL
+                        </label>
+
+                        <input type="url"
+                               id="instagram_url"
+                               name="instagram_url"
+                               class="form-control"
+                               value="{{ settings.instagram_url }}"
+                               placeholder="https://instagram.com/...">
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HOMEPAGE STATISTICS -->
+        <div class="settings-section">
+
+            <div class="settings-section-title">
+                <h4>Homepage Statistics</h4>
+                <p>Update the numbers displayed in the homepage statistics section.</p>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="vehicles_available">
+                            Vehicles Available
+                        </label>
+
+                        <input type="number"
+                               id="vehicles_available"
+                               name="vehicles_available"
+                               class="form-control"
+                               value="{{ settings.vehicles_available }}"
+                               min="0"
+                               required>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="happy_customers">
+                            Happy Customers
+                        </label>
+
+                        <input type="number"
+                               id="happy_customers"
+                               name="happy_customers"
+                               class="form-control"
+                               value="{{ settings.happy_customers }}"
+                               min="0"
+                               required>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="professional_drivers">
+                            Professional Drivers
+                        </label>
+
+                        <input type="number"
+                               id="professional_drivers"
+                               name="professional_drivers"
+                               class="form-control"
+                               value="{{ settings.professional_drivers }}"
+                               min="0"
+                               required>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="backend-field">
+
+                        <label for="years_experience">
+                            Years of Experience
+                        </label>
+
+                        <input type="number"
+                               id="years_experience"
+                               name="years_experience"
+                               class="form-control"
+                               value="{{ settings.years_experience }}"
+                               min="0"
+                               required>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SAVE -->
+        <div class="form-actions">
+
+            <button type="submit"
+                    class="backend-btn">
+
+                <i class="bi bi-check-lg"></i>
+                Save Changes
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
 {% endblock %}
