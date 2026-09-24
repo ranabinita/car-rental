@@ -34,6 +34,8 @@ if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
 # =========================================================
 
 INSTALLED_APPS = [
+    'cloudinary_storage',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'cloudinary',
     'corsheaders',
 
     'dashboard',
@@ -54,8 +57,6 @@ INSTALLED_APPS = [
     'site_settings',
     'testimonials',
     'destinations',
-    'cloudinary_storage',
-    'cloudinary',
 ]
 
 
@@ -165,7 +166,6 @@ STATICFILES_DIRS = [
 # =========================================================
 # STORAGE
 # =========================================================
-
 if os.environ.get('RENDER'):
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
@@ -190,7 +190,6 @@ else:
             'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
         },
     }
-
 # =========================================================
 # MEDIA
 # =========================================================
