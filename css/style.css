@@ -257,7 +257,7 @@ body {
   position: relative;
   z-index: 20;
   margin-top: -70px;
-  padding-bottom: 80px;
+  padding-bottom: 25px;
 }
 
 .booking-panel {
@@ -422,7 +422,7 @@ body {
    HOW IT WORKS
 ========================================== */
 .how-it-works {
-  padding: 72px 0 78px;
+  padding: 45px 0 65px;
   background: #ffffff;
 }
 
@@ -1361,9 +1361,9 @@ body {
     padding: 25px;
   }
 
-  .how-it-works {
-    padding: 75px 0;
-  }
+.how-it-works {
+  padding: 45px 0 55px;
+}
 
   .work-step {
     border-right: 0;
@@ -1575,9 +1575,9 @@ body {
   }
 
   /* HOW IT WORKS: 2 x 2 MOBILE GRID */
-  .how-it-works {
-    padding: 44px 0;
-  }
+.how-it-works {
+  padding: 44px 0;
+}
 
   .how-it-works .row {
     margin-top: 12px !important;
