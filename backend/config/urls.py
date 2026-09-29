@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
 from django.views.generic import RedirectView
+from django.views.static import serve
 
 from bookings import views as booking_views
 from driver_requests import views as driver_request_views
@@ -15,7 +16,7 @@ from destinations import views as destination_views
 
 
 urlpatterns = [
-    path('',RedirectView.as_view(pattern_name='dashboard:home',permanent=False)),
+    # path('',RedirectView.as_view(pattern_name='dashboard:home',permanent=False)),
     # PUBLIC APIs
     path('api/vehicles/',vehicle_views.vehicle_api,name='vehicle_api'),
     path('api/bookings/',booking_views.create_booking,name='create_booking'),
@@ -41,4 +42,14 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    FRONTEND_DIR = settings.BASE_DIR.parent
+
+    urlpatterns += [
+        path('', serve, {'document_root': FRONTEND_DIR, 'path': 'index.html'}),
+        path('css/<path:path>', serve, {'document_root': FRONTEND_DIR / 'css'}),
+        path('js/<path:path>', serve, {'document_root': FRONTEND_DIR / 'js'}),
+        path('images/<path:path>', serve, {'document_root': FRONTEND_DIR / 'images'}),
+        path('components/<path:path>', serve, {'document_root': FRONTEND_DIR / 'components'}),
+    ]
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
