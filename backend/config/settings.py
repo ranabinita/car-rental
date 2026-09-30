@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
-    'rest_framework',
+    # 'rest_framework',
 
     'dashboard',
     'vehicles',
@@ -202,15 +202,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # =========================================================
 
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:5500',
-    'http://localhost:5500',
     'http://127.0.0.1:8000',
     'http://localhost:8000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:5500',
-    'http://localhost:5500',
     'http://127.0.0.1:8000',
     'http://localhost:8000',
 ]
