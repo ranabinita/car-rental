@@ -39,7 +39,7 @@ urlpatterns = [
     path('dashboard/settings/', include('site_settings.urls')),
     path('dashboard/testimonials/', include('testimonials.urls')),
     path('dashboard/destinations/', include('destinations.urls')),
-    path('dashboard/', include('dashboard.urls')),
+    path('dashboard', include('dashboard.urls')),
 ]
 
 if settings.DEBUG:
