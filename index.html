@@ -382,19 +382,21 @@
               <input type="text" id="bookingPhone" autocomplete="tel">
             </div>
           </div>
-          <div class="booking-field">
-            <label for="bookingEmail">Email</label>
-            <input type="email" id="bookingEmail" autocomplete="email">
-          </div>
+          <div class="booking-form-row">
+  <div class="booking-field">
+    <label for="bookingEmail">Email</label>
+    <input type="email" id="bookingEmail" autocomplete="email">
+  </div>
+  <div class="booking-field">
+    <label for="bookingNotes">Notes <small>(optional)</small></label>
+    <input type="text" id="bookingNotes" placeholder="Anything we should know?" autocomplete="off">
+  </div>
+</div>
           <div class="booking-summary">
             <div><span>Pickup</span><strong id="bookingPickupSummary">—</strong></div>
             <div><span>Drop-off</span><strong id="bookingDropoffSummary">—</strong></div>
             <div><span>Rental Period</span><strong id="bookingDateSummary">—</strong></div>
             <div><span>Estimated Total</span><strong id="bookingPriceSummary">—</strong></div>
-          </div>
-          <div class="booking-field">
-            <label for="bookingNotes">Notes <small>(optional)</small></label>
-            <textarea id="bookingNotes" rows="3" placeholder="Anything we should know about your trip?"></textarea>
           </div>
           <div class="booking-message" id="bookingMessage"></div>
           <button type="submit" class="booking-submit-btn">Submit Booking</button>
