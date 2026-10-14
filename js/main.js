@@ -79,7 +79,115 @@ const selectedService = params.get('service');
 if (['driver', 'self', 'rent'].includes(selectedService)) {
   selectService(selectedService);
 }
+/* =========================
+   LOCATION AUTOCOMPLETE
+========================= */
 
+const GEOAPIFY_API_KEY = 'f14cdc9d2421489f80639e8d642e7d79';
+
+function initLocationAutocomplete() {
+  const locationInputs = [
+    'pickupLocation',
+    'dropoffLocation',
+    'driverPickupLocation',
+    'driverDropoffLocation',
+    'selfPickupLocation',
+    'selfDropoffLocation'
+  ];
+
+  locationInputs.forEach((id) => {
+    const input = document.getElementById(id);
+    if (!input) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'location-autocomplete';
+
+    input.parentNode.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
+
+    const dropdown = document.createElement('div');
+    dropdown.className = 'location-suggestions';
+    wrapper.appendChild(dropdown);
+
+    let timeout;
+
+    input.addEventListener('input', () => {
+      clearTimeout(timeout);
+
+      const query = input.value.trim();
+
+      if (query.length < 3) {
+        dropdown.innerHTML = '';
+        dropdown.classList.remove('show');
+        return;
+      }
+
+      timeout = setTimeout(async () => {
+        try {
+          const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&filter=countrycode:np&limit=6&format=json&apiKey=${GEOAPIFY_API_KEY}`;
+
+          const response = await fetch(url);
+          if (!response.ok) throw new Error('Location search failed.');
+
+          const data = await response.json();
+          dropdown.innerHTML = '';
+
+          if (!data.results?.length) {
+            dropdown.classList.remove('show');
+            return;
+          }
+
+          data.results.forEach((place) => {
+            const item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'location-suggestion-item';
+
+            const locationName =
+              place.formatted ||
+              [place.name, place.city, place.state, place.country]
+                .filter(Boolean)
+                .join(', ');
+
+            item.innerHTML = `
+              <i class="bi bi-geo-alt"></i>
+              <span>${locationName}</span>
+            `;
+
+            item.addEventListener('click', () => {
+              input.value = locationName;
+              input.dataset.lat = place.lat || '';
+              input.dataset.lon = place.lon || '';
+
+              dropdown.innerHTML = '';
+              dropdown.classList.remove('show');
+            });
+
+            dropdown.appendChild(item);
+          });
+
+          dropdown.classList.add('show');
+        } catch (error) {
+          console.error('Location autocomplete error:', error);
+          dropdown.classList.remove('show');
+        }
+      }, 350);
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!wrapper.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initLocationAutocomplete);
 
 /* =========================
    WHY SECTION ANIMATION
@@ -613,7 +721,6 @@ if (qualityTabs.length && qualityTitle && qualityText) {
 
 // document.addEventListener('DOMContentLoaded', loadSigninModal);
 
-
 /* =========================
    VEHICLE BOOKING FLOW
    RENT A CAR + SELF DRIVE
@@ -626,20 +733,57 @@ function initVehicleBooking() {
   const modal = document.getElementById('bookingModal');
   const overlay = document.getElementById('bookingModalOverlay');
   const closeButton = document.getElementById('bookingModalClose');
+
   const vehicleView = document.getElementById('vehicleSelectionView');
   const bookingView = document.getElementById('bookingDetailsView');
   const results = document.getElementById('vehicleResults');
+
   const bookingForm = document.getElementById('bookingForm');
   const backButton = document.getElementById('bookingBackBtn');
+  const bookAndPayButton = document.getElementById('bookAndPayBtn');
 
-  if (!modal || !vehicleView || !bookingView || !results || !bookingForm) {
-    return;
-  }
+  const bookingToast = document.getElementById('bookingToast');
+  const bookingToastTitle = document.getElementById('bookingToastTitle');
+  const bookingToastText = document.getElementById('bookingToastText');
+
+  if (!modal || !vehicleView || !bookingView || !results || !bookingForm) return;
 
   let availableVehicles = [];
   let selectedVehicle = null;
   let currentTrip = null;
   let currentRentalType = 'rental';
+  let bookingToastTimer;
+
+  function showBookingToast(title, message, type = 'success') {
+    if (!bookingToast) return;
+
+    clearTimeout(bookingToastTimer);
+
+    const icon = bookingToast.querySelector('.booking-toast-icon i');
+
+    if (bookingToastTitle) bookingToastTitle.textContent = title;
+    if (bookingToastText) bookingToastText.textContent = message;
+
+    bookingToast.classList.toggle('info', type === 'info');
+
+    if (icon) {
+      icon.className = type === 'info'
+        ? 'bi bi-info-lg'
+        : 'bi bi-check-lg';
+    }
+
+    bookingToast.classList.remove('show');
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        bookingToast.classList.add('show');
+      });
+    });
+
+    bookingToastTimer = setTimeout(() => {
+      bookingToast.classList.remove('show');
+    }, 4000);
+  }
 
   function getRentTrip() {
     return {
@@ -704,6 +848,13 @@ function initVehicleBooking() {
     selectedVehicle = null;
     currentTrip = null;
     currentRentalType = 'rental';
+
+    const message = document.getElementById('bookingMessage');
+
+    if (message) {
+      message.className = 'booking-message';
+      message.textContent = '';
+    }
   }
 
   function showVehicleView() {
@@ -722,7 +873,9 @@ function initVehicleBooking() {
     if (!vehicles.length) {
       results.innerHTML = `
         <div class="vehicle-message">
-          No vehicles are available for the selected dates.
+          <i class="bi bi-car-front"></i>
+          <strong>No vehicles available</strong>
+          <span>No vehicles are available for the selected dates.</span>
         </div>
       `;
       return;
@@ -749,6 +902,7 @@ function initVehicleBooking() {
 
         <div class="vehicle-card-body">
           <span class="vehicle-card-type">${vehicle.vehicle_type}</span>
+
           <h3>${vehicle.name}</h3>
 
           <div class="vehicle-details">
@@ -770,9 +924,7 @@ function initVehicleBooking() {
 
           <div class="vehicle-card-footer">
             <div class="vehicle-price">
-              <strong>
-                Rs. ${Number(vehicle.price_per_day).toLocaleString()}
-              </strong>
+              <strong>Rs. ${Number(vehicle.price_per_day).toLocaleString()}</strong>
               <small>per day</small>
             </div>
 
@@ -782,6 +934,7 @@ function initVehicleBooking() {
               data-vehicle-id="${vehicle.id}"
             >
               Select Vehicle
+              <i class="bi bi-arrow-right"></i>
             </button>
           </div>
         </div>
@@ -792,16 +945,19 @@ function initVehicleBooking() {
   }
 
   async function findVehicles(trip, rentalType, button) {
-    if (!validateTrip(trip)) return;
+    if (!button || !validateTrip(trip)) return;
 
     currentTrip = trip;
     currentRentalType = rentalType;
     selectedVehicle = null;
 
-    const originalText = button.textContent;
+    const originalHTML = button.innerHTML;
 
     button.disabled = true;
-    button.textContent = 'Finding Vehicles...';
+    button.innerHTML = `
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Finding Vehicles...
+    `;
 
     try {
       const query = new URLSearchParams({
@@ -827,21 +983,17 @@ function initVehicleBooking() {
     } catch (error) {
       console.error('Vehicle error:', error);
 
-      alert(
-        'Unable to load vehicles. Please try again.'
-      );
+      alert('Unable to load vehicles. Please try again.');
     } finally {
       button.disabled = false;
-      button.textContent = originalText;
+      button.innerHTML = originalHTML;
     }
   }
 
   /* RENT A CAR */
   rentButton?.addEventListener('click', () => {
-    const trip = getRentTrip();
-
     findVehicles(
-      trip,
+      getRentTrip(),
       'rental',
       rentButton
     );
@@ -849,10 +1001,8 @@ function initVehicleBooking() {
 
   /* SELF DRIVE */
   selfDriveButton?.addEventListener('click', () => {
-    const trip = getSelfDriveTrip();
-
     findVehicles(
-      trip,
+      getSelfDriveTrip(),
       'self_drive',
       selfDriveButton
     );
@@ -867,7 +1017,7 @@ function initVehicleBooking() {
     const vehicleId = Number(button.dataset.vehicleId);
 
     selectedVehicle = availableVehicles.find(
-      (vehicle) => vehicle.id === vehicleId
+      (vehicle) => Number(vehicle.id) === vehicleId
     );
 
     if (!selectedVehicle || !currentTrip) return;
@@ -879,19 +1029,16 @@ function initVehicleBooking() {
 
     const pickup = new Date(currentTrip.pickupDate);
     const returnTime = new Date(currentTrip.returnDate);
+
     const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
     const rentalDays = Math.max(
       1,
-      Math.ceil(
-        (returnTime - pickup) /
-        millisecondsPerDay
-      )
+      Math.ceil((returnTime - pickup) / millisecondsPerDay)
     );
 
     const total =
-      rentalDays *
-      Number(selectedVehicle.price_per_day);
+      rentalDays * Number(selectedVehicle.price_per_day);
 
     document.getElementById('bookingVehicleId').value =
       selectedVehicle.id;
@@ -921,13 +1068,23 @@ function initVehicleBooking() {
           : 'Complete Your Booking';
     }
 
-    const message =
-      document.getElementById('bookingMessage');
+    const message = document.getElementById('bookingMessage');
 
-    message.className = 'booking-message';
-    message.textContent = '';
+    if (message) {
+      message.className = 'booking-message';
+      message.textContent = '';
+    }
 
     showBookingView();
+  });
+
+  /* BOOK & PAY */
+  bookAndPayButton?.addEventListener('click', () => {
+    showBookingToast(
+      'Online payment unavailable',
+      'Online payment is not available right now. Please use Book Now to reserve your vehicle.',
+      'info'
+    );
   });
 
   /* BACK / CLOSE */
@@ -1017,7 +1174,10 @@ function initVehicleBooking() {
     };
 
     submitButton.disabled = true;
-    submitButton.textContent = 'Submitting...';
+    submitButton.innerHTML = `
+      <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      Booking...
+    `;
 
     try {
       const response = await fetch(
@@ -1035,39 +1195,33 @@ function initVehicleBooking() {
 
       if (!response.ok) {
         throw new Error(
-          data.error ||
-          'Unable to submit booking.'
+          data.error || 'Unable to submit booking.'
         );
       }
 
-      message.className =
-        'booking-message success';
+      const vehicleName = selectedVehicle.name;
+      const bookingId = data.booking_id;
 
-      if (currentRentalType === 'self_drive') {
-        message.textContent =
-          `Self Drive booking submitted successfully. Booking #${data.booking_id}. Total: Rs. ${Number(data.total_price).toLocaleString()}`;
-      } else {
-        message.textContent =
-          `Booking submitted successfully. Booking #${data.booking_id}. Total: Rs. ${Number(data.total_price).toLocaleString()}`;
-      }
+      bookingForm.reset();
 
-      document.getElementById('bookingFullName').value = '';
-      document.getElementById('bookingEmail').value = '';
-      document.getElementById('bookingPhone').value = '';
-      document.getElementById('bookingNotes').value = '';
+      closeModal();
 
+      showBookingToast(
+        'Booking confirmed!',
+        `${vehicleName} has been booked successfully. Booking #${bookingId}.`
+      );
     } catch (error) {
       console.error('Booking error:', error);
 
-      message.className =
-        'booking-message error';
-
-      message.textContent =
-        error.message;
-
+      message.className = 'booking-message error';
+      message.textContent = error.message;
     } finally {
       submitButton.disabled = false;
-      submitButton.textContent = 'Submit Booking';
+
+      submitButton.innerHTML = `
+        <i class="bi bi-calendar-check"></i>
+        Book Now
+      `;
     }
   });
 }

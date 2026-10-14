@@ -399,11 +399,31 @@
             <div><span>Estimated Total</span><strong id="bookingPriceSummary">—</strong></div>
           </div>
           <div class="booking-message" id="bookingMessage"></div>
-          <button type="submit" class="booking-submit-btn">Submit Booking</button>
+
+<div class="booking-actions">
+  <button type="submit" class="booking-submit-btn">
+    <i class="bi bi-calendar-check"></i>
+    Book Now
+  </button>
+
+  <button type="button" class="booking-pay-btn" id="bookAndPayBtn">
+    <i class="bi bi-credit-card"></i>
+    Book & Pay
+  </button>
+</div>
         </form>
       </div>
     </div>
   </div>
+  <div class="booking-toast" id="bookingToast">
+  <div class="booking-toast-icon">
+    <i class="bi bi-check-lg"></i>
+  </div>
+  <div>
+    <strong id="bookingToastTitle">Booking confirmed!</strong>
+    <span id="bookingToastText">Your vehicle has been booked successfully.</span>
+  </div>
+</div>
 
   <!-- DRIVER REQUEST MODAL -->
   <div class="booking-modal" id="driverRequestModal">
