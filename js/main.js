@@ -1,9 +1,9 @@
 /* =========================
    SHARED COMPONENTS
 ========================= */
-// const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
+const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
 // const API_BASE_URL = 'http://127.0.0.1:8000';
-const API_BASE_URL = window.location.origin;
+// const API_BASE_URL = window.location.origin;
 
 
 async function loadComponent(id, path) {
