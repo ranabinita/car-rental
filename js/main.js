@@ -1,9 +1,9 @@
 /* =========================
    SHARED COMPONENTS
 ========================= */
-const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
+// const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
 // const API_BASE_URL = 'http://127.0.0.1:8000';
-// const API_BASE_URL = window.location.origin;
+const API_BASE_URL = window.location.origin;
 
 
 async function loadComponent(id, path) {
@@ -87,12 +87,14 @@ const GEOAPIFY_API_KEY = 'f14cdc9d2421489f80639e8d642e7d79';
 
 function initLocationAutocomplete() {
   const locationInputs = [
-    'pickupLocation',
-    'dropoffLocation',
-    'driverPickupLocation',
-    'driverDropoffLocation',
-    'selfPickupLocation',
-    'selfDropoffLocation'
+  'pickupLocation',
+  'dropoffLocation',
+  'driverPickupLocation',
+  'driverDropoffLocation',
+  'selfPickupLocation',
+  'selfDropoffLocation',
+  'destinationPickupLocation',
+  'destinationDropoffLocation'
   ];
 
   locationInputs.forEach((id) => {
@@ -124,9 +126,7 @@ function initLocationAutocomplete() {
 
       timeout = setTimeout(async () => {
         try {
-          const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&filter=countrycode:np&limit=6&format=json&apiKey=${GEOAPIFY_API_KEY}`;
-
-          const response = await fetch(url);
+          const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&bias=countrycode:none&limit=8&format=json&apiKey=${GEOAPIFY_API_KEY}`;          const response = await fetch(url);
           if (!response.ok) throw new Error('Location search failed.');
 
           const data = await response.json();
@@ -729,6 +729,8 @@ if (qualityTabs.length && qualityTitle && qualityText) {
 function initVehicleBooking() {
   const rentButton = document.querySelector('#rentForm .find-vehicle-btn');
   const selfDriveButton = document.querySelector('#selfForm .self-drive-search-btn');
+  const destinationButton = document.getElementById('destinationFindVehicle');
+  const destinationModal = document.getElementById('destinationBookingModal');
 
   const modal = document.getElementById('bookingModal');
   const overlay = document.getElementById('bookingModalOverlay');
@@ -802,6 +804,29 @@ function initVehicleBooking() {
       returnDate: document.getElementById('selfDropDateTime')?.value || ''
     };
   }
+  function getDestinationTrip() {
+  const pickupDate = document.getElementById('destinationPickupDateTime')?.value || '';
+
+  let returnDate = '';
+
+  if (pickupDate) {
+    const returnTime = new Date(pickupDate);
+    returnTime.setHours(returnTime.getHours() + 24);
+
+    const pad = (number) => String(number).padStart(2, '0');
+
+    returnDate =
+      `${returnTime.getFullYear()}-${pad(returnTime.getMonth() + 1)}-${pad(returnTime.getDate())}` +
+      `T${pad(returnTime.getHours())}:${pad(returnTime.getMinutes())}`;
+  }
+
+  return {
+    pickupLocation: document.getElementById('destinationPickupLocation')?.value.trim() || '',
+    dropoffLocation: document.getElementById('destinationDropoffLocation')?.value.trim() || '',
+    pickupDate,
+    returnDate
+  };
+}
 
   function validateTrip(trip) {
     if (
@@ -1006,6 +1031,53 @@ function initVehicleBooking() {
       'self_drive',
       selfDriveButton
     );
+  });
+  /* DESTINATION RENTAL */
+destinationButton?.addEventListener('click', () => {
+  const trip = getDestinationTrip();
+
+  if (
+    !trip.pickupLocation ||
+    !trip.dropoffLocation ||
+    !trip.pickupDate
+  ) {
+    const message = document.getElementById('destinationBookingMessage');
+
+    if (message) {
+      message.className = 'booking-message error';
+      message.textContent = 'Please complete all trip details.';
+    }
+
+    return;
+  }
+
+  const pickup = new Date(trip.pickupDate);
+
+  if (Number.isNaN(pickup.getTime())) {
+    const message = document.getElementById('destinationBookingMessage');
+
+    if (message) {
+      message.className = 'booking-message error';
+      message.textContent = 'Please select a valid pickup date.';
+    }
+
+    return;
+  }
+
+  const message = document.getElementById('destinationBookingMessage');
+
+  if (message) {
+    message.className = 'booking-message';
+    message.textContent = '';
+  }
+
+  destinationModal?.classList.remove('show');
+
+  findVehicles(
+    trip,
+    'rental',
+    destinationButton
+  );
   });
 
   /* SELECT VEHICLE */
@@ -2024,9 +2096,9 @@ async function loadDestinations() {
     ? `<button type="button" class="destination-more-btn" data-description="${escapeHtml(destination.description)}">Read More</button>`
     : ''}
 
-  <a href="#booking" class="tour-link destination-book-btn" data-destination="${escapeHtml(destination.name)}">
-    Book Now →
-  </a>
+<button type="button" class="destination-book-btn" data-destination="${escapeHtml(destination.name)}">
+  Book Now <i class="bi bi-arrow-right"></i>
+</button>
 </div>
         </div>
       </div>
@@ -2060,35 +2132,64 @@ document.addEventListener('click', (event) => {
 
   button.textContent = expanded ? 'Show Less' : 'Read More';
 });
-
-
 /* DESTINATION BOOKING */
 
-document.addEventListener('click', (event) => {
-  const button = event.target.closest('.destination-book-btn');
-  if (!button) return;
+function initDestinationBooking() {
+  const modal = document.getElementById('destinationBookingModal');
+  const overlay = document.getElementById('destinationBookingOverlay');
+  const closeButton = document.getElementById('destinationBookingClose');
+  const title = document.getElementById('destinationBookingTitle');
+  const pickupInput = document.getElementById('destinationPickupLocation');
+  const dropoffInput = document.getElementById('destinationDropoffLocation');
+  const pickupDate = document.getElementById('destinationPickupDateTime');
+  const message = document.getElementById('destinationBookingMessage');
 
-  event.preventDefault();
+  if (!modal) return;
 
-  const destination = button.dataset.destination;
-  const bookingSection = document.getElementById('booking');
-  const dropoffInput = document.getElementById('dropoffLocation');
-  const pickupInput = document.getElementById('pickupLocation');
-  const rentOption =
-    document.querySelector('.service-option[data-service="rent"]');
+  function closeModal() {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
 
-  if (!destination || !bookingSection || !dropoffInput) return;
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('.destination-book-btn');
+    if (!button) return;
 
-  if (rentOption) rentOption.click();
+    event.preventDefault();
 
-  dropoffInput.value = destination;
+    const destination = button.dataset.destination;
+    if (!destination) return;
 
-  bookingSection.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center'
+    if (title) title.textContent = `Rent a Car to ${destination}`;
+
+    if (dropoffInput) {
+      dropoffInput.value = destination;
+      dropoffInput.dataset.lat = '';
+      dropoffInput.dataset.lon = '';
+    }
+
+    if (pickupInput) pickupInput.value = '';
+    if (pickupDate) pickupDate.value = '';
+
+    if (message) {
+      message.className = 'booking-message';
+      message.textContent = '';
+    }
+
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(() => pickupInput?.focus(), 150);
   });
 
-  setTimeout(() => {
-    pickupInput?.focus();
-  }, 500);
-});
+  closeButton?.addEventListener('click', closeModal);
+  overlay?.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initDestinationBooking);

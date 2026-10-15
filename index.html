@@ -343,6 +343,49 @@
     <p id="destinationModalDescription"></p>
   </div>
 </div>
+<!-- DESTINATION BOOKING MODAL -->
+<div class="booking-modal" id="destinationBookingModal">
+  <div class="booking-modal-overlay" id="destinationBookingOverlay"></div>
+
+  <div class="booking-modal-box destination-booking-box">
+    <button type="button" class="booking-modal-close" id="destinationBookingClose" aria-label="Close">
+      <i class="bi bi-x-lg"></i>
+    </button>
+
+    <div class="booking-modal-header">
+      <span>PLAN YOUR TRIP</span>
+      <h2 id="destinationBookingTitle">Rent a Car</h2>
+      <p>Choose your pickup details and find the right vehicle for your trip.</p>
+    </div>
+
+    <div class="destination-booking-form">
+      <div class="booking-form-row">
+        <div class="booking-field">
+          <label for="destinationPickupLocation">Pick Up Location</label>
+          <input type="text" id="destinationPickupLocation" class="booking-control" placeholder="Please enter from location" autocomplete="off">
+        </div>
+
+        <div class="booking-field">
+          <label for="destinationDropoffLocation">Drop Off Location</label>
+          <input type="text" id="destinationDropoffLocation" class="booking-control" placeholder="Please enter destination" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="booking-form-row">
+        <div class="booking-field">
+          <label for="destinationPickupDateTime">Pick Up Date</label>
+          <input type="datetime-local" id="destinationPickupDateTime" class="booking-control">
+        </div>
+      </div>
+
+      <div class="booking-message" id="destinationBookingMessage"></div>
+
+      <button type="button" class="find-vehicle-btn destination-find-vehicle-btn" id="destinationFindVehicle">
+        Find Vehicle
+      </button>
+    </div>
+  </div>
+</div>
 
   <!-- FOOTER -->
   <div id="footer"></div>
