@@ -2,9 +2,9 @@
    SHARED COMPONENTS
 ========================= */
 // const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
-// const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://127.0.0.1:8000';
 // const API_BASE_URL = window.location.origin;
-const API_BASE_URL = 'https://thakurlogistic.com';
+// const API_BASE_URL = 'https://thakurlogistic.com';
 
 async function loadComponent(id, path) {
   const container = document.getElementById(id);
@@ -127,9 +127,12 @@ function initLocationAutocomplete() {
       timeout = setTimeout(async () => {
         try {
           const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&filter=countrycode:np&bias=countrycode:np&limit=8&format=json&apiKey=${GEOAPIFY_API_KEY}`;
+          const response = await fetch(url);
+
           if (!response.ok) throw new Error('Location search failed.');
 
-          const data = await response.json();
+        const data = await response.json();
+
           dropdown.innerHTML = '';
 
           if (!data.results?.length) {
