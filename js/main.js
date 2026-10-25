@@ -1,10 +1,10 @@
 /* =========================
    SHARED COMPONENTS
 ========================= */
-const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
+// const API_BASE_URL = 'https://thakur-logistics-backend.onrender.com';
 // const API_BASE_URL = 'http://127.0.0.1:8000';
 // const API_BASE_URL = window.location.origin;
-
+const API_BASE_URL = 'https://thakurlogistic.com';
 
 async function loadComponent(id, path) {
   const container = document.getElementById(id);
@@ -126,7 +126,7 @@ function initLocationAutocomplete() {
 
       timeout = setTimeout(async () => {
         try {
-          const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&bias=countrycode:none&limit=8&format=json&apiKey=${GEOAPIFY_API_KEY}`;          const response = await fetch(url);
+          const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(query)}&filter=countrycode:np&bias=countrycode:np&limit=8&format=json&apiKey=${GEOAPIFY_API_KEY}`;
           if (!response.ok) throw new Error('Location search failed.');
 
           const data = await response.json();
@@ -754,6 +754,7 @@ function initVehicleBooking() {
   let selectedVehicle = null;
   let currentTrip = null;
   let currentRentalType = 'rental';
+  let currentBookingSource = 'rent_a_car';
   let bookingToastTimer;
 
   function showBookingToast(title, message, type = 'success') {
@@ -820,12 +821,14 @@ function initVehicleBooking() {
       `T${pad(returnTime.getHours())}:${pad(returnTime.getMinutes())}`;
   }
 
-  return {
-    pickupLocation: document.getElementById('destinationPickupLocation')?.value.trim() || '',
-    dropoffLocation: document.getElementById('destinationDropoffLocation')?.value.trim() || '',
-    pickupDate,
-    returnDate
-  };
+return {
+  fullName: document.getElementById('destinationFullName')?.value.trim() || '',
+  phone: document.getElementById('destinationPhone')?.value.trim() || '',
+  pickupLocation: document.getElementById('destinationPickupLocation')?.value.trim() || '',
+  dropoffLocation: document.getElementById('destinationDropoffLocation')?.value.trim() || '',
+  pickupDate,
+  returnDate
+};
 }
 
   function validateTrip(trip) {
@@ -1015,71 +1018,83 @@ function initVehicleBooking() {
     }
   }
 
-  /* RENT A CAR */
-  rentButton?.addEventListener('click', () => {
-    findVehicles(
-      getRentTrip(),
-      'rental',
-      rentButton
-    );
-  });
+/* RENT A CAR */
+rentButton?.addEventListener('click', () => {
+  currentBookingSource = 'rent_a_car';
 
-  /* SELF DRIVE */
-  selfDriveButton?.addEventListener('click', () => {
-    findVehicles(
-      getSelfDriveTrip(),
-      'self_drive',
-      selfDriveButton
-    );
-  });
-  /* DESTINATION RENTAL */
+  findVehicles(
+    getRentTrip(),
+    'rental',
+    rentButton
+  );
+});
+
+/* SELF DRIVE */
+selfDriveButton?.addEventListener('click', () => {
+  currentBookingSource = 'self_drive';
+
+  findVehicles(
+    getSelfDriveTrip(),
+    'self_drive',
+    selfDriveButton
+  );
+});
+/* DESTINATION RENTAL */
+
 destinationButton?.addEventListener('click', () => {
   const trip = getDestinationTrip();
+  const message = document.getElementById('destinationBookingMessage');
 
   if (
+    !trip.fullName ||
+    !trip.phone ||
     !trip.pickupLocation ||
     !trip.dropoffLocation ||
     !trip.pickupDate
   ) {
-    const message = document.getElementById('destinationBookingMessage');
-
     if (message) {
       message.className = 'booking-message error';
-      message.textContent = 'Please complete all trip details.';
+      message.textContent = 'Please complete all required fields.';
     }
+    return;
+  }
 
+  const phonePattern = /^[0-9+\-\s()]{7,20}$/;
+
+  if (!phonePattern.test(trip.phone)) {
+    if (message) {
+      message.className = 'booking-message error';
+      message.textContent = 'Please enter a valid phone number.';
+    }
     return;
   }
 
   const pickup = new Date(trip.pickupDate);
 
   if (Number.isNaN(pickup.getTime())) {
-    const message = document.getElementById('destinationBookingMessage');
-
     if (message) {
       message.className = 'booking-message error';
       message.textContent = 'Please select a valid pickup date.';
     }
-
     return;
   }
-
-  const message = document.getElementById('destinationBookingMessage');
 
   if (message) {
     message.className = 'booking-message';
     message.textContent = '';
   }
 
+  const bookingName = document.getElementById('bookingFullName');
+  const bookingPhone = document.getElementById('bookingPhone');
+
+  if (bookingName) bookingName.value = trip.fullName;
+  if (bookingPhone) bookingPhone.value = trip.phone;
+
   destinationModal?.classList.remove('show');
-
-  findVehicles(
-    trip,
-    'rental',
-    destinationButton
-  );
-  });
-
+  document.body.style.overflow = '';
+  currentBookingSource = 'destination';
+  findVehicles(trip, 'rental', destinationButton);
+});
   /* SELECT VEHICLE */
   results.addEventListener('click', (event) => {
     const button = event.target.closest('.select-vehicle-btn');
@@ -1235,6 +1250,7 @@ destinationButton?.addEventListener('click', () => {
     const bookingData = {
       vehicle_id: selectedVehicle.id,
       rental_type: currentRentalType,
+      booking_source: currentBookingSource,
       full_name: fullName,
       email,
       phone,

@@ -26,8 +26,9 @@
                     <tr>
                         <th>Customer</th>
                         <th>Vehicle</th>
-                        <th>Rental Type</th>
+                        <th>Source</th>
                         <th>Phone</th>
+                        <th>Route</th>
                         <th>Pickup</th>
                         <th>Return</th>
                         <th>Total</th>
@@ -47,14 +48,24 @@
                             <td>{{ booking.vehicle.name }}</td>
 
                             <td>
-                                {% if booking.rental_type == 'self_drive' %}
-                                    Self Drive
+                                {% if booking.booking_source == 'destination' %}
+                                    <span class="status-badge status-confirmed">Destination</span>
+                                {% elif booking.booking_source == 'self_drive' %}
+                                    <span class="status-badge status-pending">Self Drive</span>
                                 {% else %}
-                                    Rent a Car
+                                    <span class="status-badge">Rent a Car</span>
                                 {% endif %}
                             </td>
 
                             <td>{{ booking.phone }}</td>
+
+                            <td>
+    <span>{{ booking.pickup_location }}</span><br>
+    <span>
+        <i class="bi bi-arrow-right"></i>
+        {{ booking.dropoff_location }}
+    </span>
+</td>
 
                             <td>
                                 {{ booking.pickup_datetime|date:"M d, Y" }}<br>
@@ -62,8 +73,12 @@
                             </td>
 
                             <td>
-                                {{ booking.return_datetime|date:"M d, Y" }}<br>
-                                <small>{{ booking.return_datetime|date:"g:i A" }}</small>
+                                {% if booking.booking_source == 'destination' %}
+                                    —
+                                {% else %}
+                                    {{ booking.return_datetime|date:"M d, Y" }}<br>
+                                    <small>{{ booking.return_datetime|date:"g:i A" }}</small>
+                                {% endif %}
                             </td>
 
                             <td>

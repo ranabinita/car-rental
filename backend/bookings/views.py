@@ -109,6 +109,17 @@ def create_booking(request):
                 status=400
             )
 
+        # BOOKING SOURCE
+        booking_source = data.get('booking_source', 'rent_a_car')
+
+        valid_booking_sources = dict(Booking.BOOKING_SOURCE_CHOICES)
+
+        if booking_source not in valid_booking_sources:
+            return JsonResponse(
+            {'error': 'Invalid booking source.'},
+                status=400
+            )
+
         # REQUIRED FIELDS
         required_fields = [
             'vehicle_id',
@@ -199,6 +210,7 @@ def create_booking(request):
         booking = Booking.objects.create(
             vehicle=vehicle,
             rental_type=rental_type,
+            booking_source=booking_source,
             full_name=data['full_name'].strip(),
             email=data['email'].strip(),
             phone=data['phone'].strip(),
@@ -218,6 +230,7 @@ def create_booking(request):
                 'status': booking.status,
                 'rental_days': rental_days,
                 'total_price': float(total_price),
+                'booking_source': booking.booking_source,
             },
             status=201
         )

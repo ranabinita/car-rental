@@ -4,9 +4,16 @@ from vehicles.models import Vehicle
 
 class Booking(models.Model):
     RENTAL_TYPES = [
-    ('rental', 'Rent a Car'),
-    ('self_drive', 'Self Drive'),
+        ('rental', 'Rent a Car'),
+        ('self_drive', 'Self Drive'),
     ]
+
+    BOOKING_SOURCE_CHOICES = [
+        ('rent_a_car', 'Rent a Car'),
+        ('destination', 'Destination'),
+        ('self_drive', 'Self Drive'),
+    ]
+
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
@@ -28,10 +35,20 @@ class Booking(models.Model):
     # Trip information
     pickup_location = models.CharField(max_length=255)
     dropoff_location = models.CharField(max_length=255)
-
     pickup_datetime = models.DateTimeField()
     return_datetime = models.DateTimeField()
-    rental_type = models.CharField(max_length=20,choices=RENTAL_TYPES,default='rental')
+
+    rental_type = models.CharField(
+        max_length=20,
+        choices=RENTAL_TYPES,
+        default='rental'
+    )
+
+    booking_source = models.CharField(
+        max_length=20,
+        choices=BOOKING_SOURCE_CHOICES,
+        default='rent_a_car'
+    )
 
     # Booking information
     total_price = models.DecimalField(
